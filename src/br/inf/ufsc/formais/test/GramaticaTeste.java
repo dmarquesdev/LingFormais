@@ -11,6 +11,7 @@ import br.inf.ufsc.formais.model.gramatica.Gramatica;
 import br.inf.ufsc.formais.model.gramatica.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
+import br.inf.ufsc.formais.operacoes.Gramatica2AFD;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -60,7 +61,7 @@ public class GramaticaTeste {
         
         System.out.println(gr.toString());
         
-        AutomatoFinitoDeterministico fsa = gr.toAutomatoFinito();
+        AutomatoFinitoDeterministico fsa = Gramatica2AFD.converterParaAFD(gr);
         
         System.out.println(fsa.toString());
     }
