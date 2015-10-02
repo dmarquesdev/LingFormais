@@ -15,10 +15,10 @@ public class TestRunner {
         AutomatoFinitoDeterministicoTeste dfaT = new AutomatoFinitoDeterministicoTeste();
         ExpressaoRegularTeste erT = new ExpressaoRegularTeste();
         DeterminizacaoTeste detT = new DeterminizacaoTeste();
-        
+//        
 //        gT.runTest();
 //        dfaT.runTest();
-//        erT.runTest();
-        detT.runTeste();
+        erT.runTest();
+//        detT.runTeste();
     }
 }

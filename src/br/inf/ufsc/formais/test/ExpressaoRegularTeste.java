@@ -5,8 +5,10 @@
  */
 package br.inf.ufsc.formais.test;
 
-import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.exception.InputException;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
+import java.io.IOException;
 
 /**
  *
@@ -15,15 +17,15 @@ import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 public class ExpressaoRegularTeste {
 
     public void runTest() {
-        ExpressaoRegular er = new ExpressaoRegular();
-        Simbolo a = new Simbolo("a");
-        Simbolo b = new Simbolo("b");
-        
-        er.concatenar(a);
-        er.concatenarSimboloFecho(a);
-        er.concatenar(b);
-        
-        System.out.println(er.toString());
+        ExpressaoRegular er = null;
+        try {
+            er = new ExpressaoRegularIO().read("C:\\", "er.in");
+            System.out.println(er.toString());
+        } catch (IOException ex) {
+            System.out.println("Ocorreu um erro de leitura no arquivo!");
+        } catch (InputException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
 }
