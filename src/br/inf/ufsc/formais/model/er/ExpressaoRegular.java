@@ -5,10 +5,11 @@
  */
 package br.inf.ufsc.formais.model.er;
 
-import br.inf.ufsc.formais.model.Simbolo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import br.inf.ufsc.formais.model.Simbolo;
 
 /**
  *
@@ -30,6 +31,10 @@ public class ExpressaoRegular {
 
     public ExpressaoRegular() {
         this.simbolos = new ArrayList<>();
+    }
+    
+    public List<Simbolo> getSimbolos(){
+        return simbolos;
     }
 
     public void concatenar(Simbolo simbolo) {

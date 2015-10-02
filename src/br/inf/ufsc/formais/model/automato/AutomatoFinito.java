@@ -5,10 +5,11 @@
  */
 package br.inf.ufsc.formais.model.automato;
 
-import br.inf.ufsc.formais.model.Alfabeto;
-import br.inf.ufsc.formais.model.Simbolo;
 import java.util.Map;
 import java.util.Set;
+
+import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.model.Simbolo;
 
 /**
  *

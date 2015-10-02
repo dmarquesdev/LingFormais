@@ -6,6 +6,7 @@
 package br.inf.ufsc.formais.model.automato;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Set;
  * @author Diego
  */
 public class Estados extends Estado {
+
     private Set<Estado> estados;
 
     public Estados(Set<Estado> estados) {
@@ -24,25 +26,23 @@ public class Estados extends Estado {
         super("");
         this.estados = new LinkedHashSet<>();
     }
-    
-    
-    
+
     public void addEstado(Estado estado) {
         estados.add(estado);
     }
-    
+
     public Set<Estado> get() {
         return estados;
     }
-    
+
     public Estado[] getEstados() {
         return estados.toArray(new Estado[estados.size()]);
     }
-    
+
     public void removeEstado(Estado estado) {
         estados.remove(estado);
     }
-    
+
     public int size() {
         return estados.size();
     }
@@ -53,9 +53,9 @@ public class Estados extends Estado {
         for (Estado estado : estados) {
             out.append(estado.getId()).append(", ");
         }
-        
+
         out.delete(out.length() - 2, out.length());
-        
+
         return out.toString();
     }
 

@@ -5,14 +5,15 @@
  */
 package br.inf.ufsc.formais.model.automato;
 
-import br.inf.ufsc.formais.model.Alfabeto;
-import br.inf.ufsc.formais.model.Simbolo;
-import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 
 /**
  *

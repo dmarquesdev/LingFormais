@@ -5,12 +5,14 @@
  */
 package br.inf.ufsc.formais.model.automato;
 
-import br.inf.ufsc.formais.model.Alfabeto;
-import br.inf.ufsc.formais.model.Simbolo;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.model.Simbolo;
 
 /**
  *
@@ -98,8 +100,7 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public void addTransicao(Entrada entrada, Estados destino) {
         transicoes.put(entrada, destino);
     }
-    
-    
+
     @Override
     public Map<Entrada, Estados> getTransicoes() {
         return transicoes;
@@ -164,6 +165,10 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
     @Override
     public boolean existeTransicao(Estado de, Simbolo entrada, Estado para) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Estado removeEstadoInicial() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

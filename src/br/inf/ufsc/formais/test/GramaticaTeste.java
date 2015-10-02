@@ -5,6 +5,9 @@
  */
 package br.inf.ufsc.formais.test;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.gramatica.Cadeia;
 import br.inf.ufsc.formais.model.gramatica.Gramatica;
@@ -12,8 +15,6 @@ import br.inf.ufsc.formais.model.gramatica.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import br.inf.ufsc.formais.operacoes.Gramatica2AFD;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  *
