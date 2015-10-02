@@ -6,7 +6,9 @@
 package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
+import br.inf.ufsc.formais.operacoes.ER2AFND;
 
 /**
  *
@@ -16,6 +18,7 @@ public class ExpressaoRegularTeste {
 
     public void runTest() {
         ExpressaoRegular er = new ExpressaoRegular();
+        AutomatoFinitoNaoDeterministico afnd;
         Simbolo a = new Simbolo("a");
         Simbolo b = new Simbolo("b");
         
@@ -23,7 +26,13 @@ public class ExpressaoRegularTeste {
         er.concatenarSimboloFecho(a);
         er.concatenar(b);
         
+        afnd = ER2AFND.converterParaAutomato(er);
+        
+        
+        
         System.out.println(er.toString());
+        
+        System.out.println(afnd.toString());
     }
 
 }

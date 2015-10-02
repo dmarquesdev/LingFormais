@@ -154,7 +154,26 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
     @Override
     public Estado removeEstadoFinal(EstadoFinal estado) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Estado novo = new Estado(estado.getId());
+        for (Entrada ent : transicoes.keySet()) {
+
+            Estados ests = transicoes.get(ent);
+
+            for (Estado est : ests.get()) {
+                if (est.equals(estado)) {
+                    ests.get().remove(estado);
+                    ests.get().add(est);
+                }
+            }
+            if (ent.getEstado().equals(estado)) {
+                ent.setEstado(novo);
+            }
+
+        }
+        estadosAceitacao.remove(estado);
+        estados.remove(estado);
+        estados.add(novo);
+        return novo;
     }
 
     @Override
@@ -168,6 +187,25 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     }
 
     public Estado removeEstadoInicial() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Estado novo = new Estado(estadoInicial.getId());
+        for (Entrada ent : transicoes.keySet()) {
+            
+            Estados ests = transicoes.get(ent);
+            
+                for(Estado est : ests.get()){
+                    if(est.equals(estadoInicial)){
+                        ests.get().remove(estadoInicial);
+                        ests.get().add(est);
+                    }
+                }
+            if (ent.getEstado().equals(estadoInicial)) {
+                ent.setEstado(novo);
+            }
+            
+        }
+        
+        estados.remove(estadoInicial);
+        estados.add(novo);
+        return novo;
     }
 }

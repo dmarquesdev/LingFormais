@@ -3,14 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/test/TestRunner.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/er/ExpressaoRegular.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoDeterministico.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoNaoDeterministico.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/operacoes/AFNDG2ER.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/test/AutomatoFinitoDeterministicoTeste.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/operacoes/AFD2AFNDG.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoNaoDeterministicoGeneralizado.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/PASSAR_PARA_OUTRAS_CLASSES.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/AutomatoFinitoDeterministicoTeste.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/operacoes/Gramatica2AFD.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoNaoDeterministico.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/EntradaAFNDG.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/er/ExpressaoRegular.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoNaoDeterministicoGeneralizado.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/Estados.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/EstadoFinal.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/Estado.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/ExpressaoRegularTeste.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/EstadoInicial.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoDeterministico.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/operacoes/AFNDG2ER.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/operacoes/ER2AFND.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/er/SimboloOperacional.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/Simbolo.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/automato/Entrada.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/TestRunner.java</file>
         </group>
     </open-files>
 </project-private>
