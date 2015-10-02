@@ -59,5 +59,4 @@ public class Simbolo {
     public String toString() {
         return referencia;
     }
-
 }

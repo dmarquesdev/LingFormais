@@ -7,10 +7,8 @@ package br.inf.ufsc.formais.model.er;
 
 import br.inf.ufsc.formais.model.Simbolo;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  *
@@ -21,7 +19,8 @@ public class ExpressaoRegular {
     private List<Simbolo> simbolos;
 
     public ExpressaoRegular(List<Simbolo> simbolos) {
-        this.simbolos = simbolos;
+        this.simbolos = new ArrayList<>();
+        this.simbolos.addAll(simbolos);
     }
 
     public ExpressaoRegular(Simbolo simbolo) {
@@ -34,35 +33,63 @@ public class ExpressaoRegular {
     }
 
     public void concatenar(Simbolo simbolo) {
+        ExpressaoRegular antes = null;
         simbolos.add(simbolo);
     }
 
     public void concatenar(ExpressaoRegular er) {
-        simbolos.add(SimboloOperacional.ABRE_GRUPO);
         List<Simbolo> simbolosOutraER = new ArrayList<>();
         simbolosOutraER.addAll(er.simbolos);
-        for (Simbolo simbolo : simbolosOutraER) {
-            simbolos.add(simbolo);
+
+        ExpressaoRegular antes = null;
+
+        if (er.somenteVazio() || this.somenteVazio()) {
+            this.simbolos.removeAll(simbolos);
+            this.simbolos.add(Simbolo.CONJUNTO_VAZIO);
+        } else if (this.somenteEpsilon() && !er.somenteEpsilon()) {
+            this.simbolos.remove(Simbolo.EPSILON);
+            this.simbolos.addAll(simbolosOutraER);
+        } else if (!this.somenteEpsilon() && !er.somenteEpsilon()) {
+            simbolos.add(SimboloOperacional.ABRE_GRUPO);
+            for (Simbolo simbolo : simbolosOutraER) {
+                simbolos.add(simbolo);
+            }
+            simbolos.add(SimboloOperacional.FECHA_GRUPO);
         }
-        simbolos.add(SimboloOperacional.FECHA_GRUPO);
+
     }
 
     private void agrupar(ExpressaoRegular er) {
-        er.simbolos.add(0, SimboloOperacional.ABRE_GRUPO);
-        er.simbolos.add(SimboloOperacional.FECHA_GRUPO);
+        ExpressaoRegular antes = null;
+        if (!er.somenteEpsilon() && !er.somenteVazio() && simbolos.size() > 1) {
+            er.simbolos.add(0, SimboloOperacional.ABRE_GRUPO);
+            er.simbolos.add(SimboloOperacional.FECHA_GRUPO);
+        }
     }
 
     public void alternancia(Simbolo simbolo) {
-        agrupar(this);
-        concatenar(SimboloOperacional.ALTERNANCIA);
-        concatenar(simbolo);
+        if (this.somenteVazio() || this.somenteEpsilon()) {
+            this.simbolos.remove(0);
+            this.simbolos.add(simbolo);
+        } else if (simbolos.size() > 1 || !simbolos.contains(simbolo)) {
+            agrupar(this);
+            concatenar(SimboloOperacional.ALTERNANCIA);
+            concatenar(simbolo);
+        }
     }
 
     public void alternancia(ExpressaoRegular er) {
-        agrupar(this);
-        agrupar(er);
-        concatenar(SimboloOperacional.ALTERNANCIA);
-        concatenar(er);
+        if (this.somenteVazio() || this.somenteEpsilon()) {
+            if (!(this.somenteEpsilon() && er.somenteVazio()) || (this.somenteVazio() && er.somenteEpsilon())) {
+                this.simbolos.remove(0);
+                this.simbolos.addAll(er.simbolos);
+            }
+        } else if (!er.somenteEpsilon() && !er.somenteVazio() && !this.equals(er)) {
+            agrupar(this);
+            agrupar(er);
+            concatenar(SimboloOperacional.ALTERNANCIA);
+            concatenar(er);
+        }
     }
 
     public void concatenarSimboloFecho(Simbolo simbolo) {
@@ -73,7 +100,9 @@ public class ExpressaoRegular {
     public void concatenarERFecho(ExpressaoRegular er) {
         agrupar(er);
         concatenar(er);
-        concatenar(SimboloOperacional.FECHO);
+        if (!er.somenteEpsilon() && !er.somenteVazio()) {
+            concatenar(SimboloOperacional.FECHO);
+        }
     }
 
     @Override
@@ -85,7 +114,7 @@ public class ExpressaoRegular {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) {
+        if (this == obj) {
             return true;
         }
         if (obj == null) {
@@ -110,4 +139,36 @@ public class ExpressaoRegular {
 
         return out.toString();
     }
+
+    public boolean somenteEpsilon() {
+        boolean somenteEpsilon = true;
+        for (Simbolo simbolo : simbolos) {
+            if (!(simbolo instanceof SimboloOperacional) && !simbolo.equals(Simbolo.EPSILON)) {
+                somenteEpsilon = false;
+                break;
+            }
+        }
+
+        return somenteEpsilon;
+    }
+
+    public boolean somenteVazio() {
+        boolean somenteVazio = true;
+        for (Simbolo simbolo : simbolos) {
+            if (!(simbolo instanceof SimboloOperacional) && !simbolo.equals(Simbolo.CONJUNTO_VAZIO)) {
+                somenteVazio = false;
+                break;
+            }
+        }
+
+        return somenteVazio;
+    }
+
+    public ExpressaoRegular clone() {
+        ExpressaoRegular er = new ExpressaoRegular();
+        er.simbolos.addAll(simbolos);
+
+        return er;
+    }
+
 }

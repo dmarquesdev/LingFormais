@@ -49,11 +49,8 @@ public class EntradaAFNDG extends Entrada {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) {
+        if (this == obj) {
             return true;
-        }
-        if(!super.equals(obj)) {
-            return false;
         }
         if (obj == null) {
             return false;
@@ -62,6 +59,9 @@ public class EntradaAFNDG extends Entrada {
             return false;
         }
         final EntradaAFNDG other = (EntradaAFNDG) obj;
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
         if (!Objects.equals(this.expressaoRegular, other.expressaoRegular)) {
             return false;
         }

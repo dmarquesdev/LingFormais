@@ -32,6 +32,13 @@ public class AFD2AFNDG {
         EstadoFinal estadoFinal = new EstadoFinal("NF");
 
         Map<EntradaAFNDG, Estados> transicoes = new LinkedHashMap<>();
+        
+        EntradaAFNDG entradaNSNF = new EntradaAFNDG(estadoInicial, Simbolo.EPSILON);
+        Estados estadosNSNF = new Estados();
+        estadosNSNF.addEstado(estadoFinal);
+        
+        transicoes.put(entradaNSNF, estadosNSNF);
+        
         Set<EstadoFinal> aceitacao = new LinkedHashSet<>();
         aceitacao.addAll(afd.getEstadosAceitacao());
         
