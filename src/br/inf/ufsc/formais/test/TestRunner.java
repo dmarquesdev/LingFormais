@@ -17,8 +17,8 @@ public class TestRunner {
         DeterminizacaoTeste detT = new DeterminizacaoTeste();
 //        
 //        gT.runTest();
-//        dfaT.runTest();
-        erT.runTest();
+        dfaT.runTest();
+//        erT.runTest();
 //        detT.runTeste();
     }
 }
