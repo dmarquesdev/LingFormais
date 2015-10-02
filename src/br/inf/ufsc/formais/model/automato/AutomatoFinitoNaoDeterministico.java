@@ -166,4 +166,8 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public boolean existeTransicao(Estado de, Simbolo entrada, Estado para) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public Estado removeEstadoInicial() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
