@@ -5,6 +5,11 @@
  */
 package br.inf.ufsc.formais.operacoes;
 
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
@@ -15,10 +20,6 @@ import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.gramatica.Gramatica;
 import br.inf.ufsc.formais.model.gramatica.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *

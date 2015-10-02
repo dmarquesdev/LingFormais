@@ -5,12 +5,11 @@
  */
 package br.inf.ufsc.formais.model.er;
 
-import br.inf.ufsc.formais.model.Simbolo;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
+import br.inf.ufsc.formais.model.Simbolo;
 
 /**
  *

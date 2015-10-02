@@ -5,9 +5,10 @@
  */
 package br.inf.ufsc.formais.model.automato;
 
+import java.util.Objects;
+
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
-import java.util.Objects;
 
 /**
  *
