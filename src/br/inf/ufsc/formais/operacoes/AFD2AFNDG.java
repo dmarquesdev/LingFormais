@@ -5,20 +5,19 @@
  */
 package br.inf.ufsc.formais.operacoes;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministicoGeneralizado;
-import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.EntradaAFNDG;
 import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
-import br.inf.ufsc.formais.model.er.ExpressaoRegular;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -32,6 +31,13 @@ public class AFD2AFNDG {
         EstadoFinal estadoFinal = new EstadoFinal("NF");
 
         Map<EntradaAFNDG, Estados> transicoes = new LinkedHashMap<>();
+        
+        EntradaAFNDG entradaNSNF = new EntradaAFNDG(estadoInicial, Simbolo.EPSILON);
+        Estados estadosNSNF = new Estados();
+        estadosNSNF.addEstado(estadoFinal);
+        
+        transicoes.put(entradaNSNF, estadosNSNF);
+        
         Set<EstadoFinal> aceitacao = new LinkedHashSet<>();
         aceitacao.addAll(afd.getEstadosAceitacao());
         
@@ -45,7 +51,7 @@ public class AFD2AFNDG {
             EntradaAFNDG entradaEstadoInicial = new EntradaAFNDG(estadoInicial, Simbolo.EPSILON);
             Estados estadosEntradaEstadoInicial = transicoes.get(entradaEstadoInicial);
             if(estadosEntradaEstadoInicial == null) {
-                estadosEntradaEstadoInicial = new Estados(new LinkedHashSet<>());
+                estadosEntradaEstadoInicial = new Estados(new LinkedHashSet<Estado>());
                 estadosEntradaEstadoInicial.addEstado(i);
                 transicoes.put(entradaEstadoInicial, estadosEntradaEstadoInicial);
             } else {
@@ -55,7 +61,7 @@ public class AFD2AFNDG {
             EntradaAFNDG entradaEstadoFinal = new EntradaAFNDG(i, Simbolo.EPSILON);
             Estados estadosEntradaEstadoFinal = transicoes.get(entradaEstadoFinal);
             if(estadosEntradaEstadoFinal == null) {
-                estadosEntradaEstadoFinal = new Estados(new LinkedHashSet<>());
+                estadosEntradaEstadoFinal = new Estados(new LinkedHashSet<Estado>());
                 estadosEntradaEstadoFinal.addEstado(estadoFinal);
                 transicoes.put(entradaEstadoFinal, estadosEntradaEstadoFinal);
             } else {
@@ -73,7 +79,7 @@ public class AFD2AFNDG {
                 if(estTrans != null) {
                     estTrans.addEstado(j);
                 } else {
-                    estTrans = new Estados(new LinkedHashSet<>());
+                    estTrans = new Estados(new LinkedHashSet<Estado>());
                     estTrans.addEstado(j);
                     transicoes.put(eTrans, estTrans);
                 }

@@ -5,7 +5,6 @@
  */
 package br.inf.ufsc.formais.model;
 
-import br.inf.ufsc.formais.model.automato.Estado;
 import java.util.Set;
 
 /**

@@ -14,9 +14,11 @@ public class TestRunner {
         GramaticaTeste gT = new GramaticaTeste();
         AutomatoFinitoDeterministicoTeste dfaT = new AutomatoFinitoDeterministicoTeste();
         ExpressaoRegularTeste erT = new ExpressaoRegularTeste();
-        
+        DeterminizacaoTeste detT = new DeterminizacaoTeste();
+//        
 //        gT.runTest();
         dfaT.runTest();
 //        erT.runTest();
+//        detT.runTeste();
     }
 }

@@ -13,6 +13,8 @@ import br.inf.ufsc.formais.model.Simbolo;
  */
 public class SimboloTerminal extends Simbolo {
     
+    public static final SimboloTerminal EPSILON = new SimboloTerminal("ε");
+    
     public SimboloTerminal(String referencia) {
         super(referencia);
     }

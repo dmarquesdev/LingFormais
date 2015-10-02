@@ -5,13 +5,15 @@
  */
 package br.inf.ufsc.formais.model.automato;
 
-import br.inf.ufsc.formais.model.Alfabeto;
-import br.inf.ufsc.formais.model.Simbolo;
-import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 
 /**
  *
@@ -40,7 +42,7 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         estadosAceitacao = new LinkedHashSet<>();
         transicoes = new HashMap<>();
     }
-    
+
     @Override
     public void addEstado(Estado estado) {
         estados.add(estado);
@@ -90,7 +92,7 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
     public void addEstadoFinal(EstadoFinal estado) {
         estadosAceitacao.add(estado);
     }
-    
+
     public EstadoFinal getEstadoFinal() {
         return estadosAceitacao.toArray(new EstadoFinal[1])[0];
     }
@@ -101,7 +103,7 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         // TODO
         return null;
     }
-    
+
     public Estado getEstadoTransicao(EntradaAFNDG entrada) {
         return transicoes.get(entrada);
     }
@@ -114,32 +116,54 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
 
     @Override
     public void removeEstado(Estado k) {
-        for(Estado i : estados) {
-            for(Estado j : estados) {
-                ExpressaoRegular ii = getExpressaoRegular(i, i);
-                ii.concatenar(getExpressaoRegular(i, k));
-                ii.concatenarERFecho(getExpressaoRegular(k, k));
-                ii.concatenar(getExpressaoRegular(k, i));
-                
-                ExpressaoRegular jj = getExpressaoRegular(j, j);
-                jj.concatenar(getExpressaoRegular(j, k));
-                jj.concatenarERFecho(getExpressaoRegular(k, k));
-                jj.concatenar(getExpressaoRegular(k, j));
-                
-                ExpressaoRegular ij = getExpressaoRegular(i, j);
-                ij.concatenar(getExpressaoRegular(i, k));
-                ij.concatenarERFecho(getExpressaoRegular(k, k));
-                ij.concatenar(getExpressaoRegular(k, j));
-                
-                ExpressaoRegular ji = getExpressaoRegular(j, i);
-                ji.concatenar(getExpressaoRegular(j, k));
-                ji.concatenarERFecho(getExpressaoRegular(k, k));
-                ji.concatenar(getExpressaoRegular(k, i));
+        ExpressaoRegular kk = getExpressaoRegular(k, k);
+        ExpressaoRegular erAnt = null;
+        boolean nd = false;
+        Map<EntradaAFNDG, Estados> novasTransicoes = new LinkedHashMap<>();
+        for (Estado i : estados) {
+            if (!i.equals(k)) {
+                if (!i.equals(estadoInicial) && !i.equals(getEstadoFinal())) {
+                    ExpressaoRegular ii = getExpressaoRegular(i, i);
+                    ExpressaoRegular ik = getExpressaoRegular(i, k);
+                    ExpressaoRegular ki = getExpressaoRegular(k, i);
+                    ik.concatenarERFecho(kk);
+                    ik.concatenar(ki);
+                    ii.alternancia(ik);
+                    
+                    EntradaAFNDG novaEntrada = new EntradaAFNDG(i, ii);
+                    Estados novoEstados = new Estados();
+                    novoEstados.addEstado(i);
+                    novasTransicoes.put(novaEntrada, novoEstados);
+                    System.out.println(i.toString() + ", " + i.toString() + " -> " + ii.toString());
+                }
+
+                for (Estado j : estados) {
+                    if (!j.equals(k) && !j.equals(i)) {
+                        if (!j.equals(estadoInicial) && !i.equals(getEstadoFinal())) {
+                            ExpressaoRegular ij = getExpressaoRegular(i, j);
+                            ExpressaoRegular ik = getExpressaoRegular(i, k);
+                            ExpressaoRegular kj = getExpressaoRegular(k, j);
+                            ik.concatenarERFecho(kk);
+                            ik.concatenar(kj);
+                            ij.alternancia(ik);
+                            
+                            EntradaAFNDG novaEntrada = new EntradaAFNDG(i, ij);
+                            Estados novoEstados = transicoes.get(novaEntrada);
+                            if(novoEstados == null) {
+                                novoEstados = new Estados();
+                            }
+                            novoEstados.addEstado(j);
+                            novasTransicoes.put(novaEntrada, novoEstados);
+                            System.out.println(i.toString() + ", " + j.toString() + " -> " + ij.toString());
+                        }
+                    }
+                }
             }
         }
-        
+
         estados.remove(k);
-        
+        transicoes = novasTransicoes;
+
     }
 
     @Override
@@ -164,15 +188,15 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         EntradaAFNDG ent = new EntradaAFNDG(de, entrada);
         return (transicoes.get(ent) != null);
     }
-    
+
     public ExpressaoRegular getExpressaoRegular(Estado de, Estado para) {
         for (EntradaAFNDG entrada : transicoes.keySet()) {
-            if(entrada.getEstado().equals(de) && 
-                    transicoes.get(entrada).get().contains(para)) {
-                return entrada.getExpressaoRegular();
+            if (entrada.getEstado().equals(de)
+                    && transicoes.get(entrada).get().contains(para)) {
+                return entrada.getExpressaoRegular().clone();
             }
         }
-        
+
         return null;
     }
 
@@ -192,9 +216,9 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         for (EntradaAFNDG ent : transicoes.keySet()) {
             for (Estado estado : transicoes.get(ent).get()) {
                 out.append("T(")
-                    .append(ent.toString())
-                    .append(") -> ").append(estado.toString())
-                    .append("\n");
+                        .append(ent.toString())
+                        .append(") -> ").append(estado.toString())
+                        .append("\n");
             }
         }
 
