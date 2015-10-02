@@ -31,6 +31,10 @@ public class ExpressaoRegular {
     public ExpressaoRegular() {
         this.simbolos = new ArrayList<>();
     }
+    
+    public List<Simbolo> getSimbolos(){
+        return simbolos;
+    }
 
     public void concatenar(Simbolo simbolo) {
         simbolos.add(simbolo);

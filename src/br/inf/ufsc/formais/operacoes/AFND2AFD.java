@@ -39,11 +39,11 @@ public class AFND2AFD {
 				for (Estado estado : estadoAtual.get()) {
 
 					Entrada entrada = new Entrada(estado, simbolo);
-					Set<Estado> alcancaveis = AFND.getEstadoTransicao(entrada).get();
+					Set<Estado> alcancaveis = AFND.getEstadosTransicao(entrada).get();
 
 					// trata o caso de transição para o vazio
 					if (!alcancaveis.isEmpty()) {
-						novoEstado.addAll(AFND.getEstadoTransicao(entrada).get());
+						novoEstado.addAll(AFND.getEstadosTransicao(entrada).get());
 					}
 				}
 			}
@@ -90,11 +90,11 @@ public class AFND2AFD {
 
 				for (Estado estadoAtual : estadosEntrada.get()) {
 					Entrada entrada = new Entrada(estadoAtual, simboloAtual);
-					Set<Estado> alcancaveis = AFND.getEstadoTransicao(entrada).get();
+					Set<Estado> alcancaveis = AFND.getEstadosTransicao(entrada).get();
 
 					// trata o caso de transição para o vazio
 					if (!alcancaveis.isEmpty()) {
-						novoEstado.addAll(AFND.getEstadoTransicao(entrada).get());
+						novoEstado.addAll(AFND.getEstadosTransicao(entrada).get());
 					}
 				}
 
