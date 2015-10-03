@@ -10,6 +10,7 @@ import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import java.io.IOException;
 
+
 /**
  *
  * @author Diego
@@ -17,6 +18,7 @@ import java.io.IOException;
 public class ExpressaoRegularTeste {
 
     public void runTest() {
+
         ExpressaoRegular er = null;
         try {
             er = new ExpressaoRegularIO().read("C:\\", "er.in");
@@ -26,6 +28,7 @@ public class ExpressaoRegularTeste {
         } catch (FormaisIOException ex) {
             System.out.println(ex.getMessage());
         }
+
     }
 
 }

@@ -30,11 +30,11 @@ public class ER2AFND {
 
     public static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
         List<Simbolo> subSimbolos = new ArrayList<>();
-        
+
         AutomatoFinitoNaoDeterministico ultimo = null;
-        
+
         for (int i = 0; i < er.getSimbolos().size(); i++) {
-            
+
             if (er.getSimbolos().get(i) == SimboloOperacional.ABRE_GRUPO) {
                 //quando encontra um abre grupo entra num laço gerando uma sub er ete o fecha grupo.
                 //calcula essa sub er e retorna.
@@ -53,29 +53,39 @@ public class ER2AFND {
                     j++;
                 }
                 i = j;
-                ultimo = converterParaAutomato(subEr);
-
-            }
-            else if (er.getSimbolos().get(i) == SimboloOperacional.FECHO) {
-                ultimo = fechoDeAF(ultimo);
                 
-            }
-            else if (er.getSimbolos().get(i) == SimboloOperacional.ALTERNANCIA) {
+                if (ultimo == null) {
+                    if (er.getSimbolos().get(i + 1) == SimboloOperacional.FECHO) {
+                        ultimo = fechoDeAF(converterParaAutomato(subEr));
+                        ++i;
+                    } else {
+                        ultimo = converterParaAutomato(subEr);
+                    }
+                } else {
+                    if (er.getSimbolos().get(i + 1) == SimboloOperacional.FECHO) {
+                        ultimo = concatenaAFs(ultimo, fechoDeAF(converterParaAutomato(subEr)));
+                        ++i;
+                    } else {
+                        ultimo = concatenaAFs(ultimo,converterParaAutomato(subEr));
+                    }
+                }
+            } else if (er.getSimbolos().get(i) == SimboloOperacional.FECHO) {
+                ultimo = fechoDeAF(ultimo);
+
+            } else if (er.getSimbolos().get(i) == SimboloOperacional.ALTERNANCIA) {
                 ExpressaoRegular subEr = new ExpressaoRegular(subSimbolos);
                 //cria automato depois do | e opera com o automato em espera
-                
-                subSimbolos = er.getSimbolos().subList(i+1, er.getSimbolos().size());
+
+                subSimbolos = er.getSimbolos().subList(i + 1, er.getSimbolos().size());
                 ultimo = ouEntreAFs(ultimo, converterParaAutomato(subEr));
-                
-            }
-            else if (er.getSimbolos().get(i) == SimboloOperacional.CONJUNTO_VAZIO){
+
+            } else if (er.getSimbolos().get(i) == SimboloOperacional.CONJUNTO_VAZIO) {
                 ultimo = aFLingVazia();
-            }
-            else { //se for um simbolo
+            } else { //se for um simbolo
                 if (ultimo == null) {
-                    if(er.getSimbolos().get(i) == SimboloOperacional.EPSILON){
+                    if (er.getSimbolos().get(i) == SimboloOperacional.EPSILON) {
                         ultimo = aFPalavraVazia();
-                    }else{
+                    } else {
                         ultimo = aFdeSimbolo(er.getSimbolos().get(i));
                     }
 
@@ -84,7 +94,7 @@ public class ER2AFND {
                         ultimo = concatenaAFs(ultimo, fechoDeAF(aFdeSimbolo(er.getSimbolos().get(i))));
                         ++i;
                     } else {
-                        if(er.getSimbolos().get(i) == SimboloOperacional.EPSILON){
+                        if (er.getSimbolos().get(i) == SimboloOperacional.EPSILON) {
                             ultimo = concatenaAFs(ultimo, aFPalavraVazia());
                         }
                         ultimo = concatenaAFs(ultimo, aFdeSimbolo(er.getSimbolos().get(i)));
@@ -93,10 +103,10 @@ public class ER2AFND {
 
             }
         }
-        
+
         return ultimo;
     }
-    
+
     public static AutomatoFinitoNaoDeterministico aFdeSimbolo(Simbolo s) {
 
         EstadoInicial einicial = new EstadoInicial("->S");
