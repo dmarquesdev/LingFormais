@@ -25,8 +25,9 @@ public class ErToAfTeste {
         simbolos.add(new Simbolo("|"));
         simbolos.add(new Simbolo("b"));
         simbolos.add(new Simbolo(")"));
-        simbolos.add(new Simbolo("*"));
+        //simbolos.add(new Simbolo("("));
         simbolos.add(new Simbolo("c"));
+        //simbolos.add(new Simbolo(")"));
         ExpressaoRegular exp = new ExpressaoRegular(simbolos);
         
         AutomatoFinitoNaoDeterministico afnd;

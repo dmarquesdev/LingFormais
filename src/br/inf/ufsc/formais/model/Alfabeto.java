@@ -28,7 +28,7 @@ public class Alfabeto {
 
     @Override
     public String toString() {
-         StringBuilder out = new StringBuilder("A = (");
+         StringBuilder out = new StringBuilder("A = {");
 
         for (Simbolo simb : simbolos) {
             out.append(simb.getReferencia()).append(", ");
