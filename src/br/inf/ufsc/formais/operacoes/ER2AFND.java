@@ -29,8 +29,10 @@ import java.util.Set;
  */
 public class ER2AFND {
 
+    private static int contadorEstados = 0;
+    
     public static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
-        List<Simbolo> subSimbolos = new ArrayList<>();
+        
 
         AutomatoFinitoNaoDeterministico ultimo = null;
 
@@ -39,7 +41,7 @@ public class ER2AFND {
             if (er.getSimbolos().get(i).getReferencia().equals("(")) {
                 //quando encontra um abre grupo entra num laço gerando uma sub er ete o fecha grupo.
                 //calcula essa sub er e retorna.
-                
+                List<Simbolo> subSimbolos = new ArrayList<>();
                 int abregrupo = 1;
                 int j = i + 1;
                 while (abregrupo > 0) {
@@ -83,7 +85,7 @@ public class ER2AFND {
                 ultimo = fechoDeAF(ultimo);
 
             } else if (er.getSimbolos().get(i).getReferencia().equals("|")) {
-                
+                List<Simbolo> subSimbolos;
                 //cria automato depois do | e opera com o automato em espera
 
                 subSimbolos = er.getSimbolos().subList(i+1, er.getSimbolos().size());
@@ -139,9 +141,11 @@ public class ER2AFND {
 
     public static AutomatoFinitoNaoDeterministico aFdeSimbolo(Simbolo s) {
 
-        EstadoInicial einicial = new EstadoInicial("S" + s.getReferencia());
-        EstadoFinal efinal = new EstadoFinal("F" + s.getReferencia());
-
+        EstadoInicial einicial = new EstadoInicial("q" + contadorEstados);
+        ++contadorEstados;
+        EstadoFinal efinal = new EstadoFinal("q" + contadorEstados);
+        ++contadorEstados;
+        
         Set<Estado> estados = new LinkedHashSet<>();
         estados.add(einicial);
         estados.add(efinal);
@@ -169,7 +173,7 @@ public class ER2AFND {
     }
 
     public static AutomatoFinitoNaoDeterministico fechoDeAF(AutomatoFinitoNaoDeterministico af) {
-        AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico();
+        AutomatoFinitoNaoDeterministico afnd;
         afnd = af;
 
         Set<Estado> prox = new LinkedHashSet<>();
@@ -186,8 +190,8 @@ public class ER2AFND {
     }
 
     public static AutomatoFinitoNaoDeterministico ouEntreAFs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
-        EstadoInicial novoInicial = new EstadoInicial("S");
-
+        EstadoInicial novoInicial = new EstadoInicial("q" + contadorEstados);
+        ++contadorEstados;
         //Criando estados que serão substituidos pelos iniciais de af1 e af2
         Estado ei_af1 = af1.removeEstadoInicial();
         Estado ei_af2 = af2.removeEstadoInicial();
