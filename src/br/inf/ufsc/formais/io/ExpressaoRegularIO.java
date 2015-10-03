@@ -5,7 +5,7 @@
  */
 package br.inf.ufsc.formais.io;
 
-import br.inf.ufsc.formais.exception.InputException;
+import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import br.inf.ufsc.formais.model.er.SimboloOperacional;
@@ -25,12 +25,12 @@ import java.util.List;
 public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
 
     @Override
-    public ExpressaoRegular read(String file) throws IOException, InputException {
+    public ExpressaoRegular read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
 
     @Override
-    public ExpressaoRegular read(String path, String file) throws IOException, InputException {
+    public ExpressaoRegular read(String path, String file) throws IOException, FormaisIOException {
         String completePath = "";
         if (path != null) {
             completePath += path;
@@ -56,7 +56,7 @@ public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
                 } else if(c == '|') {
                     simbolos.add(SimboloOperacional.ALTERNANCIA);
                 } else {
-                    throw new InputException("Expressão regular contém símbolo inválido: " + c);
+                    throw new FormaisIOException("Expressão regular contém símbolo inválido: " + c);
                 }
             }
         }
