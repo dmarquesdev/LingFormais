@@ -5,7 +5,7 @@
  */
 package br.inf.ufsc.formais.io;
 
-import br.inf.ufsc.formais.exception.InputException;
+import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.gramatica.Cadeia;
 import br.inf.ufsc.formais.model.gramatica.Gramatica;
@@ -32,12 +32,12 @@ public class GramaticaIO implements IO<Gramatica> {
     Pattern gramaticaLineValidation = Pattern.compile("[A-Z] -> (([a-z&&[^e]][A-Z]?)|e)");
 
     @Override
-    public Gramatica read(String file) throws IOException, InputException {
+    public Gramatica read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
 
     @Override
-    public Gramatica read(String path, String file) throws IOException, InputException {
+    public Gramatica read(String path, String file) throws IOException, FormaisIOException {
         String completePath = "";
         if (path != null) {
             completePath += path;

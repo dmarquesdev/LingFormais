@@ -5,7 +5,7 @@
  */
 package br.inf.ufsc.formais.test;
 
-import br.inf.ufsc.formais.exception.InputException;
+import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class ExpressaoRegularTeste {
             System.out.println(er.toString());
         } catch (IOException ex) {
             System.out.println("Ocorreu um erro de leitura no arquivo!");
-        } catch (InputException ex) {
+        } catch (FormaisIOException ex) {
             System.out.println(ex.getMessage());
         }
     }

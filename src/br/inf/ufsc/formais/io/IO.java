@@ -5,7 +5,7 @@
  */
 package br.inf.ufsc.formais.io;
 
-import br.inf.ufsc.formais.exception.InputException;
+import br.inf.ufsc.formais.exception.FormaisIOException;
 import java.io.IOException;
 
 /**
@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 public interface IO<T> {
 
-    public T read(String file) throws IOException, InputException;
+    public T read(String file) throws IOException, FormaisIOException;
 
-    public T read(String path, String file) throws IOException, InputException;
+    public T read(String path, String file) throws IOException, FormaisIOException;
     
     public void write(String fileName, T obj) throws IOException;
     

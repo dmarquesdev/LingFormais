@@ -9,9 +9,9 @@ package br.inf.ufsc.formais.exception;
  *
  * @author Diego
  */
-public class InputException extends Exception{
+public class FormaisIOException extends Exception{
 
-    public InputException(String message) {
+    public FormaisIOException(String message) {
         super(message);
     }
     

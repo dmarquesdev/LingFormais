@@ -5,7 +5,7 @@
  */
 package br.inf.ufsc.formais.io;
 
-import br.inf.ufsc.formais.exception.InputException;
+import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
@@ -39,12 +39,12 @@ public class AutomatoFinitoDeterministicoIO implements IO<AutomatoFinitoDetermin
             finalPatt = Pattern.compile("F = \\{(([a-zA-Z0-9]+(, )?)+)\\}");
 
     @Override
-    public AutomatoFinitoDeterministico read(String file) throws IOException, InputException {
+    public AutomatoFinitoDeterministico read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
 
     @Override
-    public AutomatoFinitoDeterministico read(String path, String file) throws IOException, InputException {
+    public AutomatoFinitoDeterministico read(String path, String file) throws IOException, FormaisIOException {
         String completePath = "";
         if (path != null) {
             completePath += path;
@@ -55,7 +55,7 @@ public class AutomatoFinitoDeterministicoIO implements IO<AutomatoFinitoDetermin
         String line = br.readLine();
 
         if (!line.equals("M = (E,A,T,I,F)")) {
-            throw new InputException("Declaração de AFD fora do padrão!");
+            throw new FormaisIOException("Declaração de AFD fora do padrão!");
         }
 
         line = br.readLine();
@@ -132,7 +132,7 @@ public class AutomatoFinitoDeterministicoIO implements IO<AutomatoFinitoDetermin
                     }
                 }
             } else {
-                throw new InputException("Entrada da AFD inválida: " + line);
+                throw new FormaisIOException("Entrada da AFD inválida: " + line);
             }
 
             line = br.readLine();
