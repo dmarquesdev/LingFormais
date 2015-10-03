@@ -6,7 +6,6 @@
 package br.inf.ufsc.formais.model.automato;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -155,6 +154,7 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
     @Override
     public Estado removeEstadoFinal(EstadoFinal estado) {
+        
         Estado novo = new Estado(estado.getId());
         for (Entrada ent : transicoes.keySet()) {
 
