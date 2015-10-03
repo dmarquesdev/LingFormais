@@ -12,6 +12,7 @@ import java.util.Set;
 
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
+import java.util.HashSet;
 
 /**
  *
@@ -85,6 +86,10 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public void setEstadosAceitacao(Set<EstadoFinal> estadosAceitacao) {
         this.estadosAceitacao = estadosAceitacao;
     }
+    
+    public void setTransicoes(Map<Entrada, Estados> transicoes) {
+        this.transicoes = transicoes;
+    }
 
     @Override
     public void addEstadoFinal(EstadoFinal estado) {
@@ -94,6 +99,14 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     @Override
     public Estado getEstadoTransicao(Entrada entrada) {
         return transicoes.get(entrada);
+    }
+    
+    public Estados getEstadosTransicao(Entrada entrada) {
+            if (transicoes.get(entrada) != null) {
+                    return transicoes.get(entrada);
+            } else {
+                    return new Estados(new HashSet<Estado>());
+            }
     }
 
     public void addTransicao(Entrada entrada, Estados destino) {

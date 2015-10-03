@@ -5,6 +5,8 @@
  */
 package br.inf.ufsc.formais.model.automato;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +21,11 @@ public class Estados extends Estado {
 		super("");
 		this.estados = estados;
 	}
+        
+        public Estados(){
+            super("");
+            this.estados = new LinkedHashSet<>();
+        }
 
 	public void addEstado(Estado estado) {
 		estados.add(estado);
@@ -61,7 +68,7 @@ public class Estados extends Estado {
 			return false;
 		}
 		final Estados other = (Estados) obj;
-		if (!Objects.equals(this.getId(), other.getId()) || !estados.equals(other.get())) {
+		if (!estados.equals(other.get())) {
 			return false;
 		}
 		return true;
