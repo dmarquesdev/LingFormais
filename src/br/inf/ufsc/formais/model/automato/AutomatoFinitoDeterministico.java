@@ -160,8 +160,10 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         for (Entrada ent : transicoes.keySet()) {
             out.append("T(").append(ent.toString())
                     .append(") -> ")
-                    .append(transicoes.get(ent).toString())
-                    .append("\n");
+                    if(transicoes.get(ent) != null){
+                    out.append(transicoes.get(ent).toString()); 
+                    }
+                    out.append("\n");
         }
         
         out.append("\n");
