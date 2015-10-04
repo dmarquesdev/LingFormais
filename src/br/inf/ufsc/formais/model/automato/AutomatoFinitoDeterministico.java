@@ -159,7 +159,7 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         
         for (Entrada ent : transicoes.keySet()) {
             out.append("T(").append(ent.toString())
-                    .append(") -> ")
+                    .append(") -> ")                 
                     .append(transicoes.get(ent).toString())
                     .append("\n");
         }
