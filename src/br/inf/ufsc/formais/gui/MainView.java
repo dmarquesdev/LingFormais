@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.gui;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
-import br.inf.ufsc.formais.io.AutomatoFinitoDeterministicoIO;
+import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.io.GramaticaIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
@@ -19,12 +14,18 @@ import br.inf.ufsc.formais.operacoes.AFD2Gramatica;
 import br.inf.ufsc.formais.operacoes.AFNDG2ER;
 import br.inf.ufsc.formais.operacoes.ER2AFND;
 import br.inf.ufsc.formais.operacoes.Gramatica2AFD;
+import br.inf.ufsc.formais.operacoes.Gramatica2AFND;
 import java.io.IOException;
 import java.util.Scanner;
 
 /**
- *
- * @author Diego
+ * Essa classe tem como objetivo apresentar uma interface para o usuário
+ * de modo que o mesmo possa executar as operações requeridas utilizando
+ * as ferramentas de Linguagens Regulares.
+ * 
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class MainView {
 
@@ -74,17 +75,17 @@ public class MainView {
                     scanInput.close();
                     if (opt.equals("1")) {
                         afd = Gramatica2AFD.converterParaAFD(gramatica);
-                        new AutomatoFinitoDeterministicoIO().write("gramatica_afd.out", afd);
+                        new AutomatoFinitoIO().write("gramatica_afd.out", afd);
                     } else if (opt.equals("2")) {
-//                        afnd = Gramatica2AFND.converterParaAFND(gramatica);
-//                        new AutomatoFinitoNaoDeterministicoIO().write("er_afnd.out", afnd);
+                        afnd = Gramatica2AFND.converterParaAFND(gramatica);
+                        new AutomatoFinitoIO().write("gramatica_afnd.out", afnd);
                     } else {
                         System.out.println("Opção inválida!");
                         System.exit(0);
                     }
                     break;
                 case "AFD":
-                    afd = new AutomatoFinitoDeterministicoIO().read(arquivo);
+                    afd = (AutomatoFinitoDeterministico) new AutomatoFinitoIO().read(arquivo);
                     System.out.println("(1)AFD -> Gramática");
                     System.out.println("(2)AFD -> Expressão Regular");
                     opt = scanInput.nextLine();

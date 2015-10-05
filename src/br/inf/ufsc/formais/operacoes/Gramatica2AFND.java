@@ -13,10 +13,12 @@ import java.util.Set;
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
+import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
+import br.inf.ufsc.formais.model.automato.Estados;
 import br.inf.ufsc.formais.model.gramatica.Gramatica;
 import br.inf.ufsc.formais.model.gramatica.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
@@ -25,9 +27,9 @@ import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
  *
  * @author Diego
  */
-public class Gramatica2AFD {
+public class Gramatica2AFND {
 
-    public static AutomatoFinitoDeterministico converterParaAFD(Gramatica g) {
+    public static AutomatoFinitoNaoDeterministico converterParaAFND(Gramatica g) {
         Set<Simbolo> simbAlfa = new LinkedHashSet<>();
         simbAlfa.addAll(g.getSimbolosTerminais());
         Alfabeto alfa = new Alfabeto(simbAlfa);
@@ -44,11 +46,16 @@ public class Gramatica2AFD {
         EstadoFinal fim = new EstadoFinal("T");
         finais.add(fim);
 
-        Map<Entrada, Estado> transicoes = new HashMap<>();
+        Map<Entrada, Estados> transicoes = new HashMap<>();
         for (RegraProducao regra : g.getRegrasDeProducao()) {
-
             Estado atual = new Estado(regra.getSimboloProducao().getReferencia());
             Estado prox = null;
+            
+            for (Estado estado : estados) {
+                if(regra.getSimboloProducao().getReferencia().equals(estado.getId())) {
+                    atual = estado;
+                }
+            }
 
             Simbolo entrada = regra.getCadeiaProduzida().getSimboloTerminal();
             if (regra.getCadeiaProduzida().isTerminal()) {
@@ -63,9 +70,17 @@ public class Gramatica2AFD {
             }
 
             Entrada ent = new Entrada(atual, entrada);
-            transicoes.put(ent, prox);
+            Estados ests = transicoes.get(ent);
+            
+            if(ests == null) {
+                ests = new Estados();
+            }
+            
+            ests.addEstado(prox);
+            
+            transicoes.put(ent, ests);
         }
 
-        return new AutomatoFinitoDeterministico(estados, alfa, estadoInicial, finais, transicoes);
+        return new AutomatoFinitoNaoDeterministico(estados, alfa, estadoInicial, finais, transicoes);
     }
 }

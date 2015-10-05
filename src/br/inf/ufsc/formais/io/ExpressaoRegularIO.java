@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.io;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
@@ -19,16 +14,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Classe responsável pela entrada/saída de Expressões Regulares.
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
 
+    /**
+     * Lê um arquivo que contenha uma Expressão Regular.
+     *
+     * @param file Arquivo para ser lido (caminho completo).
+     * @return Uma Expressão Regular.
+     * @throws IOException Quando ocorre algum erro na leitura/escrita do
+     * arquivo.
+     * @throws FormaisIOException Quando ocorre algum erro na leitura da
+     * estrutura do arquivo.
+     */
     @Override
     public ExpressaoRegular read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
 
+    /**
+     * Lê um arquivo que contenha uma Expressão Regular.
+     *
+     * @param file Arquivo para ser lido.
+     * @param path Caminho onde se encontra o arquivo.
+     * @return Uma Expressão Regular.
+     * @throws IOException Quando ocorre algum erro na leitura/escrita do
+     * arquivo.
+     * @throws FormaisIOException Quando ocorre algum erro na leitura da
+     * estrutura do arquivo.
+     */
     @Override
     public ExpressaoRegular read(String path, String file) throws IOException, FormaisIOException {
         String completePath = "";
@@ -44,33 +63,46 @@ public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
 
         if (line != null && !line.isEmpty()) {
             for (char c : line.toCharArray()) {
-                if(Character.isAlphabetic(c) || Character.isDigit(c)) {
-                    Simbolo a = new Simbolo(""+c);
+                if (Character.isAlphabetic(c) || Character.isDigit(c)) {
+                    Simbolo a = new Simbolo("" + c);
                     simbolos.add(a);
-                } else if(c == '(') {
+                } else if (c == '(') {
                     simbolos.add(SimboloOperacional.ABRE_GRUPO);
-                } else if(c == ')') {
+                } else if (c == ')') {
                     simbolos.add(SimboloOperacional.FECHA_GRUPO);
-                } else if(c == '*') {
+                } else if (c == '*') {
                     simbolos.add(SimboloOperacional.FECHO);
-                } else if(c == '|') {
+                } else if (c == '|') {
                     simbolos.add(SimboloOperacional.ALTERNANCIA);
                 } else {
                     throw new FormaisIOException("Expressão regular contém símbolo inválido: " + c);
                 }
             }
         }
-        
+
         br.close();
-        
+
         return new ExpressaoRegular(simbolos);
     }
 
+    /**
+     * Escreve uma Expressão Regular em um arquivo.
+     * @param fileName Nome do arquivo a ser escrito.
+     * @param obj Expressão Regular que será escrito no arquivo.
+     * @throws IOException Quando não for possível escrever o arquivo em disco.
+     */
     @Override
     public void write(String fileName, ExpressaoRegular obj) throws IOException {
         write(null, fileName, obj);
     }
 
+    /**
+     * Escreve uma Expressão Regular em um arquivo.
+     * @param path Caminho do arquivo que será escrito.
+     * @param fileName Nome do arquivo a ser escrito.
+     * @param obj Expressão Regular que será escrito no arquivo.
+     * @throws IOException Quando não for possível escrever o arquivo em disco.
+     */
     @Override
     public void write(String path, String fileName, ExpressaoRegular obj) throws IOException {
         String completePath = "";
@@ -78,12 +110,12 @@ public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
             completePath += path;
         }
         completePath += fileName;
-        
+
         File arq = new File(completePath);
-        if(arq.exists()) {
+        if (arq.exists()) {
             throw new IOException();
         }
-        
+
         BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
         bw.write(obj.toString());
         bw.close();

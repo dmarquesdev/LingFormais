@@ -6,7 +6,7 @@
 package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
-import br.inf.ufsc.formais.io.AutomatoFinitoDeterministicoIO;
+import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class AutomatoFinitoDeterministicoTeste {
     public void runTest() {
         AutomatoFinitoDeterministico dfa = null;
         try {
-            dfa = new AutomatoFinitoDeterministicoIO().read("C:\\", "afd.in");
+            dfa = (AutomatoFinitoDeterministico) new AutomatoFinitoIO().read("C:\\", "afd.in");
             System.out.println(dfa.toString());
             AutomatoFinitoNaoDeterministicoGeneralizado afndg = AFD2AFNDG.converterParaAFDNG(dfa);
 
