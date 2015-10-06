@@ -9,10 +9,14 @@ import br.inf.ufsc.formais.model.Simbolo;
 
 /**
  *
- * @author Diego
+ * Define um simbolo operacional de uma expressão regular.
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
-public class SimboloOperacional extends Simbolo{
-    
+public class SimboloOperacional extends Simbolo {
+
     public static final SimboloOperacional FECHO = new SimboloOperacional("*");
     public static final SimboloOperacional ALTERNANCIA = new SimboloOperacional("|");
     public static final SimboloOperacional ABRE_GRUPO = new SimboloOperacional("(");
@@ -21,5 +25,5 @@ public class SimboloOperacional extends Simbolo{
     public SimboloOperacional(String referencia) {
         super(referencia);
     }
-    
+
 }

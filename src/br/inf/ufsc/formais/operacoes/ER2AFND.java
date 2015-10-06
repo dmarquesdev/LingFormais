@@ -24,8 +24,8 @@ import java.util.Set;
 
 /**
  *
- * Essa classe tem o objetivo de converter uma expressão regular em um automato
- * finito não deterministico.
+ * Essa classe tem os procediemntos necessarios para converter uma expressão
+ * regular em um automato finito não deterministico.
  *
  * @author Diego Marques
  * @author Matheus Demetrio

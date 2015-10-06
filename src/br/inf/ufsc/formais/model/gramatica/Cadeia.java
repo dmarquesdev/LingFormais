@@ -7,6 +7,7 @@ package br.inf.ufsc.formais.model.gramatica;
 
 /**
  *
+ * 
  * @author Diego
  */
 public class Cadeia {
