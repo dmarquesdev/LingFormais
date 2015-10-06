@@ -46,9 +46,6 @@ public class Estado {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
         final Estado other = (Estado) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;

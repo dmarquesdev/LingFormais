@@ -14,10 +14,12 @@ import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
 import br.inf.ufsc.formais.operacoes.AFND2AFD;
+import java.io.IOException;
+
 
 public class DeterminizacaoTeste {
 
-	public void runTeste() {
+	public void runTeste() throws IOException {
 
 		HashSet<Estado> estados = new LinkedHashSet<Estado>();
 		Estado q0 = new EstadoInicial("Q0");
@@ -66,9 +68,9 @@ public class DeterminizacaoTeste {
 		afnd.setEstadosAceitacao(conjuntosEstadosAceitacao);
 		afnd.setTransicoes(transicoes);
 		
-		AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-		
-		System.out.println(AFD);
+                AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
+                System.out.println("Determinização sem epsilon transição.");
+		System.out.println(AFD);              
 
 	}
 }

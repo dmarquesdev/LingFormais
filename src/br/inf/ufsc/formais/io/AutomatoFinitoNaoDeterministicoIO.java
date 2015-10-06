@@ -13,6 +13,7 @@ import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
+import br.inf.ufsc.formais.model.automato.Estados;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,7 +35,7 @@ public class AutomatoFinitoNaoDeterministicoIO implements IO<AutomatoFinitoNaoDe
 
     Pattern estadosPatt = Pattern.compile("E = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
             alfabetoPatt = Pattern.compile("A = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
-            transicaoPatt = Pattern.compile("T = \\(([a-zA-Z0-9]+, [a-zA-Z0-9]+)\\) -> ([a-zA-Z0-9]+)"),
+            transicaoPatt = Pattern.compile("T = \\(([a-zA-Z0-9]+, [a-zA-Z0-9]+)\\) -> \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
             inicialPatt = Pattern.compile("I = ([a-zA-Z0-9]+)"),
             finalPatt = Pattern.compile("F = \\{(([a-zA-Z0-9]+(, )?)+)\\}");
 
@@ -64,7 +65,7 @@ public class AutomatoFinitoNaoDeterministicoIO implements IO<AutomatoFinitoNaoDe
         Set<Estado> estados = new LinkedHashSet<>();
         Set<EstadoFinal> estadosFinais = new LinkedHashSet<>();
         EstadoInicial inicial = null;
-        Map<Entrada, Estado> transicoes = new LinkedHashMap<>();
+        Map<Entrada, Estados> transicoes = new LinkedHashMap<>();
 
         Matcher estadosMatcher, alfabetoMatcher,
                 transicaoMatcher, inicialMatcher, finalMatcher;
@@ -99,16 +100,21 @@ public class AutomatoFinitoNaoDeterministicoIO implements IO<AutomatoFinitoNaoDe
                 String ent = transicaoMatcher.group(1),
                         paraStr = transicaoMatcher.group(2);
                 String[] estSimb = ent.split(", ");
-                Estado de = new Estado(estSimb[0]), para = new Estado(paraStr);
+                Estado de = new Estado(estSimb[0]);
+                Estados para = new Estados();
                 Simbolo simb = new Simbolo(estSimb[1]);
                 Entrada entrada = new Entrada(de, simb);
                 for (Estado e : estados) {
                     if (e.getId().equals(de.getId())) {
                         de = e;
-                    } else if (e.getId().equals(para.getId())) {
-                        para = e;
                     }
                 }
+                String[] paraEstados = paraStr.split(", ");
+                for (String estadoAtual : paraEstados) {
+                    Estado novoEstado = new Estado(estadoAtual);
+                    para.addEstado(novoEstado);
+                }
+                
                 transicoes.put(entrada, para);
             } else if (inicialMatcher.matches()) {
                 inicial = new EstadoInicial(inicialMatcher.group(1));

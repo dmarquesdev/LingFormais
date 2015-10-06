@@ -136,13 +136,13 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
         out.append(alfabeto.toString()).append("\n");
 
-        for (Entrada ent : transicoes.keySet()) {
-            for (Estado est : transicoes.get(ent).get()) {
+        for (Entrada ent : transicoes.keySet()) { 
+                Estados est = transicoes.get(ent);
                 out.append("T(")
                         .append(ent.toString())
                         .append(") -> ").append(est.toString())
                         .append("\n");
-            }
+            
         }
 
         out.append("\n");

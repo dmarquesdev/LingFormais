@@ -38,11 +38,13 @@ public class Estados extends Estado {
 	@Override
 	public String getId() {
 		StringBuilder out = new StringBuilder();
+                out.append("{");
 		for (Estado estado : estados) {
 			out.append(estado.getId()).append(", ");
 		}
 
 		out.delete(out.length() - 2, out.length());
+                out.append("}");
 		return out.toString();
 
 	}
