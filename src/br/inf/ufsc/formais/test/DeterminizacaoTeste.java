@@ -14,12 +14,12 @@ import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
 import br.inf.ufsc.formais.operacoes.AFND2AFD;
-import java.io.IOException;
+
 
 
 public class DeterminizacaoTeste {
 
-	public void runTeste() throws IOException {
+	public void runTeste() {
 
 		HashSet<Estado> estados = new LinkedHashSet<Estado>();
 		Estado q0 = new EstadoInicial("Q0");
