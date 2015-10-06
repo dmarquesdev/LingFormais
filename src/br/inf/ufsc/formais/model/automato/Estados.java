@@ -1,36 +1,51 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.model.automato;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
+ * Clase que representa um conjunto de estados do Automato.
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Estados extends Estado {
+    
+        /**
+         * Conjunto de estados
+         */
 	private Set<Estado> estados;
 
+        /**
+         * Contrutor, inicializa todos os atributos da classe.
+         * @param estados conjunto de estados em que será inicializado o objeto.
+         */
 	public Estados(Set<Estado> estados) {
 		super("");
 		this.estados = estados;
 	}
         
+        /**
+         * Contrutor vazio, inicializa os atributos da classe com um valor padrão.
+         */
         public Estados(){
             super("");
             this.estados = new LinkedHashSet<>();
         }
-
+        
+        /**
+         * Adiciona um estado no conjunto de estados da classe.
+         * @param estado Estado a ser adicionado ao conjunto.
+         */
 	public void addEstado(Estado estado) {
 		estados.add(estado);
 	}
 
+        /**
+         * Retorna o conjunto de estados da classe.
+         * @return conjunto de estados da classe.
+         */
 	public Set<Estado> get() {
 		return estados;
 	}
@@ -49,6 +64,10 @@ public class Estados extends Estado {
 
 	}
 	
+        /**
+         * Retorna se o conjunto de estados da classe está vazio.
+         * @return Verdadeiro se está vazio, falso caso contrario.
+         */
 	public boolean isEmpty() {
 		return estados.isEmpty();
 	}

@@ -16,117 +16,143 @@ import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
 
+/**
+ * Implementação do algoritmo de determinização de automatos finitos não
+ * deterministicos sem epsilon transição.
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
+ */
 public class AFND2AFD {
 
-	public static AutomatoFinitoDeterministico determinizar(AutomatoFinitoNaoDeterministico AFND) {
+    /**
+     * Retorna um Automato Finito Deterministico.
+     * A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo.
+     * Então todos os conjuntos de estados alcançaveis são agrupados para formar os novos estados deterministicos. 
+     * Depois disso, cada conjunto é mapeado para um novo estado deterministico e são definidos os novos estados finais.
+     * Por fim, as novas transições deterministicas são encontradas e o Automato Finito Deterministico é gerado. 
+     * @param AFND Automato finito não deterministico a ser determinizado.
+     * @return O Automato finito determinizado.
+     */
+    public static AutomatoFinitoDeterministico determinizar(AutomatoFinitoNaoDeterministico AFND) {
 
-		Set<Estados> estadosAgrupados = new LinkedHashSet<Estados>();
-		Set<Estados> estadosToBeGrouped = new LinkedHashSet<Estados>();
-		Set<Estados> estadosAlcancaveis = new LinkedHashSet<Estados>();
+        Set<Estados> estadosAgrupados = new LinkedHashSet<Estados>();
+        Set<Estados> estadosToBeGrouped = new LinkedHashSet<Estados>();
+        Set<Estados> estadosAlcancaveis = new LinkedHashSet<Estados>();
 
-		Estados estadoInicial = new Estados(new HashSet<Estado>());
-		estadoInicial.addEstado(AFND.getEstadoInicial());
-		estadosToBeGrouped.add(estadoInicial);
+        Estados estadoInicial = new Estados(new HashSet<Estado>());
+        estadoInicial.addEstado(AFND.getEstadoInicial());
+        estadosToBeGrouped.add(estadoInicial);
 
-		// agrupar estados para formar novos deterministicos
-		while (!estadosToBeGrouped.isEmpty()) {
+        // agrupar estados para formar novos deterministicos
+        while (!estadosToBeGrouped.isEmpty()) {
 
-			Estados estadoAtual = (Estados) estadosToBeGrouped.toArray()[0];
+            Estados estadoAtual = (Estados) estadosToBeGrouped.toArray()[0];
 
-			for (Simbolo simbolo : AFND.getAlfabeto().getSimbolos()) {
+            for (Simbolo simbolo : AFND.getAlfabeto().getSimbolos()) {
 
-				HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
+                HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
 
-				for (Estado estado : estadoAtual.get()) {
+                for (Estado estado : estadoAtual.get()) {
 
-					Entrada entrada = new Entrada(estado, simbolo);
-					Set<Estado> alcancaveis = AFND.getEstadosTransicao(entrada).get();
-                                        novoEstado.addAll(AFND.getEstadosTransicao(entrada).get());
-					
-				}
-				Estados novoEstados = new Estados(novoEstado);
-                                // trata o caso de transição para o vazio
-				if (!novoEstados.get().isEmpty()) {
-					estadosAlcancaveis.add(novoEstados);
-					
-				}
+                    Entrada entrada = new Entrada(estado, simbolo);
+                    Set<Estado> alcancaveis = AFND.getEstadosTransicao(entrada).get();
+                    novoEstado.addAll(AFND.getEstadosTransicao(entrada).get());
 
-			}
-			estadosAgrupados.add(estadoAtual);
-			estadosToBeGrouped.addAll(estadosAlcancaveis);
-			estadosToBeGrouped.removeAll(estadosAgrupados);
-		}
+                }
+                Estados novoEstados = new Estados(novoEstado);
+                // trata o caso de transição para o vazio
+                if (!novoEstados.get().isEmpty()) {
+                    estadosAlcancaveis.add(novoEstados);
 
-		// criar novos estados deterministicos
-		HashMap<Estados, Estado> estadosDeterministicos = new LinkedHashMap<Estados, Estado>();
-		Set<EstadoFinal> estadosAceitacaoDeterministico = new HashSet<EstadoFinal>();
-		Estado estadoInicialDeterministico = new EstadoInicial("Q0");
-		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
+                }
 
-		estadosAgrupados.remove(estadoInicial);
+            }
+            estadosAgrupados.add(estadoAtual);
+            estadosToBeGrouped.addAll(estadosAlcancaveis);
+            estadosToBeGrouped.removeAll(estadosAgrupados);
+        }
 
-		int indexEstados = 1;
+        // criar novos estados deterministicos
+        HashMap<Estados, Estado> estadosDeterministicos = new LinkedHashMap<Estados, Estado>();
+        Set<EstadoFinal> estadosAceitacaoDeterministico = new HashSet<EstadoFinal>();
+        Estado estadoInicialDeterministico = new EstadoInicial("Q0");
+        estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
-		for (Estados estadosAgrupado : estadosAgrupados) {
+        estadosAgrupados.remove(estadoInicial);
 
-			if (isFinalState(estadosAgrupado, AFND.getEstadosAceitacao())) {
-				Estado novoEstadoFinal = new EstadoFinal("Q" + indexEstados);
-				estadosDeterministicos.put(estadosAgrupado, novoEstadoFinal);
-				estadosAceitacaoDeterministico.add((EstadoFinal) novoEstadoFinal);
-			} else {
+        int indexEstados = 1;
 
-				estadosDeterministicos.put(estadosAgrupado, new Estado("Q" + indexEstados));
-			}
+        for (Estados estadosAgrupado : estadosAgrupados) {
 
-			indexEstados++;
-		}
+            if (isFinalState(estadosAgrupado, AFND.getEstadosAceitacao())) {
+                Estado novoEstadoFinal = new EstadoFinal("Q" + indexEstados);
+                estadosDeterministicos.put(estadosAgrupado, novoEstadoFinal);
+                estadosAceitacaoDeterministico.add((EstadoFinal) novoEstadoFinal);
+            } else {
 
-		// criar novas transições deterministicas
-		Map<Entrada, Estado> transicoesDeterministicas = new HashMap<Entrada, Estado>();
+                estadosDeterministicos.put(estadosAgrupado, new Estado("Q" + indexEstados));
+            }
 
-		estadosAgrupados.add(estadoInicial);
+            indexEstados++;
+        }
 
-		for (Estados estadosEntrada : estadosAgrupados) {
+        // criar novas transições deterministicas
+        Map<Entrada, Estado> transicoesDeterministicas = new HashMap<Entrada, Estado>();
 
-			for (Simbolo simboloAtual : AFND.getAlfabeto().getSimbolos()) {
-				HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
+        estadosAgrupados.add(estadoInicial);
 
-				for (Estado estadoAtual : estadosEntrada.get()) {
-					Entrada entrada = new Entrada(estadoAtual, simboloAtual);
-					Set<Estado> alcancaveis = AFND.getEstadosTransicao(entrada).get();
+        for (Estados estadosEntrada : estadosAgrupados) {
 
-					// trata o caso de transição para o vazio
-					if (!alcancaveis.isEmpty()) {
-						novoEstado.addAll(AFND.getEstadosTransicao(entrada).get());
-					}
-				}
+            for (Simbolo simboloAtual : AFND.getAlfabeto().getSimbolos()) {
+                HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
 
-				Estados alcancaveis = new Estados(novoEstado);
-				// só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
-				if (!alcancaveis.get().isEmpty()) {
-					Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
-					Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
+                for (Estado estadoAtual : estadosEntrada.get()) {
+                    Entrada entrada = new Entrada(estadoAtual, simboloAtual);
+                    Set<Estado> alcancaveis = AFND.getEstadosTransicao(entrada).get();
 
-					transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
-				}
-			}
+                    // trata o caso de transição para o vazio
+                    if (!alcancaveis.isEmpty()) {
+                        novoEstado.addAll(AFND.getEstadosTransicao(entrada).get());
+                    }
+                }
 
-		}
+                Estados alcancaveis = new Estados(novoEstado);
+                // só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
+                if (!alcancaveis.get().isEmpty()) {
+                    Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
+                    Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
 
-		Set<Estado> estadosAFD = new LinkedHashSet<Estado>();
-		estadosAFD.addAll(estadosDeterministicos.values());
+                    transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
+                }
+            }
 
-		return new AutomatoFinitoDeterministico(estadosAFD, AFND.getAlfabeto(), (EstadoInicial) estadoInicialDeterministico, estadosAceitacaoDeterministico, transicoesDeterministicas);
-	}
+        }
 
-	private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
-		Set<EstadoFinal> aux = new LinkedHashSet<EstadoFinal>();
-		aux.addAll(finais);
-		aux.retainAll(estados.get());
-		if(!aux.isEmpty()){
-			return true;
-		}
-		return false;
-	}
+        Set<Estado> estadosAFD = new LinkedHashSet<Estado>();
+        estadosAFD.addAll(estadosDeterministicos.values());
+
+        return new AutomatoFinitoDeterministico(estadosAFD, AFND.getAlfabeto(), (EstadoInicial) estadoInicialDeterministico, estadosAceitacaoDeterministico, transicoesDeterministicas);
+    }
+    
+     /**
+     * Método auxiliar que retorna se dado um conjunto de estados algum deles é final(Estado de aceitação).
+     * O metodo faz a intersecção do conjunto de estados finais com o conjunto
+     * de estados passado por parâmetro, se a intersecção não for vazia
+     * temos que o conjunto passado por paramêtro contem pelo menos um estado final.
+     * @param estados Conjunto de estados que se deseja saber se contem ao menos um estado que é final.
+     * @param finais Conjunto de estados finais do Automato finito não deterministico. 
+     * @return Verdadeiro se estados contem um estado que é final, falso caso contrário.
+     */
+    private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
+        Set<EstadoFinal> interseccao = new LinkedHashSet<EstadoFinal>();
+        interseccao.addAll(finais);
+        interseccao.retainAll(estados.get());
+        if (!interseccao.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
 }

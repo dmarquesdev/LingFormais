@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.model.automato;
 
 import java.util.HashMap;
@@ -14,17 +9,47 @@ import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
 
 /**
+ * Classe que representa um Automato Finito Deterministico.
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AutomatoFinitoDeterministico implements AutomatoFinito {
     
+    /**
+     * Conjunto de estados do Automato.
+     */
     protected Set<Estado> estados;
+    
+    /**
+    * Alfabeto do Automato.
+    */
     protected Alfabeto alfabeto;
+    
+    /**
+    * Estado inicial do Automato.
+    */
     protected EstadoInicial estadoInicial;
+    
+    /**
+    * Conjunto de estados de aceitação(Finais) do Automato.
+    */
     protected Set<EstadoFinal> estadosAceitacao;
+    
+    /**
+    * Mapa de transições do Automato.
+    */
     protected Map<Entrada, Estado> transicoes;
     
+    /**
+     * Contrutor, inicializa todos os atributos da classe.
+     * @param estados conjunto de estados que será inicializado o Automato.
+     * @param alfabeto  alfabeto que será inicializado o Automato.
+     * @param estadoInicial estado inicial que será inicializado o Automato.
+     * @param estadosAceitacao conjunto de estados de aceitação(Finais) que será inicializado o Automato.
+     * @param transicoes mapa de transições que será inicializado o Automato.
+     */
     public AutomatoFinitoDeterministico(Set<Estado> estados, Alfabeto alfabeto, EstadoInicial estadoInicial, Set<EstadoFinal> estadosAceitacao, Map<Entrada, Estado> transicoes) {
         this.estados = estados;
         this.alfabeto = alfabeto;
@@ -32,7 +57,9 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         this.estadosAceitacao = estadosAceitacao;
         this.transicoes = transicoes;
     }
-    
+    /**
+     * Contrutor vazio, inicializa os atributos da classe com valores padrão.
+     */
     public AutomatoFinitoDeterministico() {
         estados = new LinkedHashSet<>();
         estadosAceitacao = new LinkedHashSet<>();
@@ -104,6 +131,7 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         // TODO
     }
     
+    @Override
     public Map<Entrada, Estado> getTransicoes() {
         return transicoes;
     }

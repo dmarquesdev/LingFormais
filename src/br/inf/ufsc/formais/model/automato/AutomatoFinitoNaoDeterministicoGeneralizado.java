@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.model.automato;
 
 import java.util.HashMap;
@@ -16,17 +11,48 @@ import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 
 /**
+ * Classe que representa um Automato Finito não Deterministico Generalizado.
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFinito {
-
+    
+    /**
+     * Conjunto de estados do Automato.
+     */
     protected Set<Estado> estados;
+    
+    /**
+    * Alfabeto do Automato.
+    */    
     protected Alfabeto alfabeto;
+    
+     /**
+    * Estado inicial do Automato.
+    */   
     protected EstadoInicial estadoInicial;
+    
+    /**
+    * Conjunto de estados de aceitação(Finais) do Automato.
+    */    
     protected Set<EstadoFinal> estadosAceitacao;
+    
+    
+    /**
+    * Mapa de transições do Automato.
+    */    
     protected Map<EntradaAFNDG, Estados> transicoes;
 
+    /**
+     * Contrutor, inicializa todos os atributos da classe.
+     * @param estados conjunto de estados que será inicializado o Automato.
+     * @param alfabeto  alfabeto que será inicializado o Automato.
+     * @param estadoInicial estado inicial que será inicializado o Automato.
+     * @param estadosAceitacao conjunto de estados de aceitação(Finais) que será inicializado o Automato.
+     * @param transicoes mapa de transições que será inicializado o Automato.
+     */    
     public AutomatoFinitoNaoDeterministicoGeneralizado(Set<Estado> estados, Alfabeto alfabeto,
             EstadoInicial estadoInicial, Set<EstadoFinal> estadosAceitacao,
             Map<EntradaAFNDG, Estados> transicoes) {
@@ -37,6 +63,9 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         this.transicoes = transicoes;
     }
 
+    /**
+     * Contrutor vazio, inicializa os atributos da classe com valores padrão.
+     */    
     public AutomatoFinitoNaoDeterministicoGeneralizado() {
         estados = new LinkedHashSet<>();
         estadosAceitacao = new LinkedHashSet<>();
@@ -93,6 +122,10 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         estadosAceitacao.add(estado);
     }
 
+    /**
+     * Obtem o estado final do Automato.
+     * @return Estado final do automato.
+     */
     public EstadoFinal getEstadoFinal() {
         return estadosAceitacao.toArray(new EstadoFinal[1])[0];
     }
@@ -103,7 +136,12 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         // TODO
         return null;
     }
-
+    
+    /**
+     * Obtem um estado a partir de uma entrada.
+     * @param entrada Chave para o mapa de transições.
+     * @return Estado no qual foi mapeado pela chave.
+     */
     public Estado getEstadoTransicao(EntradaAFNDG entrada) {
         return transicoes.get(entrada);
     }
@@ -189,6 +227,12 @@ public class AutomatoFinitoNaoDeterministicoGeneralizado implements AutomatoFini
         return (transicoes.get(ent) != null);
     }
 
+    /**
+     * Obtem uma Expressão Regular a partir de um estado origem e de destino
+     * @param de Estado de origem
+     * @param para Estado de destino
+     * @return A expressão regular caso exista, se não retorna nulo.
+     */
     public ExpressaoRegular getExpressaoRegular(Estado de, Estado para) {
         for (EntradaAFNDG entrada : transicoes.keySet()) {
             if (entrada.getEstado().equals(de)

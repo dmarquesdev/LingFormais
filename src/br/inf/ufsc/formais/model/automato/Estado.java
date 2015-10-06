@@ -1,27 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.model.automato;
 
 import java.util.Objects;
 
 /**
+ * Clase que representa um Estado do Automato.
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Estado {
+    
+    /**
+     * Atributo que armazena o identificador do estado.
+     */
     private String id;
 
+    /**
+     * Contrutor, inicializa o único atributo da classe.
+     * @param id identificador em que será inicializado o objeto.
+     */
     public Estado(String id) {
         this.id = id;
     }
 
+    /**
+     * Retorna o id do Estado.
+     * @return o identificador do Estado.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Seta o id do Estado.
+     * @param id identificador a ser setado.
+     */
     public void setId(String id) {
         this.id = id;
     }

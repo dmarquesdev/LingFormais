@@ -15,13 +15,32 @@ import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
-
+/**
+ * Implementação do algoritmo de determinização de automatos finitos não
+ * deterministicos COM epsilon transição.
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
+ */
 public class AFNDEpsilonTransition2AFD2 {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
-
+        
+        /**
+        * Retorna um Automato Finito Deterministico.
+        * A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon.
+        * Então todos os conjuntos de estados alcançaveis são agrupados, utilizando epsilon fecho, para formar os novos estados deterministicos. 
+        * Depois disso, cada conjunto é mapeado para um novo estado deterministico e são definidos os novos estados finais.
+        * Por fim, as novas transições deterministicas são encontradas e o Automato Finito Deterministico é gerado. 
+        * @param AFND Automato finito não deterministico a ser determinizado.
+        * @return O Automato finito determinizado.
+        */
 	public static AutomatoFinitoDeterministico determinizar(AutomatoFinitoNaoDeterministico AFND) {
-		AFNDEpsilonTransition2AFD2.AFND = AFND;
+                /**
+                * Atributo responsável por armazenar o Automato finito não deterministico.
+                */
+                AFNDEpsilonTransition2AFD2.AFND = AFND;
 
 		Set<Estados> estadosAgrupados = new LinkedHashSet<Estados>();
 		Set<Estados> estadosToBeGrouped = new LinkedHashSet<Estados>();
@@ -126,17 +145,32 @@ public class AFNDEpsilonTransition2AFD2 {
 
 		return new AutomatoFinitoDeterministico(estadosAFD, AFND.getAlfabeto(), (EstadoInicial) estadoInicialDeterministico, estadosAceitacaoDeterministico, transicoesDeterministicas);
 	}
-
+        /**
+        * Método auxiliar que retorna se dado um conjunto de estados algum deles é final(Estado de aceitação).
+        * O metodo faz a intersecção do conjunto de estados finais com o conjunto
+        * de estados passado por parâmetro, se a intersecção não for vazia
+        * temos que o conjunto passado por paramêtro contem pelo menos um estado final.
+        * @param estados Conjunto de estados que se deseja saber se contem ao menos um estado que é final.
+        * @param finais Conjunto de estados finais do Automato finito não deterministico. 
+        * @return Verdadeiro se estados contem um estado que é final, falso caso contrário.
+        */
 	private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
-		Set<EstadoFinal> aux = new LinkedHashSet<EstadoFinal>();
-		aux.addAll(finais);
-		aux.retainAll(estados.get());
-		if (!aux.isEmpty()) {
+		Set<EstadoFinal> interseccao = new LinkedHashSet<EstadoFinal>();
+		interseccao.addAll(finais);
+		interseccao.retainAll(estados.get());
+		if (!interseccao.isEmpty()) {
 			return true;
 		}
 		return false;
 	}
-
+        /**
+        * Método auxiliar que retorna o Epsilon-fecho de um conjunto de estados.
+        * A partir do conjunto de estados recebido por paramêtro, são encontrados todos
+        * os estados alcançaveis por epsilon transição, então esse processo é repetido esses novos
+        * estados alcançaveis até que todas as transições por epsilon possíveis sejam encontradas. 
+        * @param estados Conjunto de estados que se deseja obter o Epsilon-fecho.
+        * @return Conjunto de estados com o epsilon-fecho do conjunto de estados recebido por paramêtro.
+        */
 	private static Estados epsilonFecho(Estados estado) {
 		Set<Estado> epsilonFecho = new LinkedHashSet<Estado>();
 		Set<Estado> toBeVisited = new LinkedHashSet<Estado>();

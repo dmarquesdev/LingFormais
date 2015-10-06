@@ -138,7 +138,7 @@ public class AutomatoFinitoNaoDeterministicoIO implements IO<AutomatoFinitoNaoDe
                     }
                 }
             } else {
-                throw new FormaisIOException("Entrada da AFD inválida: " + line);
+                throw new FormaisIOException("Entrada da AFND inválida: " + line);
             }
 
             line = br.readLine();
