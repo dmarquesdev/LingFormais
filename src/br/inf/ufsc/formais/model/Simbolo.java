@@ -1,31 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.model;
 
 import java.util.Objects;
 
 /**
- *
- * @author Diego
+ * Representação de um Símbolo para Linguagens Regulares.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Simbolo {
 
+    /**
+     * Representação da Palavra Vazia (Epsilon).
+     */
     public static final Simbolo EPSILON = new Simbolo("ε");
+    /**
+     * Representação do Vazio (Conjunto Vazio).
+     */
     public static final Simbolo CONJUNTO_VAZIO = new Simbolo("∅");
 
+    /**
+     * Atributo responsável por armazenar o símbolo de forma que
+     * possa ser trabalhado computacionalmente.
+     */
     private String referencia;
 
+    /**
+     * Cria um símbolo.
+     * @param referencia String de referência ao símbolo, como por exemplo "a".
+     */
     public Simbolo(String referencia) {
         this.referencia = referencia;
     }
 
+    /**
+     * Retorna a referência do símbolo em String.
+     * @return Referência do símbolo.
+     */
     public String getReferencia() {
         return referencia;
     }
 
+    /**
+     * Atribui um valor a referência do símbolo.
+     * @param referencia Valor a ser atribuído para a referência.
+     */
     public void setReferencia(String referencia) {
         this.referencia = referencia;
     }

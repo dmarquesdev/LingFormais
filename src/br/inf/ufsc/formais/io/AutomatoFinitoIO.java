@@ -8,6 +8,7 @@ package br.inf.ufsc.formais.io;
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.model.automato.AutomatoFinito;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.Estado;
@@ -27,24 +28,45 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author Diego
+ * Classe responsável pela entrada/saída de Automatos finitos.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
-public class AutomatoFinitoDeterministicoIO implements IO<AutomatoFinitoDeterministico> {
+public class AutomatoFinitoIO implements IO<AutomatoFinito> {
 
+    /**
+     * Expressões Regulares responsáveis por reconhecer a estrutura de um
+     * Autômato Finito.
+     */
     Pattern estadosPatt = Pattern.compile("E = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
             alfabetoPatt = Pattern.compile("A = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
             transicaoPatt = Pattern.compile("T = \\(([a-zA-Z0-9]+, [a-zA-Z0-9]+)\\) -> ([a-zA-Z0-9]+)"),
             inicialPatt = Pattern.compile("I = ([a-zA-Z0-9]+)"),
             finalPatt = Pattern.compile("F = \\{(([a-zA-Z0-9]+(, )?)+)\\}");
 
+    /**
+     * Lê um arquivo que contenha um Automato Finito.
+     * @param file Arquivo para ser lido (caminho completo).
+     * @return Um Automato Finito.
+     * @throws IOException Quando ocorre algum erro na leitura/escrita do arquivo.
+     * @throws FormaisIOException Quando ocorre algum erro na leitura da estrutura do arquivo.
+     */
     @Override
-    public AutomatoFinitoDeterministico read(String file) throws IOException, FormaisIOException {
+    public AutomatoFinito read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
 
+    /**
+     * Lê um arquivo que contenha um Automato Finito.
+     * @param file Arquivo para ser lido.
+     * @param path Caminho onde se encontra o arquivo.
+     * @return Um Automato Finito.
+     * @throws IOException Quando ocorre algum erro na leitura/escrita do arquivo.
+     * @throws FormaisIOException Quando ocorre algum erro na leitura da estrutura do arquivo.
+     */
     @Override
-    public AutomatoFinitoDeterministico read(String path, String file) throws IOException, FormaisIOException {
+    public AutomatoFinito read(String path, String file) throws IOException, FormaisIOException {
         String completePath = "";
         if (path != null) {
             completePath += path;
@@ -145,13 +167,26 @@ public class AutomatoFinitoDeterministicoIO implements IO<AutomatoFinitoDetermin
         return new AutomatoFinitoDeterministico(estados, alfa, inicial, estadosFinais, transicoes);
     }
 
+    /**
+     * Escreve um Automato Finito em um arquivo.
+     * @param fileName Nome do arquivo a ser escrito.
+     * @param obj Automato Finito que será escrito no arquivo.
+     * @throws IOException Quando não for possível escrever o arquivo em disco.
+     */
     @Override
-    public void write(String fileName, AutomatoFinitoDeterministico obj) throws IOException {
+    public void write(String fileName, AutomatoFinito obj) throws IOException {
         write(null, fileName, obj);
     }
 
+    /**
+     * Escreve um Automato Finito em um arquivo.
+     * @param  path Caminho onde será escrito o arquivo.
+     * @param fileName Nome do arquivo a ser escrito.
+     * @param obj Automato Finito que será escrito no arquivo.
+     * @throws IOException Quando não for possível escrever o arquivo em disco.
+     */
     @Override
-    public void write(String path, String fileName, AutomatoFinitoDeterministico obj) throws IOException {
+    public void write(String path, String fileName, AutomatoFinito obj) throws IOException {
         String completePath = "";
         if (path != null) {
             completePath += path;
