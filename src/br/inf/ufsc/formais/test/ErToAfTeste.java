@@ -26,10 +26,10 @@ public class ErToAfTeste {
         
         try {
             ExpressaoRegularIO ioer = new ExpressaoRegularIO();
-            ExpressaoRegular er = ioer.read("/Users/Matheus/Desktop/", "teste1ErAfnd.in");
+            ExpressaoRegular er = ioer.read("", "teste1ErAfnd.in");
             AutomatoFinitoNaoDeterministico afnd = ER2AFND.converterParaAutomato(er);
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            ioafnd.write("/Users/Matheus/Desktop/", "teste2ErAfnd.out", afnd);
+            ioafnd.write("", "teste2ErAfnd.out", afnd);
             //System.out.println("Determinização sem epsilon transição.");
             //System.out.println(AFD);
         } catch (IOException ex) {

@@ -25,14 +25,14 @@ public class GramaticaAfdTeste {
     public void runTest() {
         Gramatica gr = null;
         try {
-            gr = new GramaticaIO().read("/Users/Matheus/Desktop/", "teste9gramaticaAfd.in");
+            gr = new GramaticaIO().read("", "teste9gramaticaAfd.in");
             System.out.println(gr.toString());
 
             AutomatoFinitoDeterministico fsa = Gramatica2AFD.converterParaAFD(gr);
 
             System.out.println(fsa.toString());
             AutomatoFinitoIO ioafd = new AutomatoFinitoIO();
-            ioafd.write("/Users/Matheus/Desktop/", "teste10gramaticaAfd.out", fsa);
+            ioafd.write("", "teste10gramaticaAfd.out", fsa);
         } catch (IOException ex) {
             System.out.println("Ocorreu um erro de leitura no arquivo!");
         } catch (FormaisIOException ex) {

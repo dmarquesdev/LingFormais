@@ -6,7 +6,7 @@
 package br.inf.ufsc.formais.test;
 
 /**
- *
+ * Cria e executa os testes.
  * @author Diego Marques
  * @author Matheus Demetrio
  * @author Nathan Molinari

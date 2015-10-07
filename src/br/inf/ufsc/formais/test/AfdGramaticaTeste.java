@@ -24,14 +24,14 @@ public class AfdGramaticaTeste {
         AutomatoFinitoDeterministico afd = null;
         try {
             afd = (AutomatoFinitoDeterministico) new AutomatoFinitoIO()
-                    .read("/Users/Matheus/Desktop/", "teste11AfdGramatica.in");
+                    .read("", "teste11AfdGramatica.in");
             System.out.println(afd.toString());
 
             Gramatica gram = AFD2Gramatica.converterParaGramatica(afd);
 
             System.out.println(gram.toString());
             GramaticaIO iogr = new GramaticaIO();
-            iogr.write("/Users/Matheus/Desktop/", "teste12AfdGramatica.out", gram);
+            iogr.write("", "teste12AfdGramatica.out", gram);
         } catch (IOException ex) {
             System.out.println("Ocorreu um erro de leitura no arquivo!");
         } catch (FormaisIOException ex) {

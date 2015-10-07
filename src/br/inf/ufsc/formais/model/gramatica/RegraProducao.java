@@ -6,8 +6,10 @@
 package br.inf.ufsc.formais.model.gramatica;
 
 /**
- *
- * @author Diego
+ * Regras de produção de uma gramatica.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class RegraProducao {
 

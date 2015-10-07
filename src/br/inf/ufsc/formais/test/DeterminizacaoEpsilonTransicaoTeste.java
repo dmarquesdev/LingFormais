@@ -19,9 +19,9 @@ public class DeterminizacaoEpsilonTransicaoTeste {
         
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/Users/Matheus/Desktop/", "teste5detAfnd_epsilon.in");
+            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("", "teste5detAfnd_epsilon.in");
             AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-            ioafnd.write("/Users/Matheus/Desktop/", "teste6detAfnd_epsilon.out", afnd);
+            ioafnd.write("", "teste6detAfnd_epsilon.out", afnd);
             System.out.println("Determinização COM epsilon transição.");
             System.out.println(AFD);
         } catch (IOException ex) {
