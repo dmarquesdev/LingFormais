@@ -23,7 +23,7 @@ import br.inf.ufsc.formais.model.automato.Estados;
  * @author Matheus Demetrio
  * @author Nathan Molinari
  */
-public class AFNDEpsilonTransition2AFD2 {
+public class AFNDEpsilonTransition2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
         
@@ -40,7 +40,7 @@ public class AFNDEpsilonTransition2AFD2 {
                 /**
                 * Atributo responsável por armazenar o Automato finito não deterministico.
                 */
-                AFNDEpsilonTransition2AFD2.AFND = AFND;
+                AFNDEpsilonTransition2AFD.AFND = AFND;
 
 		Set<Estados> estadosAgrupados = new LinkedHashSet<Estados>();
 		Set<Estados> estadosToBeGrouped = new LinkedHashSet<Estados>();
