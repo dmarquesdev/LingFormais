@@ -17,8 +17,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- *
- * @author Diego
+ * Converte um automato finito não deterministico em uma gramatica.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AFND2Gramatica {
 

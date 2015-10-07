@@ -7,15 +7,21 @@ import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 import br.inf.ufsc.formais.operacoes.AFND2AFD;
 import java.io.IOException;
 
+/**
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
+ */
 public class DeterminizacaoEpsilonTransicaoTeste {
 
     public void runTeste() {
         
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Área de Trabalho/", "afndepsilon.in");
+            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/Users/Matheus/Desktop/", "teste5detAfnd_epsilon.in");
             AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-            ioafnd.write("/home/nathan/Área de Trabalho/", "afndepsilon.out", afnd);
+            ioafnd.write("/Users/Matheus/Desktop/", "teste6detAfnd_epsilon.out", afnd);
             System.out.println("Determinização sem epsilon transição.");
             System.out.println(AFD);
         } catch (IOException ex) {

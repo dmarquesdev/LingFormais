@@ -22,8 +22,10 @@ import br.inf.ufsc.formais.model.gramatica.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 
 /**
- *
- * @author Diego
+ *  Operações que transformam uma gramatica em um automato finito deterministico.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Gramatica2AFD {
 

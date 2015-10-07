@@ -6,6 +6,7 @@
 package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
+import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import br.inf.ufsc.formais.io.GramaticaIO;
 
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
@@ -15,19 +16,23 @@ import java.io.IOException;
 
 /**
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
-public class GramaticaTeste {
+public class GramaticaAfdTeste {
 
     public void runTest() {
         Gramatica gr = null;
         try {
-            gr = new GramaticaIO().read("C:\\", "gramatica.in");
+            gr = new GramaticaIO().read("/Users/Matheus/Desktop/", "teste9gramaticaAfd.in");
             System.out.println(gr.toString());
 
             AutomatoFinitoDeterministico fsa = Gramatica2AFD.converterParaAFD(gr);
 
             System.out.println(fsa.toString());
+            AutomatoFinitoIO ioafd = new AutomatoFinitoIO();
+            ioafd.write("/Users/Matheus/Desktop/", "teste10gramaticaAfd.out", fsa);
         } catch (IOException ex) {
             System.out.println("Ocorreu um erro de leitura no arquivo!");
         } catch (FormaisIOException ex) {

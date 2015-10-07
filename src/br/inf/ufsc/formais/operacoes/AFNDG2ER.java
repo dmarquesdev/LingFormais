@@ -10,8 +10,10 @@ import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 
 /**
- *
- * @author Diego
+ *  Converte um Automato finito não deterministico em uma expressão regular.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AFNDG2ER {
 

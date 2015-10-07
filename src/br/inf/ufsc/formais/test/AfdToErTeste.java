@@ -7,6 +7,7 @@ package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.AutomatoFinitoIO;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministicoGeneralizado;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
@@ -14,17 +15,19 @@ import br.inf.ufsc.formais.operacoes.AFD2AFNDG;
 import br.inf.ufsc.formais.operacoes.AFNDG2ER;
 import java.io.IOException;
 
-
 /**
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
-public class AutomatoFinitoDeterministicoTeste {
+public class AfdToErTeste {
 
     public void runTest() {
         AutomatoFinitoDeterministico dfa = null;
         try {
-            dfa = (AutomatoFinitoDeterministico) new AutomatoFinitoIO().read("C:\\", "afd.in");
+            dfa = (AutomatoFinitoDeterministico) new AutomatoFinitoIO()
+                    .read("/Users/Matheus/Desktop/", "teste3AfdEr.in");
             System.out.println(dfa.toString());
             AutomatoFinitoNaoDeterministicoGeneralizado afndg = AFD2AFNDG.converterParaAFDNG(dfa);
 
@@ -33,8 +36,12 @@ public class AutomatoFinitoDeterministicoTeste {
             ExpressaoRegular er = AFNDG2ER.converterParaER(afndg);
 
             System.out.println(er.toString());
+
+            ExpressaoRegularIO ioer = new ExpressaoRegularIO();
+            ioer.write("/Users/Matheus/Desktop/", "teste4AfdEr.out", er);
+
         } catch (IOException ex) {
-             System.out.println("Ocorreu um erro de leitura no arquivo!");
+            System.out.println("Ocorreu um erro de leitura no arquivo!");
         } catch (FormaisIOException ex) {
             System.out.println(ex.getMessage());
         }

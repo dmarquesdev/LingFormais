@@ -8,15 +8,21 @@ import br.inf.ufsc.formais.operacoes.AFND2AFD;
 import java.io.IOException;
 import br.inf.ufsc.formais.exception.FormaisIOException;
 
+/**
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
+ */
 public class DeterminizacaoTeste {
 
     public void runTeste() {
 
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Área de Trabalho/", "afnd.in");
+            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/Users/Matheus/Desktop/", "teste7detAfnd.in");
             AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-            ioafnd.write("/home/nathan/Área de Trabalho/", "afnd.out", afnd);
+            ioafnd.write("/Users/Matheus/Desktop/", "teste8detAfnd.out", afnd);
             //System.out.println("Determinização sem epsilon transição.");
             //System.out.println(AFD);
         } catch (IOException ex) {
