@@ -13,10 +13,10 @@ public class DeterminizacaoEpsilonTransicaoTeste {
         
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Área de Trabalho/", "afndepsilon.in");
+            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Documentos/Formais/LingFormais/dist/", "afndepsilon.in");
             AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-            ioafnd.write("/home/nathan/Área de Trabalho/", "afndepsilon.out", afnd);
-            System.out.println("Determinização sem epsilon transição.");
+            //ioafnd.write("/home/nathan/Documentos/Formais/LingFormais/dist/", "afndepsilon.out", afnd);
+            System.out.println("Determinização COM epsilon transição.");
             System.out.println(AFD);
         } catch (IOException ex) {
             System.out.println("Ocorreu um erro de leitura no arquivo!");

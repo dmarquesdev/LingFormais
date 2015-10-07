@@ -14,9 +14,9 @@ public class DeterminizacaoTeste {
 
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Área de Trabalho/", "afnd.in");
+            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Documentos/Formais/LingFormais/dist/", "afnd.in");
             AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-            ioafnd.write("/home/nathan/Área de Trabalho/", "afnd.out", afnd);
+            ioafnd.write("/home/nathan/Documentos/Formais/LingFormais/dist/", "afnd.out", afnd);
             //System.out.println("Determinização sem epsilon transição.");
             //System.out.println(AFD);
         } catch (IOException ex) {

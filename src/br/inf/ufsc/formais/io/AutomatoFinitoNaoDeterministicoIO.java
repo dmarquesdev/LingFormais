@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.io;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
@@ -28,150 +23,161 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author Matheus
+ * Classe responsável pela entrada/saída de Automatos finitos não deterministicos.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AutomatoFinitoNaoDeterministicoIO implements IO<AutomatoFinitoNaoDeterministico> {
 
-    Pattern estadosPatt = Pattern.compile("E = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
-            alfabetoPatt = Pattern.compile("A = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
-            transicaoPatt = Pattern.compile("T = \\(([a-zA-Z0-9]+, [a-zA-Z0-9]+)\\) -> \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
-            inicialPatt = Pattern.compile("I = ([a-zA-Z0-9]+)"),
-            finalPatt = Pattern.compile("F = \\{(([a-zA-Z0-9]+(, )?)+)\\}");
+	/**
+	 * Expressões Regulares responsáveis por reconhecer a estrutura de um Autômato Finito não Deterministico.
+	 */
+	Pattern estadosPatt = Pattern.compile("E = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
+			alfabetoPatt = Pattern.compile("A = \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
+			transicaoPatt = Pattern.compile("T = \\(([a-zA-Z0-9]+, [a-zA-Z0-9]+)\\) -> \\{(([a-zA-Z0-9]+(, )?)+)\\}"),
+			inicialPatt = Pattern.compile("I = ([a-zA-Z0-9]+)"),
+			finalPatt = Pattern.compile("F = \\{(([a-zA-Z0-9]+(, )?)+)\\}");
 
-    @Override
-    public AutomatoFinitoNaoDeterministico read(String file) throws IOException, FormaisIOException {
-        return read(null, file);
-    }
+	@Override
+	public AutomatoFinitoNaoDeterministico read(String file) throws IOException, FormaisIOException {
+		return read(null, file);
+	}
 
-    @Override
-    public AutomatoFinitoNaoDeterministico read(String path, String file) throws IOException, FormaisIOException {
-        String completePath = "";
-        if (path != null) {
-            completePath += path;
-        }
-        completePath += file;
+	@Override
+	public AutomatoFinitoNaoDeterministico read(String path, String file) throws IOException, FormaisIOException {
+		String completePath = "";
+		if (path != null) {
+			completePath += path;
+		}
+		completePath += file;
 
-        BufferedReader br = new BufferedReader(new FileReader(completePath));
-        String line = br.readLine();
+		BufferedReader br = new BufferedReader(new FileReader(completePath));
+		String line = br.readLine();
 
-        if (!line.equals("M = (E,A,T,I,F)")) {
-            throw new FormaisIOException("Declaração de AFD fora do padrão!");
-        }
+		if (!line.equals("M = (E,A,T,I,F)")) {
+			throw new FormaisIOException("Declaração de AFND fora do padrão!");
+		}
 
-        line = br.readLine();
+		line = br.readLine();
 
-        Set<Simbolo> simbolosAlfa = new LinkedHashSet<>();
-        Set<Estado> estados = new LinkedHashSet<>();
-        Set<EstadoFinal> estadosFinais = new LinkedHashSet<>();
-        EstadoInicial inicial = null;
-        Map<Entrada, Estados> transicoes = new LinkedHashMap<>();
+		Set<Simbolo> simbolosAlfa = new LinkedHashSet<>();
+		Set<Estado> estados = new LinkedHashSet<>();
+		Set<EstadoFinal> estadosFinais = new LinkedHashSet<>();
+		EstadoInicial inicial = null;
+		Map<Entrada, Estados> transicoes = new LinkedHashMap<>();
 
-        Matcher estadosMatcher, alfabetoMatcher,
-                transicaoMatcher, inicialMatcher, finalMatcher;
+		Matcher estadosMatcher, alfabetoMatcher, transicaoMatcher, inicialMatcher, finalMatcher;
 
-        while (line != null) {
-            if (line.isEmpty()) {
-                line = br.readLine();
-                continue;
-            }
+		while (line != null) {
+			if (line.isEmpty()) {
+				line = br.readLine();
+				continue;
+			}
 
-            estadosMatcher = estadosPatt.matcher(line);
-            alfabetoMatcher = alfabetoPatt.matcher(line);
-            transicaoMatcher = transicaoPatt.matcher(line);
-            inicialMatcher = inicialPatt.matcher(line);
-            finalMatcher = finalPatt.matcher(line);
+			estadosMatcher = estadosPatt.matcher(line);
+			alfabetoMatcher = alfabetoPatt.matcher(line);
+			transicaoMatcher = transicaoPatt.matcher(line);
+			inicialMatcher = inicialPatt.matcher(line);
+			finalMatcher = finalPatt.matcher(line);
 
-            if (estadosMatcher.matches()) {
-                String group = estadosMatcher.group(1);
-                String[] ests = group.split(", ");
-                for (String est : ests) {
-                    Estado estado = new Estado(est);
-                    estados.add(estado);
-                }
-            } else if (alfabetoMatcher.matches()) {
-                String group = alfabetoMatcher.group(1);
-                String[] simbs = group.split(", ");
-                for (String simb : simbs) {
-                    Simbolo simbolo = new Simbolo(simb);
-                    simbolosAlfa.add(simbolo);
-                }
-            } else if (transicaoMatcher.matches()) {
-                String ent = transicaoMatcher.group(1),
-                        paraStr = transicaoMatcher.group(2);
-                String[] estSimb = ent.split(", ");
-                Estado de = new Estado(estSimb[0]);
-                Estados para = new Estados();
-                Simbolo simb = new Simbolo(estSimb[1]);
-                Entrada entrada = new Entrada(de, simb);
-                for (Estado e : estados) {
-                    if (e.getId().equals(de.getId())) {
-                        de = e;
-                    }
-                }
-                String[] paraEstados = paraStr.split(", ");
-                for (String estadoAtual : paraEstados) {
-                    Estado novoEstado = new Estado(estadoAtual);
-                    para.addEstado(novoEstado);
-                }
-                
-                transicoes.put(entrada, para);
-            } else if (inicialMatcher.matches()) {
-                inicial = new EstadoInicial(inicialMatcher.group(1));
-                for (Estado e : estados) {
-                    if (e.getId().equals(inicial.getId())) {
-                        e = inicial;
-                        break;
-                    }
-                }
-            } else if (finalMatcher.matches()) {
-                String group = finalMatcher.group(1);
-                String[] finais = group.split(", ");
-                for (String fim : finais) {
-                    EstadoFinal ef = new EstadoFinal(fim);
-                    estadosFinais.add(ef);
-                    for (Estado e : estados) {
-                        if (e.getId().equals(ef.getId())) {
-                            e = ef;
-                            break;
-                        }
-                    }
-                }
-            } else {
-                throw new FormaisIOException("Entrada da AFND inválida: " + line);
-            }
+			if (estadosMatcher.matches()) {
+				String group = estadosMatcher.group(1);
+				String[] ests = group.split(", ");
+				for (String est : ests) {
+					Estado estado = new Estado(est);
+					estados.add(estado);
+				}
+			} else if (alfabetoMatcher.matches()) {
+				String group = alfabetoMatcher.group(1);
+				String[] simbs = group.split(", ");
+				for (String simb : simbs) {
+					Simbolo simbolo = new Simbolo("");
+					if (simb.equals("e")) {
+						simbolo = Simbolo.EPSILON;
+					} else {
+						simbolo = new Simbolo(simb);
+					}
+					simbolosAlfa.add(simbolo);
+				}
+			} else if (transicaoMatcher.matches()) {
+				String ent = transicaoMatcher.group(1), paraStr = transicaoMatcher.group(2);
+				String[] estSimb = ent.split(", ");
+				Estado de = new Estado(estSimb[0]);
+				Estados para = new Estados();
+				Simbolo simb = new Simbolo(estSimb[1]);
+				if (simb.getReferencia().equals("e")) {
+					simb = Simbolo.EPSILON;
+				}
+				Entrada entrada = new Entrada(de, simb);
+				for (Estado e : estados) {
+					if (e.getId().equals(de.getId())) {
+						de = e;
+					}
+				}
+				String[] paraEstados = paraStr.split(", ");
+				for (String estadoAtual : paraEstados) {
+					Estado novoEstado = new Estado(estadoAtual);
+					para.addEstado(novoEstado);
+				}
 
-            line = br.readLine();
-        }
+				transicoes.put(entrada, para);
+			} else if (inicialMatcher.matches()) {
+				inicial = new EstadoInicial(inicialMatcher.group(1));
+				for (Estado e : estados) {
+					if (e.getId().equals(inicial.getId())) {
+						e = inicial;
+						break;
+					}
+				}
+			} else if (finalMatcher.matches()) {
+				String group = finalMatcher.group(1);
+				String[] finais = group.split(", ");
+				for (String fim : finais) {
+					EstadoFinal ef = new EstadoFinal(fim);
+					estadosFinais.add(ef);
+					for (Estado e : estados) {
+						if (e.getId().equals(ef.getId())) {
+							e = ef;
+							break;
+						}
+					}
+				}
+			} else {
+				throw new FormaisIOException("Entrada da AFND inválida: " + line);
+			}
 
-        br.close();
+			line = br.readLine();
+		}
 
-        Alfabeto alfa = new Alfabeto(simbolosAlfa);
+		br.close();
 
-        return new AutomatoFinitoNaoDeterministico(estados, alfa, inicial, estadosFinais, transicoes);
-    }
+		Alfabeto alfa = new Alfabeto(simbolosAlfa);
 
-    @Override
-    public void write(String fileName, AutomatoFinitoNaoDeterministico obj) throws IOException {
-        write(null, fileName, obj);
-    }
+		return new AutomatoFinitoNaoDeterministico(estados, alfa, inicial, estadosFinais, transicoes);
+	}
 
-    @Override
-    public void write(String path, String fileName, AutomatoFinitoNaoDeterministico obj) throws IOException {
-        String completePath = "";
-        if (path != null) {
-            completePath += path;
-        }
-        completePath += fileName;
+	@Override
+	public void write(String fileName, AutomatoFinitoNaoDeterministico obj) throws IOException {
+		write(null, fileName, obj);
+	}
 
-        File arq = new File(completePath);
-        if (arq.exists()) {
-            throw new IOException();
-        }
+	@Override
+	public void write(String path, String fileName, AutomatoFinitoNaoDeterministico obj) throws IOException {
+		String completePath = "";
+		if (path != null) {
+			completePath += path;
+		}
+		completePath += fileName;
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
-        bw.write(obj.toString());
-        bw.close();
-    }
+		File arq = new File(completePath);
+		if (arq.exists()) {
+			throw new IOException();
+		}
+
+		BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
+		bw.write(obj.toString());
+		bw.close();
+	}
 
 }

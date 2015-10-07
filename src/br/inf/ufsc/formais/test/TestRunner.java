@@ -16,15 +16,15 @@ public class TestRunner {
         //AutomatoFinitoDeterministicoTeste dfaT = new AutomatoFinitoDeterministicoTeste();
         //ExpressaoRegularTeste erT = new ExpressaoRegularTeste();
 
-        DeterminizacaoTeste detT = new DeterminizacaoTeste();
-//        DeterminizacaoEpsilonTransicaoTeste detEpsilonT = new DeterminizacaoEpsilonTransicaoTeste();
+        //DeterminizacaoTeste detT = new DeterminizacaoTeste();
+    DeterminizacaoEpsilonTransicaoTeste detEpsilonT = new DeterminizacaoEpsilonTransicaoTeste();
         //ErToAfTeste etaT = new ErToAfTeste();
 //
 //        gT.runTest();
 //        dfaT.runTest();
 //        erT.runTest();
-        detT.runTeste();
-//        detEpsilonT.runTeste();
+       // detT.runTeste();
+      detEpsilonT.runTeste();
         //etaT.runTest();
     }
 }
