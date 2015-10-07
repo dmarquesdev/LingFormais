@@ -1,3 +1,4 @@
+
 package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.io.AutomatoFinitoNaoDeterministicoIO;
@@ -33,3 +34,4 @@ public class DeterminizacaoTeste {
 
     }
 }
+
