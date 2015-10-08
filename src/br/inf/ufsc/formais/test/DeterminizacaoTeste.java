@@ -2,6 +2,7 @@
 package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.io.AutomatoFinitoNaoDeterministicoIO;
+import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 
@@ -22,10 +23,15 @@ public class DeterminizacaoTeste {
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
             AutomatoFinitoNaoDeterministico afnd = ioafnd.read("", "teste7detAfnd.in");
+            
             AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
-            ioafnd.write("", "teste8detAfnd.out", afnd);
-            //System.out.println("Determinização sem epsilon transição.");
-            //System.out.println(AFD);
+            
+            AutomatoFinitoIO afdio = new AutomatoFinitoIO();
+            afdio.write("teste8detAfnd.out", AFD);
+
+            System.out.println("Determinização sem epsilon transição.");
+            System.out.println(AFD);
+            
         } catch (IOException ex) {
             System.out.println("Ocorreu um erro de leitura no arquivo!");
         } catch (FormaisIOException ex) {
