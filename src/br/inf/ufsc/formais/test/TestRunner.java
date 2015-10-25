@@ -32,7 +32,9 @@ public class TestRunner {
         ErToAfTeste etaT = new ErToAfTeste();
         afdTOer.runTest();
         etaT.runTest();
-
-
+        
+        //Minimizacao
+        MinimizacaoAfdTeste afdMinTeste = new MinimizacaoAfdTeste();
+        afdMinTeste.runTeste();
     }
 }

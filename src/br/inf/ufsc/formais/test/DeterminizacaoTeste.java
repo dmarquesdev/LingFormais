@@ -6,7 +6,7 @@ import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 
-import br.inf.ufsc.formais.operacoes.AFND2AFD;
+import br.inf.ufsc.formais.operacoes.AFNDEpsilonTransition2AFD;
 import java.io.IOException;
 import br.inf.ufsc.formais.exception.FormaisIOException;
 
@@ -22,12 +22,12 @@ public class DeterminizacaoTeste {
 
         try {
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("", "teste7detAfnd.in");
+            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Documentos/Formais/DiegoMarquesMatheusDemetrioNathanMolinari/Testes/", "teste7detAfnd.in");
             
-            AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
+            AutomatoFinitoDeterministico AFD = AFNDEpsilonTransition2AFD.determinizar(afnd);
             
             AutomatoFinitoIO afdio = new AutomatoFinitoIO();
-            afdio.write("teste8detAfnd.out", AFD);
+            //afdio.write("teste8detAfnd.out", AFD);
 
             System.out.println("Determinização sem epsilon transição.");
             System.out.println(AFD);
