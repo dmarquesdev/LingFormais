@@ -1,5 +1,6 @@
 package br.inf.ufsc.formais.operacoes;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -20,13 +21,13 @@ public class AFDMinimizer {
 	}
 
 	public AutomatoFinitoDeterministico minimizar() {
-		LinkedHashSet<Estados> classesEquivalencia = this.findClassesEquivalencia();
+		LinkedHashSet<Estados> classesEquivalencia = this.determineEquivalenceClasses();
 		AutomatoFinitoDeterministico afdMin = this.generateMinimumAutomaton(classesEquivalencia);
 		return afdMin;
 	}
 
 	// Hopcroft’s algorithm
-	private LinkedHashSet<Estados> findClassesEquivalencia() {
+	private LinkedHashSet<Estados> determineEquivalenceClasses() {
 
 		Estados terminais = new Estados();
 
@@ -50,14 +51,14 @@ public class AFDMinimizer {
 			toBePartitioned.remove(atual);
 
 			for (Simbolo simbolo : afd.getAlfabeto().getSimbolos()) {
-				Estados novaClasseEquivalencia = estadosAlcanveisPeloSimbolo(atual, simbolo);
+				Estados reachCurrentPartition = statesThatReachCurrentPartition(atual, simbolo);
 
-				LinkedHashSet<Estados> partitions = getPartitionsTobePartitioned(classesEquivalencia, novaClasseEquivalencia);
+				LinkedHashSet<Estados> partitions = getPartitionsTobePartitioned(classesEquivalencia, reachCurrentPartition);
 
 				for (Estados partition : partitions) {
 
-					Estados interseccao = interseccao(partition, novaClasseEquivalencia);
-					Estados diferenca = diferenca(partition, novaClasseEquivalencia);
+					Estados interseccao = interseccao(partition, reachCurrentPartition);
+					Estados diferenca = diferenca(partition, reachCurrentPartition);
 
 					classesEquivalencia.remove(partition);
 					classesEquivalencia.add(interseccao);
@@ -76,12 +77,15 @@ public class AFDMinimizer {
 					}
 				}
 			}
-			clearUnbreakablePartition(toBePartitioned);
 		}
 		return classesEquivalencia;
 	}
 
 	private AutomatoFinitoDeterministico generateMinimumAutomaton(LinkedHashSet<Estados> classesEquivalencia) {
+
+		if (isMinimumAutomatom(this.afd, classesEquivalencia)) {
+			return this.afd;
+		}
 
 		// cria novos estados para o automato minimizado
 		LinkedHashMap<Estados, Estado> novosEstados = new LinkedHashMap<Estados, Estado>();
@@ -105,12 +109,16 @@ public class AFDMinimizer {
 			for (Simbolo simboloAtual : this.afd.getAlfabeto().getSimbolos()) {
 				Entrada entrada = new Entrada(estadoAtual, simboloAtual);
 				Estado alcancavel = this.afd.getEstadoTransicao(entrada);
-				Estados classeEquivalenciaAlcancavel = getClasseEquivalencia(classesEquivalencia, alcancavel);
+				
+				//trata o caso de transições para vazio
+				if (alcancavel != null) {
+					Estados classeEquivalenciaAlcancavel = getClasseEquivalencia(classesEquivalencia, alcancavel);
 
-				Entrada novaEntrada = new Entrada(novosEstados.get(particao), simboloAtual);
-				Estado novoEstadoAlcancavel = novosEstados.get(classeEquivalenciaAlcancavel);
+					Entrada novaEntrada = new Entrada(novosEstados.get(particao), simboloAtual);
+					Estado novoEstadoAlcancavel = novosEstados.get(classeEquivalenciaAlcancavel);
 
-				novasTransicoes.put(novaEntrada, novoEstadoAlcancavel);
+					novasTransicoes.put(novaEntrada, novoEstadoAlcancavel);
+				}
 			}
 		}
 
@@ -126,17 +134,19 @@ public class AFDMinimizer {
 		return new AutomatoFinitoDeterministico(estados, afd.getAlfabeto(), (EstadoInicial) novosEstados.get(estadoInicial), novosEstadosFinais, novasTransicoes);
 	}
 
-	// retorna os Estados de uma dada classe de equivalencia que a transição de cada estado
-	// pelo simbolo leva a um estado que pertence a esta mesma classe de equivalencia.
-	private Estados estadosAlcanveisPeloSimbolo(Estados classeEquivalencia, Simbolo simbolo) {
-		Estados novaClasseEquivalencia = new Estados();
+	// Retorna todos os estados que dado um simbolo alcançam a particao
+	private Estados statesThatReachCurrentPartition(Estados currentPartition, Simbolo simbolo) {
+		Estados reachCurrentPartition = new Estados();
 
-		for (Estado estado : classeEquivalencia.get()) {
-			Entrada entrada = new Entrada(estado, simbolo);
-			Estado alcancavel = this.afd.getEstadoTransicao(entrada);
-			novaClasseEquivalencia.addEstado(alcancavel);
+		for (Entrada entrada : this.afd.getTransicoes().keySet()) {
+			if (entrada.getSimbolo().equals(simbolo)) {
+				Estado alcancavel = this.afd.getEstadoTransicao(entrada);
+				if (currentPartition.get().contains(alcancavel)) {
+					reachCurrentPartition.addEstado(entrada.getEstado());
+				}
+			}
 		}
-		return novaClasseEquivalencia;
+		return reachCurrentPartition;
 	}
 
 	// for all R in P(Classes de equivalencia) such that R ∩ la ̸= ∅ and R ̸⊆ la
@@ -173,14 +183,6 @@ public class AFDMinimizer {
 		return new Estados(diferenca);
 	}
 
-	private void clearUnbreakablePartition(LinkedHashSet<Estados> partitions) {
-		for (Estados particao : partitions) {
-			if (particao.get().size() == 1) {
-				partitions.remove(particao);
-			}
-		}
-	}
-
 	private Estados getEstadoInicial(LinkedHashSet<Estados> classesEquivalencia) {
 		for (Estados particao : classesEquivalencia) {
 			if (particao.get().contains(this.afd.getEstadoInicial())) {
@@ -212,6 +214,13 @@ public class AFDMinimizer {
 			}
 		}
 		return classesEquivalenciaAceitacao;
+	}
+
+	private boolean isMinimumAutomatom(AutomatoFinitoDeterministico afd, LinkedHashSet<Estados> classesEquivalencia) {
+		if (classesEquivalencia.size() != afd.getEstados().size()) {
+			return false;
+		}
+		return true;
 	}
 
 }
