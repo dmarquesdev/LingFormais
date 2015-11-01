@@ -20,8 +20,10 @@ import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
 
 /**
- *
- * @author Diego
+ * Converte um automato finito deterministico em uma estrutura de um automato não deterministico.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AFD2AFNDG {
 

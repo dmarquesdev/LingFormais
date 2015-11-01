@@ -18,8 +18,10 @@ import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 
 /**
- *
- * @author Diego
+ * Converte um automato finito deterministico em uma gramatica.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AFD2Gramatica {
 

@@ -2,6 +2,7 @@ package br.inf.ufsc.formais.gui;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.AutomatoFinitoIO;
+import br.inf.ufsc.formais.io.AutomatoFinitoNaoDeterministicoIO;
 import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.io.GramaticaIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
@@ -11,6 +12,7 @@ import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import br.inf.ufsc.formais.model.gramatica.Gramatica;
 import br.inf.ufsc.formais.operacoes.AFD2AFNDG;
 import br.inf.ufsc.formais.operacoes.AFD2Gramatica;
+import br.inf.ufsc.formais.operacoes.AFND2AFD;
 import br.inf.ufsc.formais.operacoes.AFNDG2ER;
 import br.inf.ufsc.formais.operacoes.ER2AFND;
 import br.inf.ufsc.formais.operacoes.Gramatica2AFD;
@@ -102,6 +104,20 @@ public class MainView {
                         System.exit(0);
                     }
                     break;
+                case "AFND":
+                    afnd = (AutomatoFinitoNaoDeterministico) new AutomatoFinitoNaoDeterministicoIO().read(arquivo);
+                    System.out.println("(1)AFND -> AFD");
+                    opt = scanInput.nextLine();
+                    scanInput.close();
+                    if (opt.equals("1")) {
+                        afd = AFND2AFD.determinizar(afnd);
+                        new AutomatoFinitoIO().write("afnd_afd.out", afd);
+                    } else {
+                        System.out.println("Opção inválida!");
+                        System.exit(0);
+                    }
+                    break;
+
                 default:
                     break;
             }

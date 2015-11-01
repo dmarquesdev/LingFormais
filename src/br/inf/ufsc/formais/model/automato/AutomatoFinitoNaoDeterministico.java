@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.inf.ufsc.formais.model.automato;
 
 import java.util.HashMap;
@@ -15,20 +10,48 @@ import br.inf.ufsc.formais.model.Simbolo;
 import java.util.HashSet;
 
 /**
+ * Classe que representa um Automato Finito Não Deterministico.
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
+    /**
+    * Conjunto de estados do Automato.
+    */
     protected Set<Estado> estados;
+    
+    /**
+    * Alfabeto do Automato.
+    */
     protected Alfabeto alfabeto;
+    
+    /**
+    * Estado inicial do Automato.
+    */
     protected EstadoInicial estadoInicial;
+    
+    /**
+    * Conjunto de estados de aceitação(Finais) do Automato.
+    */
     protected Set<EstadoFinal> estadosAceitacao;
+    
+    /**
+    * Mapa de transições do Automato.
+    */
     protected Map<Entrada, Estados> transicoes;
 
-    public AutomatoFinitoNaoDeterministico(Set<Estado> estados, Alfabeto alfabeto,
-            EstadoInicial estadoInicial, Set<EstadoFinal> estadosAceitacao,
-            Map<Entrada, Estados> transicoes) {
+    /**
+    * Contrutor, inicializa todos os atributos da classe.
+    * @param estados conjunto de estados que será inicializado o Automato.
+    * @param alfabeto  alfabeto que será inicializado o Automato.
+    * @param estadoInicial estado inicial que será inicializado o Automato.
+    * @param estadosAceitacao conjunto de estados de aceitação(Finais) que será inicializado o Automato.
+    * @param transicoes mapa de transições que será inicializado o Automato.
+    */
+    public AutomatoFinitoNaoDeterministico(Set<Estado> estados, Alfabeto alfabeto, EstadoInicial estadoInicial, Set<EstadoFinal> estadosAceitacao, Map<Entrada, Estados> transicoes) {
         this.estados = estados;
         this.alfabeto = alfabeto;
         this.estadoInicial = estadoInicial;
@@ -36,6 +59,9 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         this.transicoes = transicoes;
     }
 
+    /**
+    * Contrutor vazio, inicializa os atributos da classe com valores padrão.
+    */
     public AutomatoFinitoNaoDeterministico() {
         estados = new LinkedHashSet<>();
         estadosAceitacao = new LinkedHashSet<>();
@@ -87,6 +113,10 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         this.estadosAceitacao = estadosAceitacao;
     }
     
+    /**
+     * Seta o mapa de transições do Automato.
+     * @param transicoes mapa de transições a ser setado.
+     */
     public void setTransicoes(Map<Entrada, Estados> transicoes) {
         this.transicoes = transicoes;
     }
@@ -101,6 +131,12 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         return transicoes.get(entrada);
     }
     
+    
+    /**
+     * Obtem o conjunto de estados alcançaveis dado uma entrada.
+     * @param entrada chave para o mapa de transições.
+     * @return O conjunto de estados alcançaveis a partir da entrada.
+     */
     public Estados getEstadosTransicao(Entrada entrada) {
             if (transicoes.get(entrada) != null) {
                     return transicoes.get(entrada);
@@ -109,6 +145,11 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
             }
     }
 
+    /**
+     * Adicionar uma transição no mapa de transições do Automato.
+     * @param entrada chave do mapa de transições.
+     * @param destino Conjunto de estados do destino(Alcançavel).
+     */
     public void addTransicao(Entrada entrada, Estados destino) {
         transicoes.put(entrada, destino);
     }
@@ -136,13 +177,13 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
         out.append(alfabeto.toString()).append("\n");
 
-        for (Entrada ent : transicoes.keySet()) {
-            for (Estado est : transicoes.get(ent).get()) {
+        for (Entrada ent : transicoes.keySet()) { 
+                Estados est = transicoes.get(ent);
                 out.append("T(")
                         .append(ent.toString())
                         .append(") -> ").append(est.toString())
                         .append("\n");
-            }
+            
         }
 
         out.append("\n");
@@ -200,6 +241,10 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Remove o estado inicial.
+     * @return o estado inicial.
+     */
     public Estado removeEstadoInicial() {
         Estado novo = new Estado(estadoInicial.getId());
         for (Entrada ent : transicoes.keySet()) {

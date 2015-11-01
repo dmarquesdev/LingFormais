@@ -13,35 +13,68 @@ import br.inf.ufsc.formais.model.Simbolo;
 
 /**
  *
- * @author Diego
+ * Classe que define uma expressão regular.
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class ExpressaoRegular {
 
     private List<Simbolo> simbolos;
 
+    /**
+     * Construtor da classe.
+     *
+     * @param simbolos Uma lista de simbolos que equivale a uma expressão
+     * regular.
+     */
     public ExpressaoRegular(List<Simbolo> simbolos) {
         this.simbolos = new ArrayList<>();
         this.simbolos.addAll(simbolos);
     }
 
+    /**
+     * Construtor da classe.
+     *
+     * @param simbolo Um simbolo que equivale a uma expressão regular.
+     */
     public ExpressaoRegular(Simbolo simbolo) {
         this.simbolos = new ArrayList<>();
         simbolos.add(simbolo);
     }
 
+    /**
+     * Construtor da classe.
+     */
     public ExpressaoRegular() {
         this.simbolos = new ArrayList<>();
     }
-    
-    public List<Simbolo> getSimbolos(){
+
+    /**
+     * get da expressão regular.
+     *
+     * @return uma lista de simbolos. Equivale a expressão regular.
+     */
+    public List<Simbolo> getSimbolos() {
         return simbolos;
     }
 
+    /**
+     * Concatena um simbolo a expressão regular existente.
+     *
+     * @param simbolo Um simbolo a ser concatenado.
+     */
     public void concatenar(Simbolo simbolo) {
         ExpressaoRegular antes = null;
         simbolos.add(simbolo);
     }
 
+    /**
+     * concatena uma expressão regular a expressão existente.
+     *
+     * @param er A expressão regular a ser concatenada.
+     */
     public void concatenar(ExpressaoRegular er) {
         List<Simbolo> simbolosOutraER = new ArrayList<>();
         simbolosOutraER.addAll(er.simbolos);
@@ -64,6 +97,11 @@ public class ExpressaoRegular {
 
     }
 
+    /**
+     * Agrupa uma expressão regular (entre parenteses).
+     *
+     * @param er A expressão regular a ser agrupada.
+     */
     private void agrupar(ExpressaoRegular er) {
         ExpressaoRegular antes = null;
         if (!er.somenteEpsilon() && !er.somenteVazio() && simbolos.size() > 1) {
@@ -72,6 +110,12 @@ public class ExpressaoRegular {
         }
     }
 
+    /**
+     * Cria operação de alternancia(OU) entre a expressão existente e um
+     * simbolo.
+     *
+     * @param simbolo O simbolo a ser alternado.
+     */
     public void alternancia(Simbolo simbolo) {
         if (this.somenteVazio() || this.somenteEpsilon()) {
             this.simbolos.remove(0);
@@ -83,6 +127,12 @@ public class ExpressaoRegular {
         }
     }
 
+    /**
+     * Cria operação de alternancia(OU) entre a expressão existente e outra
+     * expressão.
+     *
+     * @param er A expressão regular a ser alternado.
+     */
     public void alternancia(ExpressaoRegular er) {
         if (this.somenteVazio() || this.somenteEpsilon()) {
             if (!(this.somenteEpsilon() && er.somenteVazio()) || (this.somenteVazio() && er.somenteEpsilon())) {
@@ -97,11 +147,22 @@ public class ExpressaoRegular {
         }
     }
 
+    /**
+     * Concatena a expressão regular existente ao fecho de simbolo.
+     *
+     * @param simbolo Simbolo a ser concatenado.
+     */
     public void concatenarSimboloFecho(Simbolo simbolo) {
         concatenar(simbolo);
         concatenar(SimboloOperacional.FECHO);
     }
 
+    /**
+     * Concatena a expressão regular existente ao fecho de uma expressão
+     * regular.
+     *
+     * @param er Expressão regular a ser concatenada.
+     */
     public void concatenarERFecho(ExpressaoRegular er) {
         agrupar(er);
         concatenar(er);
@@ -110,6 +171,11 @@ public class ExpressaoRegular {
         }
     }
 
+    /**
+     * Gera o codigo hash da expressão regular.
+     *
+     * @return O código hash.
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -117,6 +183,12 @@ public class ExpressaoRegular {
         return hash;
     }
 
+    /**
+     * Implementa o metodo equals da classe.
+     *
+     * @param obj Objeto a ser comparado.
+     * @return Um boolean com a resposta da igualdade.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -135,6 +207,11 @@ public class ExpressaoRegular {
         return true;
     }
 
+    /**
+     * Implemnat o metodo toString da classe.
+     *
+     * @return Uma string.
+     */
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
@@ -145,6 +222,11 @@ public class ExpressaoRegular {
         return out.toString();
     }
 
+    /**
+     * Verifica se a expressão regular contem apenas epsilon.
+     *
+     * @return Boolean com a resposta.
+     */
     public boolean somenteEpsilon() {
         boolean somenteEpsilon = true;
         for (Simbolo simbolo : simbolos) {
@@ -157,6 +239,11 @@ public class ExpressaoRegular {
         return somenteEpsilon;
     }
 
+    /**
+     * Verifica se a expressão regular contem apenas o simbolo de vazio.
+     *
+     * @return Boolean com a resposta.
+     */
     public boolean somenteVazio() {
         boolean somenteVazio = true;
         for (Simbolo simbolo : simbolos) {
@@ -169,6 +256,11 @@ public class ExpressaoRegular {
         return somenteVazio;
     }
 
+    /**
+     * Copia a expressão regular atual para outra.
+     *
+     * @return A Expressão regular copiada.
+     */
     public ExpressaoRegular clone() {
         ExpressaoRegular er = new ExpressaoRegular();
         er.simbolos.addAll(simbolos);

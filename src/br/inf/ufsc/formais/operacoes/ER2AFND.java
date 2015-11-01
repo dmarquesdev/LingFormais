@@ -24,22 +24,34 @@ import java.util.Set;
 
 /**
  *
- * @author Matheus
+ * Essa classe tem os procediemntos necessarios para converter uma expressão
+ * regular em um automato finito não deterministico.
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class ER2AFND {
 
     private static int contadorEstados = 0;
-    
+
+    /**
+     * Responsável por reconhecer cada símbolo da expressão regular criar o
+     * automato.
+     *
+     * @param er Uma expressão regular.
+     * @return Um automato finito não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
-        
+
         AutomatoFinitoNaoDeterministico ultimo = null;
-        
-        //laço responsavel por analizar cada simbolo da expressão regular
+
+//        laço responsavel por analizar cada simbolo da expressão regular
         for (int i = 0; i < er.getSimbolos().size(); i++) {
 
             if (er.getSimbolos().get(i).getReferencia().equals("(")) {
-                //quando encontra um abre grupo entra num laço gerando uma sub er ate o fecha grupo correpondente.
-                //calcula essa sub er e retorna.
+//                quando encontra um abre grupo entra num laço gerando uma sub er ate o fecha grupo correpondente.
+//                calcula essa sub er e retorna.
                 List<Simbolo> subSimbolos = new ArrayList<>();
                 int abregrupo = 1;
                 int j = i + 1;
@@ -55,11 +67,13 @@ public class ER2AFND {
                     j++;
                 }
                 ExpressaoRegular subEr = new ExpressaoRegular(subSimbolos);
-                i = j-1;//pula para simbolo imediatamente após o fecha grupo.
 
-                //analiza se existe um automato anterior para ser concatenado.
-                //se não existir cria af, se o prox simbolo for fecho, cria o fecho desse af
-                //se existir automato para concatenar, concatena com atual(com ou sem fecho).
+//                pula para simbolo imediatamente após o fecha grupo.
+                i = j - 1;
+
+//                analiza se existe um automato anterior para ser concatenado.
+//                se não existir cria af, se o prox simbolo for fecho, cria o fecho desse af
+//                se existir automato para concatenar, concatena com atual(com ou sem fecho).
                 if (ultimo == null) {
                     if (i < er.getSimbolos().size() - 1) {
                         if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
@@ -84,24 +98,24 @@ public class ER2AFND {
                     }
                 }
             } else if (er.getSimbolos().get(i).getReferencia().equals("*")) {
-                //gera o fecho do ultimo automato
+//                gera o fecho do ultimo automato
                 ultimo = fechoDeAF(ultimo);
 
             } else if (er.getSimbolos().get(i).getReferencia().equals("|")) {
-                //cria automato depois do | e opera com o automato em espera
+//                cria automato depois do | e opera com o automato em espera
                 List<Simbolo> subSimbolos;
-                subSimbolos = er.getSimbolos().subList(i+1, er.getSimbolos().size());
+                subSimbolos = er.getSimbolos().subList(i + 1, er.getSimbolos().size());
                 ExpressaoRegular subEr = new ExpressaoRegular(subSimbolos);
                 ultimo = ouEntreAFs(ultimo, converterParaAutomato(subEr));
                 ++i;
             } else if (er.getSimbolos().get(i) == SimboloOperacional.CONJUNTO_VAZIO) {
                 ultimo = aFLingVazia();
 
-            } else { 
-                //se for um simbolo é gerado um automato que reconheça esse simbolo, gera o seu fecho se o proximo
-                //simbolo for fecho, concatena com o automato anterior se existir.
+            } else {
+//                se for um simbolo é gerado um automato que reconheça esse simbolo, gera o seu fecho se o proximo
+//                simbolo for fecho, concatena com o automato anterior se existir.
                 if (ultimo == null) {
-        
+
                     if (er.getSimbolos().get(i) == SimboloOperacional.EPSILON) {
                         ultimo = aFPalavraVazia();
                     } else {
@@ -109,7 +123,7 @@ public class ER2AFND {
                             if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
                                 ultimo = fechoDeAF(aFdeSimbolo(er.getSimbolos().get(i)));
                                 i++;
-                            }else{
+                            } else {
                                 ultimo = aFdeSimbolo(er.getSimbolos().get(i));
                             }
                         } else {
@@ -127,7 +141,7 @@ public class ER2AFND {
                             if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
                                 ultimo = concatenaAFs(ultimo, fechoDeAF(aFdeSimbolo(er.getSimbolos().get(i))));
                                 ++i;
-                            }else{
+                            } else {
                                 ultimo = concatenaAFs(ultimo, aFdeSimbolo(er.getSimbolos().get(i)));
                             }
                         } else {
@@ -143,50 +157,61 @@ public class ER2AFND {
         return ultimo;
     }
 
-    /*
-    cria um automato que reconeça palavras com o simbolo do alfabeto passado como parametro
-    */
+    /**
+     * Cria um automato mais simples que reconheça palavras que contenham o
+     * símbolo s.
+     *
+     * @param s Um símbolo do alfabeto do automato.
+     * @return Um automato finito não determinístico.
+     */
     public static AutomatoFinitoNaoDeterministico aFdeSimbolo(Simbolo s) {
-        //cria estado inicial e final
+//        cria estado inicial e final
         EstadoInicial einicial = new EstadoInicial("q" + contadorEstados);
         ++contadorEstados;
         EstadoFinal efinal = new EstadoFinal("q" + contadorEstados);
         ++contadorEstados;
-        
-        //cria um set de estados e adiciona o inicial e o final.
+
+//        cria um set de estados e adiciona o inicial e o final.
         Set<Estado> estados = new LinkedHashSet<>();
         estados.add(einicial);
         estados.add(efinal);
 
-        //cria set de estados e adicio estado final, será usado para criar a transicao.
+//        cria set de estados e adicio estado final, será usado para criar a transicao.
         Set<Estado> prox = new LinkedHashSet<>();
         prox.add(efinal);
         Estados proxEstados = new Estados(prox);
 
-        //cria o set de estados aceitacao e adiciona estado final.
+//        cria o set de estados aceitacao e adiciona estado final.
         Set<EstadoFinal> estadosAceitacao = new LinkedHashSet<>();
         estadosAceitacao.add(efinal);
 
-        //cria um set de simbolos e adiciona au alfabeto
+//        cria um set de simbolos e adiciona au alfabeto
         Set<Simbolo> simbolos = new LinkedHashSet<>();
         simbolos.add(s);
         Alfabeto alfa = new Alfabeto(simbolos);
 
-        //cria uma entrada,composta por estado de saida da transicao e o simbolo pelo qual transita
+//        cria uma entrada,composta por estado de saida da transicao e o simbolo pelo qual transita
         Entrada entrada = new Entrada(einicial, s);
 
-        //cria um map de transicoes, cada transicao é composta por uma entrada e os estados para qual a transicao 
-        //pelo simbolo em questao leva.
+//        cria um map de transicoes, cada transicao é composta por uma entrada e os estados para qual a transicao 
+//        pelo simbolo em questao leva.
         Map<Entrada, Estados> transicoes = new HashMap<>();
         transicoes.put(entrada, proxEstados);
 
-        //gera o automato.
+//        gera o automato.
         AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, alfa,
                 einicial, estadosAceitacao, transicoes);
 
         return afnd;
     }
 
+    /**
+     * Cria o fecho de um automato. Cria uma transição de cada estado final para
+     * o inicial por epsilon.
+     *
+     * @param af Um automato finito não determinístico.
+     * @return Um automato finito não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico fechoDeAF(AutomatoFinitoNaoDeterministico af) {
         AutomatoFinitoNaoDeterministico afnd;
         afnd = af;
@@ -195,7 +220,7 @@ public class ER2AFND {
         prox.add(afnd.getEstadoInicial());
         Estados estados = new Estados(prox);
 
-        //cria uma transição por epsilon de cada estado final para o inicial.
+//        cria uma transição por epsilon de cada estado final para o inicial.
         for (EstadoFinal efinal : af.getEstadosAceitacao()) {
             Entrada entrada = new Entrada(efinal, Simbolo.EPSILON);
 
@@ -205,40 +230,49 @@ public class ER2AFND {
         return afnd;
     }
 
+    /**
+     * Cria a operação ou entre dois automatos. Cria um estado inicial novo e
+     * transições que saem desse novo estado e vai para os estados iniciais de
+     * cada automato por epsilon.
+     *
+     * @param af1 Um automato finíto não determinsitico.
+     * @param af2 Um automato finíto não determinsitico.
+     * @return Um automato finíto não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico ouEntreAFs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
-        //Cria novo estado inicial.
+//        Cria novo estado inicial.
         EstadoInicial novoInicial = new EstadoInicial("q" + contadorEstados);
         ++contadorEstados;
-        
-        //Substitui estados iniciais de af1 e af2 por estados normais
+
+//        Substitui estados iniciais de af1 e af2 por estados normais
         Estado ei_af1 = af1.removeEstadoInicial();
         Estado ei_af2 = af2.removeEstadoInicial();
 
-        //criando transicao nao deterministica do inicial para cada um dos iniciais dos afnd's
+//        criando transicao nao deterministica do inicial para cada um dos iniciais dos afnd's
         Set<Estado> estadosProx = new LinkedHashSet<>();
         estadosProx.add(ei_af2);
         estadosProx.add(ei_af1);
         Estados proxEstados = new Estados(estadosProx);
         Entrada entrada = new Entrada(novoInicial, Simbolo.EPSILON);
 
-        //Junção de estados
+//        Junção de estados
         Set<Estado> estados = new LinkedHashSet<>();
         estados.addAll(af1.getEstados());
         estados.addAll(af2.getEstados());
         estados.add(novoInicial);
 
-        //Junção de estados finais
+//        Junção de estados finais
         Set<EstadoFinal> estadosAceitacao = new LinkedHashSet<>();
         estadosAceitacao.addAll(af1.getEstadosAceitacao());
         estadosAceitacao.addAll(af2.getEstadosAceitacao());
 
-        //Junção de Alfabeto
+//        Junção de Alfabeto
         Set<Simbolo> simbolos = new LinkedHashSet<>();
         simbolos.addAll(af1.getAlfabeto().getSimbolos());
         simbolos.addAll(af2.getAlfabeto().getSimbolos());
         Alfabeto alfa = new Alfabeto(simbolos);
 
-        //Junção de transições
+//        Junção de transições
         Map<Entrada, Estados> transicoes = new HashMap<>();
         transicoes.putAll(af1.getTransicoes());
         transicoes.putAll(af2.getTransicoes());
@@ -250,42 +284,50 @@ public class ER2AFND {
         return afnd;
     }
 
+    /**
+     * Concatena dois automatos. Cria uma transição por epsilon do(s) estado(s)
+     * final(is) de um automato para o inicial do outro automato.
+     *
+     * @param af1 Um automato finíto não determinsitico.
+     * @param af2 Um automato finíto não determinsitico.
+     * @return Um automato finíto não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico concatenaAFs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
         Map<Entrada, Estados> transicoes = new HashMap<>();
 
-        //Cria estado estado para subtiruir estado inicial de af2
+//        Cria estado estado para subtiruir estado inicial de af2
         Estado eaf2 = af2.removeEstadoInicial();
 
-        //Cria uma transição de cada estado final de af1 para o estado inicial de af2
+//        Cria uma transição de cada estado final de af1 para o estado inicial de af2
         Set<Estado> estadosProx = new LinkedHashSet<>();
         estadosProx.add(eaf2);
         Estados proxEstados = new Estados(estadosProx);
-        
-        Set<EstadoFinal> apoio =  new LinkedHashSet<>();
+
+        Set<EstadoFinal> apoio = new LinkedHashSet<>();
         apoio.addAll(af1.getEstadosAceitacao());
-        
-        //Junção de transições
+
+//        Junção de transições
         transicoes.putAll(af1.getTransicoes());
         transicoes.putAll(af2.getTransicoes());
-        
+
         for (EstadoFinal e : apoio) {
             Estado eaf1 = af1.removeEstadoFinal(e);
             Entrada entrada = new Entrada(eaf1, Simbolo.EPSILON);
-            
-            //Se a entrada ja existe, adiciona o estado à transiçao.
-            if(transicoes.containsKey(entrada)){
+
+//            Se a entrada ja existe, adiciona o estado à transiçao.
+            if (transicoes.containsKey(entrada)) {
                 transicoes.get(entrada).addEstado(eaf2);
-            }else{
+            } else {
                 transicoes.put(entrada, proxEstados);
             }
         }
-        
-        //Junção de estados.
+
+//        Junção de estados.
         Set<Estado> estados = new LinkedHashSet<>();
         estados.addAll(af1.getEstados());
         estados.addAll(af2.getEstados());
 
-        //Junção de Alfabeto
+//        Junção de Alfabeto
         Set<Simbolo> simbolos = new LinkedHashSet<>();
         simbolos.addAll(af1.getAlfabeto().getSimbolos());
         simbolos.addAll(af2.getAlfabeto().getSimbolos());
@@ -298,9 +340,15 @@ public class ER2AFND {
         return afnd;
     }
 
+    /**
+     * Cria um automato que reconheça a linguagem vazia. Automato que contem
+     * apenas estado inicial, não contem estados finais.
+     *
+     * @return Um automato finíto não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico aFLingVazia() {
-        
-        //cria um automato que tem apenas o estado inicial, todo o resto é nulo.
+
+//        cria um automato que tem apenas o estado inicial, todo o resto é nulo.
         EstadoInicial einicial = new EstadoInicial("S");
         Set<Estado> estados = new LinkedHashSet<>();
         estados.add(einicial);
@@ -314,8 +362,14 @@ public class ER2AFND {
         return afnd;
     }
 
+    /**
+     * Cria automato que reconheça a palavra vazia. Contem uma transição por
+     * epsilon de inicial para final.
+     *
+     * @return Um automato finíto não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico aFPalavraVazia() {
-        //cria um automato que transita do estado inical ao final por epsilon.
+//        cria um automato que transita do estado inical ao final por epsilon.
         return aFdeSimbolo(Simbolo.EPSILON);
     }
 }

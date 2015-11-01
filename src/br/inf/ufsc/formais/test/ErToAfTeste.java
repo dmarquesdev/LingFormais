@@ -5,34 +5,39 @@
  */
 package br.inf.ufsc.formais.test;
 
-import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.exception.FormaisIOException;
+import br.inf.ufsc.formais.io.AutomatoFinitoNaoDeterministicoIO;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
-import br.inf.ufsc.formais.model.er.ExpressaoRegular;
+import br.inf.ufsc.formais.model.er.ExpressaoRegular; 
+import java.io.IOException;
 import br.inf.ufsc.formais.operacoes.ER2AFND;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  *
- * @author Matheus
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class ErToAfTeste {
     
     public void runTest(){
-        List<Simbolo> simbolos = new ArrayList();
-        simbolos.add(new Simbolo("("));
-        simbolos.add(new Simbolo("a"));
-        simbolos.add(new Simbolo("|"));
-        simbolos.add(new Simbolo("b"));
-        simbolos.add(new Simbolo(")"));
-        //simbolos.add(new Simbolo("("));
-        simbolos.add(new Simbolo("c"));
-        //simbolos.add(new Simbolo(")"));
-        ExpressaoRegular exp = new ExpressaoRegular(simbolos);
         
-        AutomatoFinitoNaoDeterministico afnd;
+        try {
+            ExpressaoRegularIO ioer = new ExpressaoRegularIO();
+            ExpressaoRegular er = ioer.read("", "teste1ErAfnd.in");
+            AutomatoFinitoNaoDeterministico afnd = ER2AFND.converterParaAutomato(er);
+            AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
+            ioafnd.write("", "teste2ErAfnd.out", afnd);
+            //System.out.println("Determinização sem epsilon transição.");
+            //System.out.println(AFD);
+        } catch (IOException ex) {
+            System.out.println("Ocorreu um erro de leitura no arquivo!");
+        } catch (FormaisIOException ex) {
+            System.out.println(ex.getMessage());
+        }
         
-        afnd = ER2AFND.converterParaAutomato(exp);
-        System.out.println("ER: " + exp.toString()+ "\n\n" + afnd.toString());
+        
     }
 }

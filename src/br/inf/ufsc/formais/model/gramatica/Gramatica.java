@@ -8,8 +8,10 @@ package br.inf.ufsc.formais.model.gramatica;
 import java.util.Set;
 
 /**
- *
- * @author Diego
+ * Classe que define uma gramatica.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Gramatica {
 

@@ -7,36 +7,27 @@ package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.AutomatoFinitoIO;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
-import br.inf.ufsc.formais.model.Alfabeto;
-import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministicoGeneralizado;
-import br.inf.ufsc.formais.model.automato.Entrada;
-import br.inf.ufsc.formais.model.automato.Estado;
-import br.inf.ufsc.formais.model.automato.EstadoFinal;
-import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import br.inf.ufsc.formais.operacoes.AFD2AFNDG;
 import br.inf.ufsc.formais.operacoes.AFNDG2ER;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author Diego
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
-public class AutomatoFinitoDeterministicoTeste {
+public class AfdToErTeste {
 
     public void runTest() {
         AutomatoFinitoDeterministico dfa = null;
         try {
-            dfa = (AutomatoFinitoDeterministico) new AutomatoFinitoIO().read("C:\\", "afd.in");
+            dfa = (AutomatoFinitoDeterministico) new AutomatoFinitoIO()
+                    .read("", "teste3AfdEr.in");
             System.out.println(dfa.toString());
             AutomatoFinitoNaoDeterministicoGeneralizado afndg = AFD2AFNDG.converterParaAFDNG(dfa);
 
@@ -45,8 +36,12 @@ public class AutomatoFinitoDeterministicoTeste {
             ExpressaoRegular er = AFNDG2ER.converterParaER(afndg);
 
             System.out.println(er.toString());
+
+            ExpressaoRegularIO ioer = new ExpressaoRegularIO();
+            ioer.write("", "teste4AfdEr.out", er);
+
         } catch (IOException ex) {
-             System.out.println("Ocorreu um erro de leitura no arquivo!");
+            System.out.println("Ocorreu um erro de leitura no arquivo!");
         } catch (FormaisIOException ex) {
             System.out.println(ex.getMessage());
         }

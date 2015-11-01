@@ -6,23 +6,33 @@
 package br.inf.ufsc.formais.test;
 
 /**
- *
- * @author Diego
+ * Cria e executa os testes.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class TestRunner {
+
     public static void main(String[] args) {
-        //GramaticaTeste gT = new GramaticaTeste();
-        //AutomatoFinitoDeterministicoTeste dfaT = new AutomatoFinitoDeterministicoTeste();
-        //ExpressaoRegularTeste erT = new ExpressaoRegularTeste();
-//        DeterminizacaoTeste detT = new DeterminizacaoTeste();
-//        DeterminizacaoEpsilonTransicaoTeste detEpsilonT = new DeterminizacaoEpsilonTransicaoTeste();
-        //ErToAfTeste etaT = new ErToAfTeste();
-//        
-//        gT.runTest();
-//        dfaT.runTest();
-//        erT.runTest();
-//        detT.runTeste();
-//        detEpsilonT.runTeste();
-        //etaT.runTest();
+
+        //Gramatica <-> AFD
+        GramaticaAfdTeste gramTOafd = new GramaticaAfdTeste();
+        AfdGramaticaTeste afdTOgram = new AfdGramaticaTeste();
+        gramTOafd.runTest();
+        afdTOgram.runTest();
+
+        //Determinizações
+        DeterminizacaoTeste detT = new DeterminizacaoTeste();
+        detT.runTeste();
+
+        //ER <-> AF
+        AfdToErTeste afdTOer = new AfdToErTeste();
+        ErToAfTeste etaT = new ErToAfTeste();
+        afdTOer.runTest();
+        etaT.runTest();
+        
+        //Minimizacao
+        MinimizacaoAfdTeste afdMinTeste = new MinimizacaoAfdTeste();
+        afdMinTeste.runTeste();
     }
 }

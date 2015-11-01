@@ -6,8 +6,10 @@
 package br.inf.ufsc.formais.model.gramatica;
 
 /**
- *
- * @author Diego
+ * Classe que define uma cadeia de simbolos de uma gramatica.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Cadeia {
 

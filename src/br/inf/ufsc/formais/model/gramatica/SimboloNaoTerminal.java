@@ -8,8 +8,10 @@ package br.inf.ufsc.formais.model.gramatica;
 import br.inf.ufsc.formais.model.Simbolo;
 
 /**
- *
- * @author Diego
+ * Define simbolos não terminais.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class SimboloNaoTerminal extends Simbolo {
     
