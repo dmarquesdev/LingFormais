@@ -1,14 +1,14 @@
 
 package br.inf.ufsc.formais.test;
 
+import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.AutomatoFinitoNaoDeterministicoIO;
 import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
-
-import br.inf.ufsc.formais.operacoes.AFNDEpsilonTransition2AFD;
+import br.inf.ufsc.formais.operacoes.AFND2AFD;
+import br.inf.ufsc.formais.operacoes.AFDMinimizer;
 import java.io.IOException;
-import br.inf.ufsc.formais.exception.FormaisIOException;
 
 /**
  *
@@ -18,26 +18,26 @@ import br.inf.ufsc.formais.exception.FormaisIOException;
  */
 public class DeterminizacaoTeste {
 
-    public void runTeste() {
+	public void runTeste() {
 
-        try {
-            AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
-            AutomatoFinitoNaoDeterministico afnd = ioafnd.read("/home/nathan/Documentos/Formais/DiegoMarquesMatheusDemetrioNathanMolinari/Testes/", "teste7detAfnd.in");
-            
-            AutomatoFinitoDeterministico AFD = AFNDEpsilonTransition2AFD.determinizar(afnd);
-            
-            AutomatoFinitoIO afdio = new AutomatoFinitoIO();
-            //afdio.write("teste8detAfnd.out", AFD);
+		try {
+			// sem epsilon transição
+			AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
+			AutomatoFinitoNaoDeterministico afnd = ioafnd.read("", "teste8detAfnd.in");
+			AutomatoFinitoDeterministico AFD = AFND2AFD.determinizar(afnd);
+			AutomatoFinitoIO afdio = new AutomatoFinitoIO();
+			afdio.write("teste8detAfnd.out", AFD);
 
-            System.out.println("Determinização sem epsilon transição.");
-            System.out.println(AFD);
-            
-        } catch (IOException ex) {
-            System.out.println("Ocorreu um erro de leitura no arquivo!");
-        } catch (FormaisIOException ex) {
-            System.out.println(ex.getMessage());
-        }
+			//com epsilon transição
+			AutomatoFinitoNaoDeterministico afndEpsilon = ioafnd.read("", "teste6detAfnd_epsilon.in");
+			AFD = AFND2AFD.determinizar(afndEpsilon);
+			afdio.write("teste6detAfnd_epsilon.out", AFD);
 
-    }
+		} catch (IOException ex) {
+			System.out.println("Ocorreu um erro de leitura no arquivo!");
+		} catch (FormaisIOException ex) {
+			System.out.println(ex.getMessage());
+		}
+
+	}
 }
-

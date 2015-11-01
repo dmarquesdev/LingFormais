@@ -10,7 +10,6 @@ import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
-import br.inf.ufsc.formais.operacoes.UnreachableStatesRemover;
 
 public class AFDMinimizer {
 
@@ -21,9 +20,8 @@ public class AFDMinimizer {
 	}
 
 	public AutomatoFinitoDeterministico minimizar() {
-		UnreachableStatesRemover remover = new UnreachableStatesRemover(afd);
-		remover.removeUnreachableStates();
-		
+		this.afd.removeUnreachableStates();
+		this.afd.removeDeadStates();
 		LinkedHashSet<Estados> classesEquivalencia = this.determineEquivalenceClasses();
 		AutomatoFinitoDeterministico afdMin = this.generateMinimumAutomaton(classesEquivalencia);
 		return afdMin;

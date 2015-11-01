@@ -23,9 +23,7 @@ public class TestRunner {
 
         //Determinizações
         DeterminizacaoTeste detT = new DeterminizacaoTeste();
-        DeterminizacaoEpsilonTransicaoTeste detEpsilonT = new DeterminizacaoEpsilonTransicaoTeste();
         detT.runTeste();
-        detEpsilonT.runTeste();
 
         //ER <-> AF
         AfdToErTeste afdTOer = new AfdToErTeste();
