@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.model.CadeiaAutomato;
 import br.inf.ufsc.formais.model.Simbolo;
 
 /**
@@ -161,6 +162,10 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
 		Entrada ent = new Entrada(de, entrada);
 		return (transicoes.get(ent) != null && transicoes.get(ent).equals(para));
 	}
+	
+	public boolean existeTransicao(Entrada entrada){
+		return this.transicoes.get(entrada) != null;
+	}
 
 	@Override
 	public Estado removeEstadoFinal(EstadoFinal estado) {
@@ -217,6 +222,10 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
 	}
 
 	private void removeUnreachableStates(Estados unreachableStates) {
+		if(unreachableStates.isEmpty()){
+			return;
+		}
+		
 		this.estados.removeAll(unreachableStates.get());
 		this.estadosAceitacao.removeAll(unreachableStates.get());
 		
@@ -230,6 +239,11 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
 	
 	public void removeDeadStates(){
 		Estados deadStates = getDeadStates();
+		
+		if(deadStates.isEmpty()){
+			return;
+		}
+		
 		this.estados.removeAll(deadStates.get());
 		
 		Set<Entrada> temp = new HashSet<Entrada>(this.transicoes.keySet());
@@ -300,6 +314,27 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
 		diferenca.addAll(one.get());
 		diferenca.removeAll(other.get());
 		return new Estados(diferenca);
+	}
+	
+	public Estado computar(CadeiaAutomato cadeia){
+		Estado estadoAtual = this.estadoInicial;
+		Estado proximoEstado = new Estado("");
+		
+		for(Simbolo simbolo : cadeia.getSimbolos()){
+			Entrada entrada = new Entrada(estadoAtual, simbolo);
+			if(!existeTransicao(entrada)){
+				//	lança exception
+			}
+			estadoAtual = transicoes.get(entrada);
+		}
+		if(!isFinalState(estadoAtual)){
+			//lança exception
+		}
+		return estadoAtual;	
+	}
+	
+	private boolean isFinalState(Estado estado){
+		return this.estadosAceitacao.contains(estado);
 	}
 
 }

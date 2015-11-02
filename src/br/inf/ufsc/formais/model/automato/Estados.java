@@ -76,6 +76,10 @@ public class Estados extends Estado {
 	public String toString() {
 		return getId();
 	}
+	
+	public void addEstados(Estados estados){
+		this.estados.addAll(estados.get());
+	}
 
 	@Override
 	public boolean equals(Object obj) {
