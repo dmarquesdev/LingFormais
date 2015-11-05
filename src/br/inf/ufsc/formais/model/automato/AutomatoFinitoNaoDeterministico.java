@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.model.CadeiaAutomato;
 import br.inf.ufsc.formais.model.Simbolo;
 import java.util.HashSet;
 
@@ -240,6 +241,10 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public boolean existeTransicao(Estado de, Simbolo entrada, Estado para) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public boolean existeTransicao(Entrada entrada){
+    	return this.transicoes.get(entrada) != null;
+    }
 
     /**
      * Remove o estado inicial.
@@ -270,4 +275,68 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         estados.add(novo);
         return novo;
     }
+    	/**
+	 * Método que retorna o Epsilon-fecho de um conjunto de estados. A partir do conjunto de estados recebido por paramêtro, são encontrados todos os estados alcançaveis por epsilon
+	 * transição, então esse processo é repetido esses novos estados alcançaveis até que todas as transições por epsilon possíveis sejam encontradas. 
+	 * @param estados Conjunto de estados que se deseja obter o Epsilon-fecho.   
+	 * @return Conjunto de estados com o epsilon-fecho do conjunto de estados recebido por paramêtro.
+	 */
+	public Estados epsilonFecho(Estados estado) {
+		Set<Estado> epsilonFecho = new LinkedHashSet<Estado>();
+		Set<Estado> toBeVisited = new LinkedHashSet<Estado>();
+		Set<Estado> alreadyVisited = new LinkedHashSet<Estado>();
+
+		toBeVisited.addAll(estado.get());
+
+		while (!toBeVisited.isEmpty()) {
+
+			for (Estado estadoAtual : toBeVisited) {
+				epsilonFecho.add(estadoAtual);
+
+				Entrada entrada = new Entrada(estadoAtual, Simbolo.EPSILON);
+				if (existeTransicao(entrada)) {
+					Estados alcancavelPorEpsilon = this.transicoes.get(entrada);
+					epsilonFecho.addAll(alcancavelPorEpsilon.get());
+				}	
+				alreadyVisited.add(estadoAtual);
+			}
+			toBeVisited.addAll(epsilonFecho);
+			toBeVisited.removeAll(alreadyVisited);
+		}
+
+		return new Estados(epsilonFecho);
+	}
+	
+	public boolean hasEstadoFinal(Estados estados){
+		Set<Estado> interseccao = new LinkedHashSet<Estado>(this.estadosAceitacao);
+		interseccao.retainAll(estados.get());
+		return !interseccao.isEmpty();
+	}
+	
+	public Estados computar(CadeiaAutomato cadeia){
+		Estados estadosAtuais = new Estados();
+		estadosAtuais.addEstado(this.estadoInicial);
+		
+		for(Simbolo simbolo : cadeia.getSimbolos()){
+			estadosAtuais = epsilonFecho(estadosAtuais);
+			Estados alcancaveis = new Estados();
+			for(Estado estado : estadosAtuais.get()){
+				Entrada entrada = new Entrada(estado, simbolo);
+				if(existeTransicao(entrada)){
+				alcancaveis.addEstados(this.transicoes.get(entrada));
+				}
+			}
+			if(alcancaveis.isEmpty()){
+				//lanca exception
+			}
+			estadosAtuais.get().clear();
+			estadosAtuais.addEstados(alcancaveis);	
+		}
+		
+		if(!hasEstadoFinal(estadosAtuais)){
+			//lança exception
+		}
+		
+		return estadosAtuais;
+	}
 }
