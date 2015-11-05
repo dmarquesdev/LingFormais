@@ -33,6 +33,20 @@ import java.util.Set;
  */
 public class ER2AFND {
 
+    public static AutomatoFinitoNaoDeterministico analisaConverte(ExpressaoRegular er) {
+        AutomatoFinitoNaoDeterministico afnd;
+
+        if (er.toString().equals("|") || er.toString().equals("*")
+                || er.toString().equals("(") || er.toString().equals(")")) {
+            afnd = OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0));
+        } else if (er.toString().equals("||")) {
+            afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0)), OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(1)));
+        } else {
+            afnd = ER2AFND.converterParaAutomato(er);
+        }
+        return afnd;
+    }
+
     /**
      * Responsável por reconhecer cada símbolo da expressão regular criar o
      * automato.
@@ -40,7 +54,7 @@ public class ER2AFND {
      * @param er Uma expressão regular.
      * @return Um automato finito não determinsitico.
      */
-    public static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
+    private static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
 
         AutomatoFinitoNaoDeterministico ultimo = null;
 

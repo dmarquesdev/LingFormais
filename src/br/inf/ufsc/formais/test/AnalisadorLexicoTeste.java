@@ -5,14 +5,18 @@
  */
 package br.inf.ufsc.formais.test;
 
+import br.inf.ufsc.formais.exception.EstadoInalcancavelException;
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.ExpressaoRegularIO;
+import br.inf.ufsc.formais.model.CadeiaAutomato;
+import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
+import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
+import br.inf.ufsc.formais.operacoes.AFDMinimizer;
+import br.inf.ufsc.formais.operacoes.AFND2AFD;
 import br.inf.ufsc.formais.operacoes.ER2AFND;
-import br.inf.ufsc.formais.operacoes.OperacoesAFND;
 import java.io.IOException;
-
 
 /**
  *
@@ -25,17 +29,22 @@ public class AnalisadorLexicoTeste {
         try {
             for (ExpressaoRegular er : ioer.readAll("", "testeer.in")) {
                 System.out.println(er.toString());
-                AutomatoFinitoNaoDeterministico afnd;
-                if (er.toString().equals("|")
-                        || er.toString().equals("*") || er.toString().equals("(")
-                        || er.toString().equals(")")) {
-                           afnd = OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0));
-                }else if(er.toString().equals("||")){
-                    afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0)), OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(1)));
-                }else{
-                afnd = ER2AFND.converterParaAutomato(er);
-                }
+                
+                AutomatoFinitoNaoDeterministico afnd = ER2AFND.analisaConverte(er);
                 System.out.println(afnd.toString());
+
+                AutomatoFinitoDeterministico afd = AFND2AFD.determinizar(afnd);
+                AFDMinimizer minimizer = new AFDMinimizer(afd);
+                afd = minimizer.minimizar();
+                System.out.println(afd.toString());
+
+                try {
+                    Estado estado = afd.computar(new CadeiaAutomato("program"));
+                    System.out.println("\nEstado em que a palavra foi aceita: "+estado.toString() +"\n\n");
+                } catch (EstadoInalcancavelException e) {
+                    System.out.println("\n\nEntrada não é aceita pela linguagem!\n\n");
+                }
+
             }
 
         } catch (IOException ex) {

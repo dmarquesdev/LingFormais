@@ -5,12 +5,6 @@
  */
 package br.inf.ufsc.formais.test;
 
-import br.inf.ufsc.formais.exception.FormaisIOException;
-import br.inf.ufsc.formais.io.ExpressaoRegularIO;
-import br.inf.ufsc.formais.model.er.ExpressaoRegular;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Cria e executa os testes.

@@ -62,7 +62,7 @@ public class MainView {
                     opt = scanInput.nextLine();
                     scanInput.close();
                     if (opt.equals("1")) {
-                        afnd = ER2AFND.converterParaAutomato(er);
+                        afnd = ER2AFND.analisaConverte(er);
                         new AutomatoFinitoIO().write("er_afnd.out", afnd);
                     } else {
                         System.out.println("Opção inválida!");
