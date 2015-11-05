@@ -5,6 +5,13 @@
  */
 package br.inf.ufsc.formais.test;
 
+import br.inf.ufsc.formais.exception.FormaisIOException;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
+import br.inf.ufsc.formais.model.er.ExpressaoRegular;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Cria e executa os testes.
  * @author Diego Marques
@@ -15,24 +22,30 @@ public class TestRunner {
 
     public static void main(String[] args) {
 
-        //Gramatica <-> AFD
-        GramaticaAfdTeste gramTOafd = new GramaticaAfdTeste();
-        AfdGramaticaTeste afdTOgram = new AfdGramaticaTeste();
-        gramTOafd.runTest();
-        afdTOgram.runTest();
-
-        //Determinizações
-        DeterminizacaoTeste detT = new DeterminizacaoTeste();
-        detT.runTeste();
-
-        //ER <-> AF
-        AfdToErTeste afdTOer = new AfdToErTeste();
-        ErToAfTeste etaT = new ErToAfTeste();
-        afdTOer.runTest();
-        etaT.runTest();
+//        //Gramatica <-> AFD
+//        GramaticaAfdTeste gramTOafd = new GramaticaAfdTeste();
+//        AfdGramaticaTeste afdTOgram = new AfdGramaticaTeste();
+//        gramTOafd.runTest();
+//        afdTOgram.runTest();
+//
+//        //Determinizações
+//        DeterminizacaoTeste detT = new DeterminizacaoTeste();
+//        detT.runTeste();
+//
+//        //ER <-> AF
+//        AfdToErTeste afdTOer = new AfdToErTeste();
+//        ErToAfTeste etaT = new ErToAfTeste();
+//        afdTOer.runTest();
+//        etaT.runTest();
+//        
+//        //Minimizacao
+//        MinimizacaoAfdTeste afdMinTeste = new MinimizacaoAfdTeste();
+//        afdMinTeste.runTeste();
         
-        //Minimizacao
-        MinimizacaoAfdTeste afdMinTeste = new MinimizacaoAfdTeste();
-        afdMinTeste.runTeste();
+        //Analisador Lexico
+        AnalisadorLexicoTeste lexico = new AnalisadorLexicoTeste();
+        lexico.runTest();
+        
+        
     }
 }

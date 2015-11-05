@@ -36,6 +36,45 @@ public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
     public ExpressaoRegular read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
+    
+    @Override
+    public ArrayList<ExpressaoRegular> readAll(String path, String file) throws IOException, FormaisIOException{
+        String completePath = "";
+        if (path != null) {
+            completePath += path;
+        }
+        completePath += file;
+
+        BufferedReader br = new BufferedReader(new FileReader(completePath));
+        
+        String line = br.readLine();
+
+        ArrayList<ExpressaoRegular> listaEr = new ArrayList<>();
+        
+        while (line != null && !line.isEmpty()) {
+            List<Simbolo> simbolos = new ArrayList<>();
+            for (char c : line.toCharArray()) {
+                if (c == '(') {
+                    simbolos.add(SimboloOperacional.ABRE_GRUPO);
+                } else if (c == ')') {
+                    simbolos.add(SimboloOperacional.FECHA_GRUPO);
+                } else if (c == '*') {
+                    simbolos.add(SimboloOperacional.FECHO);
+                } else if (c == '|') {
+                    simbolos.add(SimboloOperacional.ALTERNANCIA);
+                } else {
+                    Simbolo a = new Simbolo("" + c);
+                    simbolos.add(a);
+                }
+            }
+            listaEr.add(new ExpressaoRegular(simbolos));
+            line = br.readLine();
+        }
+
+        br.close();
+
+        return listaEr;
+    }
 
     /**
      * Lê um arquivo que contenha uma Expressão Regular.
@@ -57,11 +96,13 @@ public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
         completePath += file;
 
         BufferedReader br = new BufferedReader(new FileReader(completePath));
+        
         String line = br.readLine();
 
         List<Simbolo> simbolos = new ArrayList<>();
 
         if (line != null && !line.isEmpty()) {
+            System.out.println(line);
             for (char c : line.toCharArray()) {
                 if (Character.isAlphabetic(c) || Character.isDigit(c)) {
                     Simbolo a = new Simbolo("" + c);
@@ -78,6 +119,7 @@ public class ExpressaoRegularIO implements IO<ExpressaoRegular> {
                     throw new FormaisIOException("Expressão regular contém símbolo inválido: " + c);
                 }
             }
+            
         }
 
         br.close();

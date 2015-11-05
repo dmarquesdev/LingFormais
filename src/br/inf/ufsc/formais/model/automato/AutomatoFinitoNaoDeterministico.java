@@ -250,8 +250,11 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         for (Entrada ent : transicoes.keySet()) {
             
             Estados ests = transicoes.get(ent);
+            Estados apoio = new Estados();
             
-                for(Estado est : ests.get()){
+            apoio.addEstado(transicoes.get(ent));
+            
+                for(Estado est : apoio.get()){
                     if(est.equals(estadoInicial)){
                         ests.get().remove(estadoInicial);
                         ests.get().add(est);

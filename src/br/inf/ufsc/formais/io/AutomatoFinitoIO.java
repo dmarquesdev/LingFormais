@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -201,6 +202,11 @@ public class AutomatoFinitoIO implements IO<AutomatoFinito> {
         BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
         bw.write(obj.toString());
         bw.close();
+    }
+
+    @Override
+    public ArrayList<AutomatoFinito> readAll(String path, String file) throws IOException, FormaisIOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
