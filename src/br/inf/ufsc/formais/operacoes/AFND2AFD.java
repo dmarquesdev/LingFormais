@@ -7,6 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.crypto.ExemptionMechanismSpi;
+
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -48,34 +50,29 @@ public class AFND2AFD {
 
 		Estados estadoInicial = new Estados(new HashSet<Estado>());
 		estadoInicial.addEstado(AFND.getEstadoInicial());
-		estadosToBeGrouped.add(AFND.epsilonFecho(estadoInicial));
-
-		Set<Simbolo> simbolos = AFND.getAlfabeto().getSimbolos();
-
-		simbolos.remove(Simbolo.EPSILON);
+		estadosToBeGrouped.add(estadoInicial);
+		AFND.getAlfabeto().getSimbolos().remove(Simbolo.EPSILON);
 
 		// agrupar estados para formar novos deterministicos
 		while (!estadosToBeGrouped.isEmpty()) {
 
-			Estados estadoAtual = (Estados) estadosToBeGrouped.toArray()[0];
+			Estados estadoAtual = ((Estados) estadosToBeGrouped.toArray()[0]);
 
 			for (Simbolo simbolo : AFND.getAlfabeto().getSimbolos()) {
 
-				HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
-
-				for (Estado estado : estadoAtual.get()) {
+				Estados novosEstados = new Estados();
+				Estados epsilonFecho = AFND.epsilonFecho(estadoAtual);
+				for (Estado estado : epsilonFecho.get()) { // otimizar
 
 					Entrada entrada = new Entrada(estado, simbolo);
-					Estados alcancaveis = AFND.getEstadosTransicao(entrada);
-
-					Estados epsilonFecho = AFND.epsilonFecho(alcancaveis);
-					novoEstado.addAll(epsilonFecho.get());
-
+					if (AFND.existeTransicao(entrada)) {
+						Estados alcancaveis = AFND.getEstadosTransicao(entrada);
+						novosEstados.addEstados(alcancaveis);
+					}
 				}
-				Estados novoEstados = new Estados(novoEstado);
 				// trata o caso de transição para o vazio
-				if (!novoEstados.get().isEmpty()) {
-					estadosAlcancaveis.add(novoEstados);
+				if (!novosEstados.isEmpty()) {
+					estadosAlcancaveis.add(novosEstados);
 				}
 			}
 			estadosAgrupados.add(estadoAtual);
@@ -87,7 +84,7 @@ public class AFND2AFD {
 		HashMap<Estados, Estado> estadosDeterministicos = new LinkedHashMap<Estados, Estado>();
 		Set<EstadoFinal> estadosAceitacaoDeterministico = new HashSet<EstadoFinal>();
 		Estado estadoInicialDeterministico = new EstadoInicial("Q0");
-		estadosDeterministicos.put(AFND.epsilonFecho(estadoInicial), estadoInicialDeterministico);
+		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
 
@@ -115,26 +112,20 @@ public class AFND2AFD {
 		for (Estados estadosEntrada : estadosAgrupados) {
 
 			for (Simbolo simboloAtual : AFND.getAlfabeto().getSimbolos()) {
-				HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
-
-				for (Estado estadoAtual : estadosEntrada.get()) {
+				Estados alcancaveis = new Estados();
+				Estados epsilonFecho = AFND.epsilonFecho(estadosEntrada);
+				for (Estado estadoAtual : epsilonFecho.get()) {
 					Entrada entrada = new Entrada(estadoAtual, simboloAtual);
-					Estados alcancaveis = AFND.getEstadosTransicao(entrada);
-					Estados epsilonFecho = AFND.epsilonFecho(alcancaveis);
-
-					// trata o caso de transição para o vazio
-					if (!epsilonFecho.isEmpty()) {
-						novoEstado.addAll(epsilonFecho.get());
+					if (AFND.existeTransicao(entrada)) {
+						alcancaveis.addEstados(AFND.getEstadosTransicao(entrada));
 					}
-				}
 
-				Estados alcancaveis = new Estados(novoEstado);
-				// só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
-				if (!alcancaveis.get().isEmpty()) {
-					Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
-					Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
-
-					transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
+					// só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
+					if (!alcancaveis.isEmpty()) {
+						Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
+						Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
+						transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
+					}
 				}
 			}
 

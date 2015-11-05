@@ -31,7 +31,6 @@ public class AFDMinimizer {
 	private LinkedHashSet<Estados> determineEquivalenceClasses() {
 
 		Estados terminais = new Estados();
-
 		for (EstadoFinal ef : afd.getEstadosAceitacao()) {
 			terminais.addEstado((Estado) ef);
 		}
@@ -103,22 +102,23 @@ public class AFDMinimizer {
 
 		// cria as novas transições
 		LinkedHashMap<Entrada, Estado> novasTransicoes = new LinkedHashMap<Entrada, Estado>();
+		classesEquivalencia.add(estadoInicial);
 		for (Estados particao : novosEstados.keySet()) {
 
 			Estado estadoAtual = (Estado) particao.get().toArray()[0];
 
 			for (Simbolo simboloAtual : this.afd.getAlfabeto().getSimbolos()) {
 				Entrada entrada = new Entrada(estadoAtual, simboloAtual);
-				Estado alcancavel = this.afd.getEstadoTransicao(entrada);
-				
-				//trata o caso de transições para vazio
-				if (alcancavel != null) {
-					Estados classeEquivalenciaAlcancavel = getClasseEquivalencia(classesEquivalencia, alcancavel);
+				if (this.afd.existeTransicao(entrada)) {
+					Estado alcancavel = this.afd.getEstadoTransicao(entrada);
 
-					Entrada novaEntrada = new Entrada(novosEstados.get(particao), simboloAtual);
-					Estado novoEstadoAlcancavel = novosEstados.get(classeEquivalenciaAlcancavel);
+						Estados classeEquivalenciaAlcancavel = getClasseEquivalencia(classesEquivalencia, alcancavel);
 
-					novasTransicoes.put(novaEntrada, novoEstadoAlcancavel);
+						Entrada novaEntrada = new Entrada(novosEstados.get(particao), simboloAtual);
+						Estado novoEstadoAlcancavel = novosEstados.get(classeEquivalenciaAlcancavel);
+
+						novasTransicoes.put(novaEntrada, novoEstadoAlcancavel);
+					
 				}
 			}
 		}
