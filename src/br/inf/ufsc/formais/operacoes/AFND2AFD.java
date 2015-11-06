@@ -6,9 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.crypto.ExemptionMechanismSpi;
-
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -43,7 +40,6 @@ public class AFND2AFD {
 		 * Atributo responsável por armazenar o Automato finito não deterministico.
 		 */
 		AFND2AFD.AFND = AFND;
-
 		Set<Estados> estadosAgrupados = new LinkedHashSet<Estados>();
 		Set<Estados> estadosToBeGrouped = new LinkedHashSet<Estados>();
 		Set<Estados> estadosAlcancaveis = new LinkedHashSet<Estados>();
@@ -62,8 +58,7 @@ public class AFND2AFD {
 
 				Estados novosEstados = new Estados();
 				Estados epsilonFecho = AFND.epsilonFecho(estadoAtual);
-				for (Estado estado : epsilonFecho.get()) { // otimizar
-
+				for (Estado estado : epsilonFecho.get()) { 
 					Entrada entrada = new Entrada(estado, simbolo);
 					if (AFND.existeTransicao(entrada)) {
 						Estados alcancaveis = AFND.getEstadosTransicao(entrada);
@@ -75,6 +70,7 @@ public class AFND2AFD {
 					estadosAlcancaveis.add(novosEstados);
 				}
 			}
+			
 			estadosAgrupados.add(estadoAtual);
 			estadosToBeGrouped.addAll(estadosAlcancaveis);
 			estadosToBeGrouped.removeAll(estadosAgrupados);
@@ -114,18 +110,18 @@ public class AFND2AFD {
 			for (Simbolo simboloAtual : AFND.getAlfabeto().getSimbolos()) {
 				Estados alcancaveis = new Estados();
 				Estados epsilonFecho = AFND.epsilonFecho(estadosEntrada);
+
 				for (Estado estadoAtual : epsilonFecho.get()) {
 					Entrada entrada = new Entrada(estadoAtual, simboloAtual);
 					if (AFND.existeTransicao(entrada)) {
 						alcancaveis.addEstados(AFND.getEstadosTransicao(entrada));
 					}
-
-					// só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
-					if (!alcancaveis.isEmpty()) {
-						Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
-						Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
-						transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
-					}
+				}
+				// só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
+				if (!alcancaveis.isEmpty()) {
+					Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
+					Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
+					transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
 				}
 			}
 
@@ -150,7 +146,7 @@ public class AFND2AFD {
 	private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
 		Set<EstadoFinal> interseccao = new LinkedHashSet<EstadoFinal>();
 		interseccao.addAll(finais);
-		interseccao.retainAll(estados.get());
+		interseccao.retainAll(AFND.epsilonFecho(estados).get());
 		if (!interseccao.isEmpty()) {
 			return true;
 		}
