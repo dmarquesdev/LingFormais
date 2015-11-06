@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import br.inf.ufsc.formais.common.IndexGenerator;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -25,8 +27,7 @@ import br.inf.ufsc.formais.model.automato.Estados;
 public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
-	private static final Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
-	private static int index;
+	private static Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
 
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
@@ -82,13 +83,13 @@ public class AFND2AFD {
 		// criar novos estados deterministicos
 		HashMap<Estados, Estado> estadosDeterministicos = new LinkedHashMap<Estados, Estado>();
 		Set<EstadoFinal> estadosAceitacaoDeterministico = new HashSet<EstadoFinal>();
-		Estado estadoInicialDeterministico = new EstadoInicial("Q" + getIndex());
+		Estado estadoInicialDeterministico = new EstadoInicial("Q" + IndexGenerator.newIndex());
 		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
 
 		for (Estados estadosAgrupado : estadosAgrupados) {
-			Estado novoEstado = new Estado("Q" + getIndex());
+			Estado novoEstado = new Estado("Q" + IndexGenerator.newIndex());
 			estadosDeterministicos.put(estadosAgrupado, novoEstado);
 			if (isFinalState(estadosAgrupado, AFND.getEstadosAceitacao())) {
 				estadosAceitacaoDeterministico.add(new EstadoFinal(novoEstado.getId()));
@@ -124,7 +125,7 @@ public class AFND2AFD {
 
 		Set<Estado> estadosAFD = new LinkedHashSet<Estado>();
 		estadosAFD.addAll(estadosDeterministicos.values());
-
+		epsilonFechoMap.clear();
 		return new AutomatoFinitoDeterministico(estadosAFD, AFND.getAlfabeto(), (EstadoInicial) estadoInicialDeterministico, estadosAceitacaoDeterministico, transicoesDeterministicas);
 	}
 
@@ -155,11 +156,5 @@ public class AFND2AFD {
 		Estados epsilonFecho = AFND.epsilonFecho(estados);
 		epsilonFechoMap.put(estados, epsilonFecho);
 		return epsilonFecho;
-	}
-
-	private static int getIndex() {
-		int temp = index;
-		index++;
-		return temp;
 	}
 }
