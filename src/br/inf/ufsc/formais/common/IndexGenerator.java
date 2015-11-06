@@ -6,8 +6,4 @@ public class IndexGenerator {
 	public static int newIndex() {
 		return index++;
 	}
-
-	public static int getIndex() {
-		return index;
-	}
 }
