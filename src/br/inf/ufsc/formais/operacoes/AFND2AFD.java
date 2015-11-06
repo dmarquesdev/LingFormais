@@ -25,7 +25,8 @@ import br.inf.ufsc.formais.model.automato.Estados;
 public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
-
+	private static final Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
+	
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
 	 * conjuntos de estados alcançaveis são agrupados, utilizando epsilon fecho, para formar os novos estados deterministicos. Depois disso, cada conjunto é mapeado para um novo estado deterministico
@@ -57,7 +58,8 @@ public class AFND2AFD {
 			for (Simbolo simbolo : AFND.getAlfabeto().getSimbolos()) {
 
 				Estados novosEstados = new Estados();
-				Estados epsilonFecho = AFND.epsilonFecho(estadoAtual);
+				Estados epsilonFecho = getEpsilonFecho(estadoAtual);
+				
 				for (Estado estado : epsilonFecho.get()) { 
 					Entrada entrada = new Entrada(estado, simbolo);
 					if (AFND.existeTransicao(entrada)) {
@@ -109,7 +111,7 @@ public class AFND2AFD {
 
 			for (Simbolo simboloAtual : AFND.getAlfabeto().getSimbolos()) {
 				Estados alcancaveis = new Estados();
-				Estados epsilonFecho = AFND.epsilonFecho(estadosEntrada);
+				Estados epsilonFecho = getEpsilonFecho(estadosEntrada);
 
 				for (Estado estadoAtual : epsilonFecho.get()) {
 					Entrada entrada = new Entrada(estadoAtual, simboloAtual);
@@ -146,10 +148,19 @@ public class AFND2AFD {
 	private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
 		Set<EstadoFinal> interseccao = new LinkedHashSet<EstadoFinal>();
 		interseccao.addAll(finais);
-		interseccao.retainAll(AFND.epsilonFecho(estados).get());
+		interseccao.retainAll(getEpsilonFecho(estados).get());
 		if (!interseccao.isEmpty()) {
 			return true;
 		}
 		return false;
+	}
+	
+	private static Estados getEpsilonFecho(Estados estados){
+		if(epsilonFechoMap.containsKey(estados)){
+			return epsilonFechoMap.get(estados);
+		}
+		Estados epsilonFecho = AFND.epsilonFecho(estados);
+		epsilonFechoMap.put(estados, epsilonFecho);
+		return epsilonFecho;
 	}
 }
