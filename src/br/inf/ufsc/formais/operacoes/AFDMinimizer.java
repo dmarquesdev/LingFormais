@@ -14,6 +14,7 @@ import br.inf.ufsc.formais.model.automato.Estados;
 public class AFDMinimizer {
 
 	private AutomatoFinitoDeterministico afd;
+	private static int index;
 
 	public AFDMinimizer(AutomatoFinitoDeterministico afd) {
 		this.afd = afd;
@@ -91,13 +92,11 @@ public class AFDMinimizer {
 		LinkedHashMap<Estados, Estado> novosEstados = new LinkedHashMap<Estados, Estado>();
 		Estados estadoInicial = getEstadoInicial(classesEquivalencia);
 		classesEquivalencia.remove(estadoInicial);
-		novosEstados.put(estadoInicial, new EstadoInicial("Q0"));
-		int index = 1;
+		novosEstados.put(estadoInicial, new EstadoInicial("Q" + getIndex()));
 
 		for (Estados estados : classesEquivalencia) {
-			Estado novoEstado = new Estado("Q" + index);
+			Estado novoEstado = new Estado("Q" + getIndex());
 			novosEstados.put(estados, novoEstado);
-			index++;
 		}
 
 		// cria as novas transições
@@ -222,6 +221,12 @@ public class AFDMinimizer {
 			return false;
 		}
 		return true;
+	}
+	
+	private static int getIndex() {
+		int temp = index;
+		index++;
+		return temp;
 	}
 
 }

@@ -26,7 +26,8 @@ public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
 	private static final Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
-	
+	private static int index;
+
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
 	 * conjuntos de estados alcançaveis são agrupados, utilizando epsilon fecho, para formar os novos estados deterministicos. Depois disso, cada conjunto é mapeado para um novo estado deterministico
@@ -59,8 +60,8 @@ public class AFND2AFD {
 
 				Estados novosEstados = new Estados();
 				Estados epsilonFecho = getEpsilonFecho(estadoAtual);
-				
-				for (Estado estado : epsilonFecho.get()) { 
+
+				for (Estado estado : epsilonFecho.get()) {
 					Entrada entrada = new Entrada(estado, simbolo);
 					if (AFND.existeTransicao(entrada)) {
 						Estados alcancaveis = AFND.getEstadosTransicao(entrada);
@@ -72,7 +73,7 @@ public class AFND2AFD {
 					estadosAlcancaveis.add(novosEstados);
 				}
 			}
-			
+
 			estadosAgrupados.add(estadoAtual);
 			estadosToBeGrouped.addAll(estadosAlcancaveis);
 			estadosToBeGrouped.removeAll(estadosAgrupados);
@@ -81,25 +82,17 @@ public class AFND2AFD {
 		// criar novos estados deterministicos
 		HashMap<Estados, Estado> estadosDeterministicos = new LinkedHashMap<Estados, Estado>();
 		Set<EstadoFinal> estadosAceitacaoDeterministico = new HashSet<EstadoFinal>();
-		Estado estadoInicialDeterministico = new EstadoInicial("Q0");
+		Estado estadoInicialDeterministico = new EstadoInicial("Q" + getIndex());
 		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
 
-		int indexEstados = 1;
-
 		for (Estados estadosAgrupado : estadosAgrupados) {
-
+			Estado novoEstado = new Estado("Q" + getIndex());
+			estadosDeterministicos.put(estadosAgrupado, novoEstado);
 			if (isFinalState(estadosAgrupado, AFND.getEstadosAceitacao())) {
-				Estado novoEstadoFinal = new EstadoFinal("Q" + indexEstados);
-				estadosDeterministicos.put(estadosAgrupado, novoEstadoFinal);
-				estadosAceitacaoDeterministico.add((EstadoFinal) novoEstadoFinal);
-			} else {
-
-				estadosDeterministicos.put(estadosAgrupado, new Estado("Q" + indexEstados));
+				estadosAceitacaoDeterministico.add(new EstadoFinal(novoEstado.getId()));
 			}
-
-			indexEstados++;
 		}
 
 		// criar novas transições deterministicas
@@ -154,13 +147,19 @@ public class AFND2AFD {
 		}
 		return false;
 	}
-	
-	private static Estados getEpsilonFecho(Estados estados){
-		if(epsilonFechoMap.containsKey(estados)){
+
+	private static Estados getEpsilonFecho(Estados estados) {
+		if (epsilonFechoMap.containsKey(estados)) {
 			return epsilonFechoMap.get(estados);
 		}
 		Estados epsilonFecho = AFND.epsilonFecho(estados);
 		epsilonFechoMap.put(estados, epsilonFecho);
 		return epsilonFecho;
+	}
+
+	private static int getIndex() {
+		int temp = index;
+		index++;
+		return temp;
 	}
 }
