@@ -182,6 +182,7 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         return novo;
     }
 
+    
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder("M = (E,A,T,I,F)\n");

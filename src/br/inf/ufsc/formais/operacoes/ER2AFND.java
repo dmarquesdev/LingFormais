@@ -118,7 +118,7 @@ public class ER2AFND {
                 List<Simbolo> subSimbolos;
                 subSimbolos = er.getSimbolos().subList(i + 1, er.getSimbolos().size());
                 ExpressaoRegular subEr = new ExpressaoRegular(subSimbolos);
-                ultimo = OperacoesAFND.ouEntreAFs(ultimo, converterParaAutomato(subEr));
+                ultimo = OperacoesAFND.ouEntreAFNDs(ultimo, converterParaAutomato(subEr));
                 i = er.getSimbolos().size();
             } else if (er.getSimbolos().get(i) == SimboloOperacional.CONJUNTO_VAZIO) {
                 ultimo = OperacoesAFND.aFLingVazia();

@@ -7,6 +7,7 @@ package br.inf.ufsc.formais.operacoes;
 
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
+import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.Estado;
@@ -111,7 +112,7 @@ public class OperacoesAFND {
      * @param af2 Um automato finíto não determinsitico.
      * @return Um automato finíto não determinsitico.
      */
-    public static AutomatoFinitoNaoDeterministico ouEntreAFs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
+    public static AutomatoFinitoNaoDeterministico ouEntreAFNDs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
 //        Cria novo estado inicial.
         EstadoInicial novoInicial = new EstadoInicial("q" + contadorEstados);
         ++contadorEstados;
@@ -155,6 +156,7 @@ public class OperacoesAFND {
 
         return afnd;
     }
+    
 
     /**
      * Concatena dois automatos. Cria uma transição por epsilon do(s) estado(s)
@@ -211,6 +213,8 @@ public class OperacoesAFND {
 
         return afnd;
     }
+    
+    
 
     /**
      * Cria um automato que reconheça a linguagem vazia. Automato que contem
