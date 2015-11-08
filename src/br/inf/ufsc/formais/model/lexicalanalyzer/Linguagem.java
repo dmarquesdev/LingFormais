@@ -29,6 +29,6 @@ public class Linguagem {
     }
     
     public TipoToken computarCadeia(Cadeia cadeia) {
-        
+        return null;
     }
 }
