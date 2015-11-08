@@ -5,22 +5,17 @@
  */
 package br.inf.ufsc.formais.operacoes;
 
-import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.exception.FormaisIOException;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
-import br.inf.ufsc.formais.model.automato.Entrada;
-import br.inf.ufsc.formais.model.automato.Estado;
-import br.inf.ufsc.formais.model.automato.EstadoFinal;
-import br.inf.ufsc.formais.model.automato.EstadoInicial;
-import br.inf.ufsc.formais.model.automato.Estados;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import br.inf.ufsc.formais.model.er.SimboloOperacional;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,13 +29,34 @@ import java.util.Set;
 public class ER2AFND {
 
     public static AutomatoFinitoNaoDeterministico analisaConverte(ExpressaoRegular er) {
-        AutomatoFinitoNaoDeterministico afnd;
+        AutomatoFinitoNaoDeterministico afnd = null;
 
         if (er.toString().equals("|") || er.toString().equals("*")
                 || er.toString().equals("(") || er.toString().equals(")")) {
             afnd = OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0));
         } else if (er.toString().equals("||")) {
             afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0)), OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(1)));
+        } else if (er.toString().equals("\".\"")){
+            ExpressaoRegularIO erio = new ExpressaoRegularIO();
+            try {
+                ArrayList<ExpressaoRegular> alfa = erio.readAll("", "lista_de_caracteres.in");
+                for(Simbolo s : alfa.get(0).getSimbolos()){
+                    if(afnd == null){
+                        afnd = OperacoesAFND.aFdeSimbolo(s);
+                    }else{
+                        afnd = OperacoesAFND.ouEntreAFNDs(afnd, OperacoesAFND.aFdeSimbolo(s));
+                    }
+                }
+                afnd = OperacoesAFND.fechoDeAF(afnd);
+                afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(new Simbolo("\"")), afnd);
+                afnd = OperacoesAFND.concatenaAFs(afnd, OperacoesAFND.aFdeSimbolo(new Simbolo("\"")));
+            } catch (IOException ex) {
+                System.out.println("Ocorreu um erro de leitura no arquivo \"alfabeto.in!\"");
+            } catch (FormaisIOException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+            
         } else {
             afnd = ER2AFND.converterParaAutomato(er);
         }

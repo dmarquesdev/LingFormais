@@ -7,7 +7,6 @@ package br.inf.ufsc.formais.operacoes;
 
 import br.inf.ufsc.formais.model.Alfabeto;
 import br.inf.ufsc.formais.model.Simbolo;
-import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.Estado;
@@ -21,7 +20,9 @@ import java.util.Set;
 
 /**
  *
- * @author Matheus
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class OperacoesAFND {
 
@@ -143,8 +144,9 @@ public class OperacoesAFND {
         Set<Simbolo> simbolos = new LinkedHashSet<>();
         simbolos.addAll(af1.getAlfabeto().getSimbolos());
         simbolos.addAll(af2.getAlfabeto().getSimbolos());
+        simbolos.add(Simbolo.EPSILON);
         Alfabeto alfa = new Alfabeto(simbolos);
-
+        
 //        Junção de transições
         Map<Entrada, Estados> transicoes = new HashMap<>();
         transicoes.putAll(af1.getTransicoes());
@@ -205,6 +207,7 @@ public class OperacoesAFND {
         Set<Simbolo> simbolos = new LinkedHashSet<>();
         simbolos.addAll(af1.getAlfabeto().getSimbolos());
         simbolos.addAll(af2.getAlfabeto().getSimbolos());
+        simbolos.add(Simbolo.EPSILON);
         Alfabeto alfa = new Alfabeto(simbolos);
 
         AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, alfa,
@@ -292,6 +295,7 @@ public class OperacoesAFND {
         Set<Simbolo> simbolos = new LinkedHashSet<>();
         simbolos.addAll(af1.getAlfabeto().getSimbolos());
         simbolos.addAll(af2.getAlfabeto().getSimbolos());
+        simbolos.add(Simbolo.EPSILON);
         Alfabeto alfa = new Alfabeto(simbolos);
 
         AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, alfa,

@@ -7,7 +7,5 @@ boolean
 const
 read
 write
-false
-true
 return
 void

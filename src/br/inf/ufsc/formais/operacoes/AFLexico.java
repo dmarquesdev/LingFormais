@@ -30,10 +30,13 @@ public class AFLexico {
                 afnd = OperacoesAFND.ouEntreAFNDs(afnd, ER2AFND.analisaConverte(er));
             }
         }
-
+        
+        afnd = OperacoesAFND.concatenaAFs(afnd, OperacoesAFND.aFPalavraVazia());
+        System.out.println("AFND\n\n"+afnd.toString());
         AutomatoFinitoDeterministico afd = AFND2AFD.determinizar(afnd);
+        System.out.println("Determinizado\n\n"+afd.toString());
         afd = AFDMinimizer.minimizar(afd);
-        System.out.println(afd.toString());
+        System.out.println("Minimizado\n\n"+afd.toString());
         return afd;
     }
 

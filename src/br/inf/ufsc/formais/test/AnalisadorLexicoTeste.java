@@ -18,7 +18,9 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Matheus
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AnalisadorLexicoTeste {
 
@@ -34,6 +36,7 @@ public class AnalisadorLexicoTeste {
                 grupos.add(ioer.readAll("", "op.in"));
                 grupos.add(ioer.readAll("", "se.in"));
                 grupos.add(ioer.readAll("", "vr.in"));
+                grupos.add(ioer.readAll("", "constante.in"));
             } catch (IOException ex) {
                 System.out.println("Ocorreu um erro de leitura no arquivo!");
             } catch (FormaisIOException ex) {
@@ -44,7 +47,7 @@ public class AnalisadorLexicoTeste {
             System.out.println(afd.toString());
 
         try {
-            Estado estado = afd.computar(new CadeiaAutomato("program"));
+            Estado estado = afd.computar(new CadeiaAutomato("\" teste de espaço na string !!$#@$@%#\""));
             System.out.println("\nEstado em que a palavra foi aceita: " + estado.toString() + "\n\n");
         } catch (EstadoInalcancavelException e) {
             System.out.println("\n\nEntrada não é aceita pela linguagem!\n\n");
