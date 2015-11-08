@@ -29,9 +29,8 @@ public class AnalisadorLexicoTeste {
 
     public void runTest() {
         ExpressaoRegularIO ioer = new ExpressaoRegularIO();
-        
-            Map<Grupo,ArrayList<ExpressaoRegular>> grupos = new LinkedHashMap<Grupo,ArrayList<ExpressaoRegular>>();
-            try {
+Map<Grupo, ArrayList<ExpressaoRegular>> grupos = new LinkedHashMap<Grupo, ArrayList<ExpressaoRegular>>();
+        try {
 
                 grupos.put(Grupo.PALAVRASRESERVADAS, ioer.readAll("", "er_palavras_reservadas.in"));
                 grupos.put(Grupo.CONDICIONAL, ioer.readAll("", "er_condicional.in"));
@@ -39,23 +38,25 @@ public class AnalisadorLexicoTeste {
                 grupos.put(Grupo.OPERADORESLOGICOS, ioer.readAll("", "er_operadores_logicos.in"));
                 grupos.put(Grupo.OPERADORES, ioer.readAll("", "er_operadores.in"));
                 grupos.put(Grupo.SEPARADORES, ioer.readAll("", "er_separadores.in"));
-                grupos.put(Grupo.IDENTIFICADORES, ioer.readAll("", "er_identificadores.in"));
                 grupos.put(Grupo.CONSTANTES, ioer.readAll("", "er_constante.in"));
+                grupos.put(Grupo.IDENTIFICADORES, ioer.readAll("", "er_identificadores.in"));
 
-            } catch (IOException ex) {
-                System.out.println("Ocorreu um erro de leitura no arquivo!");
-            } catch (FormaisIOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            
-            AutomatoFinitoDeterministico afd = AFLexico.geraAutomatoFinal(grupos);
+        } catch (IOException ex) {
+            System.out.println("Ocorreu um erro de leitura no arquivo!");
+        } catch (FormaisIOException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        AutomatoFinitoDeterministico afd = AFLexico.geraAutomatoFinal(grupos);
             System.out.println(afd.toString());
 
         try {
 
+
             Estado estado = afd.computar(new CadeiaAutomato("-1324.129876"));
+
             System.out.println("\nEstado em que a palavra foi aceita: " + estado.toString());
-            System.out.println("Grupo o qual a palavra pertence: " + AFLexico.getGrupo(estado) + "\n\n");
+            System.out.println("Grupo o qual a palavra pertence: " + AFLexico.findGroup(estado) + "\n\n");
 
         } catch (EstadoInalcancavelException e) {
             System.out.println("\n\nEntrada não é aceita pela linguagem!\n\n");

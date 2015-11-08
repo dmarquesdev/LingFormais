@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package br.inf.ufsc.formais.operacoes;
+
+import br.inf.ufsc.formais.exception.EstadoInalcancavelException;
+import br.inf.ufsc.formais.model.CadeiaAutomato;
 import br.inf.ufsc.formais.model.Grupo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -15,6 +18,7 @@ import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,16 +28,23 @@ import java.util.Set;
  */
 public class AFLexico {
 	
-	private static LinkedHashMap<Estado, Grupo> states2GroupMap = new LinkedHashMap<Estado, Grupo>();
-	
-	private static void generateStates2GroupMap(Map<Estado, Estado> old2NewFinalStates, Map<Set<EstadoFinal>, Grupo> finalStatesOfEachGroup){
-		states2GroupMap = new LinkedHashMap<Estado, Grupo>();
-		for(Set<EstadoFinal> estadosFinaisGrupo : finalStatesOfEachGroup.keySet()){
-			for(EstadoFinal ef : estadosFinaisGrupo){
-				Estado novoEstadoFinal = old2NewFinalStates.get(ef);
-				states2GroupMap.put(novoEstadoFinal, finalStatesOfEachGroup.get(estadosFinaisGrupo));
+	private static Map<Grupo, Set<EstadoFinal>> finalStatesOfEachGroup = new LinkedHashMap<Grupo, Set<EstadoFinal>>(); 
+
+	public static Grupo findGroup(Estado estadoAceitacao){
+		//obtem os antigos estados finais
+		Estados antigosFinais = AFND2AFD.getOld2NewFinalStatesMap().get(estadoAceitacao);
+		//itera sobre todos os grupos
+		for(Grupo grupo : finalStatesOfEachGroup.keySet()){	
+			//faz a interseccao dos antigos estados finais com os finais do grupo
+			Set<Estado> interseccao = new LinkedHashSet<Estado>(antigosFinais.get());
+			interseccao.retainAll(finalStatesOfEachGroup.get(grupo));
+			// se a interseccao não é vazia o estadodeAceitacao pertence ao grupo
+			if(!interseccao.isEmpty()){
+				return grupo;
 			}
 		}
+                //temporario ...
+		return Grupo.LOOP;
 	}
 
     private static AutomatoFinitoDeterministico geraAutomatoDoGrupo(ArrayList<ExpressaoRegular> ers) {
@@ -46,34 +57,30 @@ public class AFLexico {
                 afnd = OperacoesAFND.ouEntreAFNDs(afnd, ER2AFND.analisaConverte(er));
             }
         }
-
         afnd = OperacoesAFND.concatenaAFs(afnd, OperacoesAFND.aFPalavraVazia());
-
         AutomatoFinitoDeterministico afd = AFND2AFD.determinizar(afnd);
-        
         afd = AFDMinimizer.minimizar(afd);
-        System.out.println("Minimizado\n\n"+afd.toString());
+        System.out.println(afd.toString());
         return afd;
     }
 
     public static AutomatoFinitoDeterministico geraAutomatoFinal(Map<Grupo,ArrayList<ExpressaoRegular>> grupos) {
-    	Map<Set<EstadoFinal>, Grupo> finalStatesOfEachGroup = new LinkedHashMap<Set<EstadoFinal>, Grupo>(); 
+    	finalStatesOfEachGroup = new LinkedHashMap<Grupo, Set<EstadoFinal>>(); 
         AutomatoFinitoNaoDeterministico afnd = null;
         for (Grupo grupo : grupos.keySet()) {
             if (afnd == null) {
             	AutomatoFinitoDeterministico afd = geraAutomatoDoGrupo(grupos.get(grupo));
-            	finalStatesOfEachGroup.put(afd.getEstadosAceitacao(), grupo);
+            	finalStatesOfEachGroup.put(grupo, afd.getEstadosAceitacao());
                 afnd = converteToAfnd(afd);
             } else {
               	AutomatoFinitoDeterministico afd = geraAutomatoDoGrupo(grupos.get(grupo));
-            	finalStatesOfEachGroup.put(afd.getEstadosAceitacao(), grupo);
+            	finalStatesOfEachGroup.put(grupo, afd.getEstadosAceitacao());
                 afnd = OperacoesAFND.ouEntreAFNDs(afnd, converteToAfnd(afd));
             }
             
         }
-        System.out.println(afnd);
-        AutomatoFinitoDeterministico bigAutomato = AFND2AFD.determinizar(afnd);
-        generateStates2GroupMap(AFND2AFD.getOld2NewFinalStatesMap(), finalStatesOfEachGroup);
+        System.out.println(afnd.toString());
+        AutomatoFinitoDeterministico bigAutomato = AFND2AFD.determinizar(afnd);        
         return bigAutomato;
     }
 
@@ -89,10 +96,6 @@ public class AFLexico {
         }
 
         return new AutomatoFinitoNaoDeterministico(afd.getEstados(), afd.getAlfabeto(), afd.getEstadoInicial(), afd.getEstadosAceitacao(), transicoes);
-    }
-    
-    public static Grupo getGrupo(Estado estado){
-        return states2GroupMap.get(estado);
     }
 
 }
