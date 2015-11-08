@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,12 +28,24 @@ import java.util.Set;
 public class AFLexico {
 	
 	private static Map<Grupo, Set<EstadoFinal>> finalStatesOfEachGroup = new LinkedHashMap<Grupo, Set<EstadoFinal>>(); 
-
+        private static List<Grupo> groupPriority = new ArrayList<Grupo>();
+        
+        static{
+                groupPriority.add(Grupo.PALAVRASRESERVADAS);
+                groupPriority.add(Grupo.CONDICIONAL);
+                groupPriority.add(Grupo.LOOP);
+                groupPriority.add(Grupo.OPERADORES);
+                groupPriority.add(Grupo.OPERADORESLOGICOS);
+                groupPriority.add(Grupo.SEPARADORES);
+                groupPriority.add(Grupo.CONSTANTES);
+                groupPriority.add(Grupo.IDENTIFICADORES);
+        }
+        
 	public static Grupo findGroup(Estado estadoAceitacao){
 		//obtem os antigos estados finais
 		Estados antigosFinais = AFND2AFD.getNew2OldFinalStatesMap().get(estadoAceitacao);
 		//itera sobre todos os grupos
-		for(Grupo grupo : finalStatesOfEachGroup.keySet()){	
+		for(Grupo grupo : groupPriority){	
 			//faz a interseccao dos antigos estados finais com os finais do grupo
 			Set<Estado> interseccao = new LinkedHashSet<Estado>(antigosFinais.get());
 			interseccao.retainAll(finalStatesOfEachGroup.get(grupo));
