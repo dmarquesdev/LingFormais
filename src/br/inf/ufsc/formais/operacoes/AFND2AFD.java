@@ -18,7 +18,7 @@ import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
 
 /**
- * Implementação do algoritmo de determinização de automatos finitos não deterministicos COM epsilon transição.
+ * Implementação do algoritmo de determinização de automatos finitos deterministicos e não deterministicos COM epsilon transição.
  *
  * @author Diego Marques
  * @author Matheus Demetrio
@@ -28,7 +28,7 @@ public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
 	private static Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
-	private static Map<Estado, Estados> old2NewFinalStatesMap = new LinkedHashMap<Estado, Estados>();
+	private static Map<Estado, Estados> new2OldFinalStatesMap = new LinkedHashMap<Estado, Estados>();
 
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
@@ -88,7 +88,7 @@ public class AFND2AFD {
 		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
-		old2NewFinalStatesMap = new LinkedHashMap<Estado, Estados>();
+		new2OldFinalStatesMap = new LinkedHashMap<Estado, Estados>();
 
 		for (Estados estadosAgrupado : estadosAgrupados) {
 			Estado novoEstado = new Estado("Q" + IndexGenerator.newIndex());
@@ -96,7 +96,7 @@ public class AFND2AFD {
 			if (!getFinalStates(estadosAgrupado).isEmpty()) {
 				EstadoFinal novoEstadoFinal = new EstadoFinal(novoEstado.getId());
 				estadosAceitacaoDeterministico.add(novoEstadoFinal);
-				putInFinalStatesMap(novoEstadoFinal, getFinalStates(estadosAgrupado));
+                                new2OldFinalStatesMap.put(novoEstadoFinal, getFinalStates(estadosAgrupado));
 			}
 		}
 
@@ -151,6 +151,11 @@ public class AFND2AFD {
 		return new Estados(interseccao);
 	}
 
+        /**
+         * Obtem o epsilon fecho de um conjunto de estados.
+         * @param estados conjunto de estados que será utilizado para calcular epsilon fecho
+         * @return Epsilon fecho do conjunto de estados.
+         */
 	private static Estados getEpsilonFecho(Estados estados) {
 		if (epsilonFechoMap.containsKey(estados)) {
 			return epsilonFechoMap.get(estados);
@@ -159,12 +164,12 @@ public class AFND2AFD {
 		epsilonFechoMap.put(estados, epsilonFecho);
 		return epsilonFecho;
 	}
-
-	private static void putInFinalStatesMap(EstadoFinal novoEstadoFinal, Estados antigosEstadosFinais) {
-		old2NewFinalStatesMap.put(novoEstadoFinal, antigosEstadosFinais);
-	}
 	
-	public static Map<Estado, Estados> getOld2NewFinalStatesMap(){
-		return old2NewFinalStatesMap;
+        /** 
+         * Retorna o map de novo estado final para antigos estados finaais
+         * @return map de novo estado final para antigos estados finaais
+         */
+	public static Map<Estado, Estados> getNew2OldFinalStatesMap(){
+		return new2OldFinalStatesMap;
 	}
 }

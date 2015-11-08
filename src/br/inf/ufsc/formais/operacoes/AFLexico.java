@@ -5,8 +5,6 @@
  */
 package br.inf.ufsc.formais.operacoes;
 
-import br.inf.ufsc.formais.exception.EstadoInalcancavelException;
-import br.inf.ufsc.formais.model.CadeiaAutomato;
 import br.inf.ufsc.formais.model.Grupo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -32,7 +30,7 @@ public class AFLexico {
 
 	public static Grupo findGroup(Estado estadoAceitacao){
 		//obtem os antigos estados finais
-		Estados antigosFinais = AFND2AFD.getOld2NewFinalStatesMap().get(estadoAceitacao);
+		Estados antigosFinais = AFND2AFD.getNew2OldFinalStatesMap().get(estadoAceitacao);
 		//itera sobre todos os grupos
 		for(Grupo grupo : finalStatesOfEachGroup.keySet()){	
 			//faz a interseccao dos antigos estados finais com os finais do grupo

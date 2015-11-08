@@ -12,10 +12,25 @@ import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
 
+/**
+ * Implementação do algoritmo de minimização de automatos finitos deterministicos.
+ *
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
+ */
 public class AFDMinimizer {
 
+        
 	private static AutomatoFinitoDeterministico afd;
 
+        /**
+         * Minimiza o automato finito deterministico recebido por parâmetro.
+         * Primeiro os estados inacalcaçaveis e mortos são removidos.
+         * Depois as classes de equivalencia são determinidas e ṕor fim o automato minimo é gerado.
+         * @param AFD automato finito deterministico a ser minimizado.
+         * @return automato finito deterministico minimo.
+         */
 	public static AutomatoFinitoDeterministico minimizar(AutomatoFinitoDeterministico AFD) {
 		afd = AFD;
 		afd.removeUnreachableStates();
@@ -25,7 +40,10 @@ public class AFDMinimizer {
 		return afdMin;
 	}
 
-	// Hopcroft’s algorithm
+	/**
+         * Implementação do algortimo de Hopcroft’s que determina as classes de equivalencia de um AFD.
+         * @return Conjuntos com as classes de equivalencia.
+         */
 	private static LinkedHashSet<Estados> determineEquivalenceClasses() {
 
 		Estados terminais = new Estados();
@@ -78,7 +96,12 @@ public class AFDMinimizer {
 		}
 		return classesEquivalencia;
 	}
-
+        
+        /**
+         * Gera um automato minimo a partir das classes de equivalencia.
+         * @param classesEquivalencia classes de equivalencia a serem utilizadas para gerar o automato.
+         * @return um novo AFD mínimo.
+         */
 	private static AutomatoFinitoDeterministico generateMinimumAutomaton(LinkedHashSet<Estados> classesEquivalencia) {
 
 		if (isMinimumAutomatom(afd, classesEquivalencia)) {
@@ -131,7 +154,12 @@ public class AFDMinimizer {
 		return new AutomatoFinitoDeterministico(estados, afd.getAlfabeto(), (EstadoInicial) novosEstados.get(estadoInicial), novosEstadosFinais, novasTransicoes);
 	}
 
-	// Retorna todos os estados que dado um simbolo alcançam a particao
+	/**
+         * Retorna todos os estados que dado um simbolo alcançam a particao
+         * @param currentPartition partição que se deseja obter os estados que a alcançam por um simbolo
+         * @param simbolo simbolo utilizado para ver as transições que alcançam a partição.
+         * @return conjunto de estados que alcançam a partição recebida por parâmetro
+         */ 
 	private static Estados statesThatReachCurrentPartition(Estados currentPartition, Simbolo simbolo) {
 		Estados reachCurrentPartition = new Estados();
 
@@ -146,9 +174,15 @@ public class AFDMinimizer {
 		return reachCurrentPartition;
 	}
 
-	// for all R in P(Classes de equivalencia) such that R ∩ la ̸= ∅ and R ̸⊆ la
-	// la ← δ^-1(S,a)
-
+        /**
+         * Obtem as partições que irão sofrer o "Split" (irão ser divididas)
+         * Retorna todas as partições que a intersecção com a partição recebida por parâmetro
+         * não for vazia e que não esteja contida na partição
+         * for all R in P(Classes de equivalencia) such that R ∩ la ̸= ∅ and R ̸⊆ la
+         * @param classesEquivalencia Todas as classes de equivalencia já calculadas
+         * @param toBeRefined partição que se deseja obter a intersecção.
+         * @return particões que serão divididas pelo algortimo de Hopcroft
+         */
 	private static LinkedHashSet<Estados> getPartitionsTobePartitioned(LinkedHashSet<Estados> classesEquivalencia, Estados toBeRefined) {
 		LinkedHashSet<Estados> refinados = new LinkedHashSet<Estados>();
 
@@ -166,6 +200,12 @@ public class AFDMinimizer {
 		return refinados;
 	}
 
+        /**
+         * Encontra a intersecçao entre dois estados
+         * @param one conjunto que será utilizado para obter a intersecção
+         * @param other conjunto que será utilizado para obter a intersecção
+         * @return A intersecção entre os dois conuntos de estados.
+         */
 	private static Estados interseccao(Estados one, Estados other) {
 		LinkedHashSet<Estado> interseccao = new LinkedHashSet<Estado>();
 		interseccao.addAll(one.get());
@@ -173,6 +213,12 @@ public class AFDMinimizer {
 		return new Estados(interseccao);
 	}
 
+        /**
+        * Encontra a diferença entre dois estados
+        * @param one conjunto que será utilizado para obter a diferença
+        * @param other conjunto que será utilizado para obter a diferença
+        * @return A diferença entre os dois conuntos de estados.
+        */
 	private static Estados diferenca(Estados one, Estados other) {
 		LinkedHashSet<Estado> diferenca = new LinkedHashSet<Estado>();
 		diferenca.addAll(one.get());
@@ -180,6 +226,11 @@ public class AFDMinimizer {
 		return new Estados(diferenca);
 	}
 
+        /**
+         * Retorna a partição que contem o estado inicial do AFD
+         * @param classesEquivalencia conjunto que contém todas as classes de equivalencia
+         * @return Partição que contém o estado incicial do AFD
+         */
 	private static Estados getEstadoInicial(LinkedHashSet<Estados> classesEquivalencia) {
 		for (Estados particao : classesEquivalencia) {
 			if (particao.get().contains(afd.getEstadoInicial())) {
@@ -188,7 +239,13 @@ public class AFDMinimizer {
 		}
 		return new Estados();
 	}
-
+        
+        /**
+         * Retorna a classe de equivalencia a que o estado pertence
+         * @param classesEquivalencia conjunto com todas as classes de equivalencias
+         * @param estado estado que se deseja encontrar a classe de equivalencia a que ele pertence
+         * @return classe de equivalencia que contem o estado
+         */
 	private static Estados getClasseEquivalencia(LinkedHashSet<Estados> classesEquivalencia, Estado estado) {
 		for (Estados particao : classesEquivalencia) {
 			if (particao.get().contains(estado)) {
@@ -198,6 +255,11 @@ public class AFDMinimizer {
 		return new Estados();
 	}
 
+        /**
+         * Retorna as classes de equivalencia que contém pelo menos um estado de aceitação
+         * @param classesEquivalencia conjunto com todas as classes de equivalencias
+         * @return Conjunto com as classes de equivalencia que contem ao menos um estado de aceitação
+         */
 	private static LinkedHashSet<Estados> getClassesEquivalenciaAceitacao(LinkedHashSet<Estados> classesEquivalencia) {
 		LinkedHashSet<Estados> classesEquivalenciaAceitacao = new LinkedHashSet<Estados>();
 
@@ -213,6 +275,12 @@ public class AFDMinimizer {
 		return classesEquivalenciaAceitacao;
 	}
 
+        /**
+         * Retorna se o automato é mínimo
+         * @param afd AFD que se deseja saber se é mínimo
+         * @param classesEquivalencia conjuntos com todas as classes de equivalencia do automato
+         * @return Verdadeiro se o automato é minimo, falso caso não seja.
+         */
 	private static boolean isMinimumAutomatom(AutomatoFinitoDeterministico afd, LinkedHashSet<Estados> classesEquivalencia) {
 		if (classesEquivalencia.size() != afd.getEstados().size()) {
 			return false;

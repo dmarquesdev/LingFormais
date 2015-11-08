@@ -49,7 +49,7 @@ public class AnalisadorLexicoTeste {
         }
 
         AutomatoFinitoDeterministico afd = AFLexico.geraAutomatoFinal(grupos);
-            System.out.println(afd.toString());
+             System.out.println(afd.toString());
 
         try {
             Estado estado = afd.computar(new CadeiaAutomato("asas"));
