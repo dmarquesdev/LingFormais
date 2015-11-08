@@ -28,7 +28,7 @@ public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
 	private static Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
-	private static Map<Estado, Estado> old2NewFinalStatesMap = new LinkedHashMap<Estado, Estado>();
+	private static Map<Estado, Estados> old2NewFinalStatesMap = new LinkedHashMap<Estado, Estados>();
 
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
@@ -88,7 +88,7 @@ public class AFND2AFD {
 		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
-		old2NewFinalStatesMap = new LinkedHashMap<Estado, Estado>();
+		old2NewFinalStatesMap = new LinkedHashMap<Estado, Estados>();
 
 		for (Estados estadosAgrupado : estadosAgrupados) {
 			Estado novoEstado = new Estado("Q" + IndexGenerator.newIndex());
@@ -96,7 +96,7 @@ public class AFND2AFD {
 			if (!getFinalStates(estadosAgrupado).isEmpty()) {
 				EstadoFinal novoEstadoFinal = new EstadoFinal(novoEstado.getId());
 				estadosAceitacaoDeterministico.add(novoEstadoFinal);
-				putInFinalStatesMap(getFinalStates(estadosAgrupado), novoEstadoFinal);
+				putInFinalStatesMap(novoEstadoFinal, getFinalStates(estadosAgrupado));
 			}
 		}
 
@@ -160,13 +160,11 @@ public class AFND2AFD {
 		return epsilonFecho;
 	}
 
-	private static void putInFinalStatesMap(Estados estadosFinais, EstadoFinal novoEstadoFinal) {
-		for (Estado estadoFinal : estadosFinais.get()) {
-			old2NewFinalStatesMap.put(estadoFinal, novoEstadoFinal);
-		}
+	private static void putInFinalStatesMap(EstadoFinal novoEstadoFinal, Estados antigosEstadosFinais) {
+		old2NewFinalStatesMap.put(novoEstadoFinal, antigosEstadosFinais);
 	}
 	
-	public static Map<Estado, Estado> getOld2NewFinalStatesMap(){
+	public static Map<Estado, Estados> getOld2NewFinalStatesMap(){
 		return old2NewFinalStatesMap;
 	}
 }

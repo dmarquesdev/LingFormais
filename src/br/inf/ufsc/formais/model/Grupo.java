@@ -2,13 +2,14 @@ package br.inf.ufsc.formais.model;
 
 public enum Grupo {
 	VARIAVEIS("Variaveis"),
-	OPERADORESLOGICOS("Operadoes lógicos"),
+	OPERADORESLOGICOS("Operadores lógicos"),
 	LOOP("Loop"),
 	PALAVRASRESERVADAS("Palavras reservadas"),
 	SEPARADORES("Separadores"),
 	OPERADORES("Operadores"),
-	CONDICIONAL("Condicional");
-	
+	CONDICIONAL("Condicional"),
+        CONSTANTES("Constantes");
+        
 	private final String descricao;
 	
 	private Grupo(String descricao) {
