@@ -1,7 +1,7 @@
 package br.inf.ufsc.formais.model;
 
 public enum Grupo {
-	VARIAVEIS("Variaveis"),
+	IDENTIFICADORES("Identificadores"),
 	OPERADORESLOGICOS("Operadores lógicos"),
 	LOOP("Loop"),
 	PALAVRASRESERVADAS("Palavras reservadas"),
@@ -25,3 +25,4 @@ public enum Grupo {
 		return this.descricao;
 	}
 }
+
