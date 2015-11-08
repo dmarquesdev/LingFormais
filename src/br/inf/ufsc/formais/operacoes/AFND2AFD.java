@@ -28,6 +28,7 @@ public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
 	private static Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
+	private static Map<Estado, Estado> old2NewFinalStatesMap = new LinkedHashMap<Estado, Estado>();
 
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
@@ -87,12 +88,15 @@ public class AFND2AFD {
 		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
+		old2NewFinalStatesMap = new LinkedHashMap<Estado, Estado>();
 
 		for (Estados estadosAgrupado : estadosAgrupados) {
 			Estado novoEstado = new Estado("Q" + IndexGenerator.newIndex());
 			estadosDeterministicos.put(estadosAgrupado, novoEstado);
-			if (isFinalState(estadosAgrupado, AFND.getEstadosAceitacao())) {
-				estadosAceitacaoDeterministico.add(new EstadoFinal(novoEstado.getId()));
+			if (!getFinalStates(estadosAgrupado).isEmpty()) {
+				EstadoFinal novoEstadoFinal = new EstadoFinal(novoEstado.getId());
+				estadosAceitacaoDeterministico.add(novoEstadoFinal);
+				putInFinalStatesMap(getFinalStates(estadosAgrupado), novoEstadoFinal);
 			}
 		}
 
@@ -130,23 +134,21 @@ public class AFND2AFD {
 	}
 
 	/**
-	 * Método auxiliar que retorna se dado um conjunto de estados algum deles é final(Estado de aceitação). O metodo faz a intersecção do conjunto de estados finais com o conjunto de estados passado
-	 * por parâmetro, se a intersecção não for vazia temos que o conjunto passado por paramêtro contem pelo menos um estado final.
+	 * Método auxiliar que retorna os estados finais contidos no conjunto de estados recebido por parametro.
+	 * O metodo retorna a intersecção do conjunto de estados finais com o conjunto de estados passado
+	 * por parâmetro.
 	 * 
 	 * @param estados
-	 *            Conjunto de estados que se deseja saber se contem ao menos um estado que é final.
+	 *            Conjunto de estados que se deseja obter os estados finais.
 	 * @param finais
 	 *            Conjunto de estados finais do Automato finito não deterministico.
-	 * @return Verdadeiro se estados contem um estado que é final, falso caso contrário.
+	 * @return Conjunto que contem os estados finais encontrados.
 	 */
-	private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
-		Set<EstadoFinal> interseccao = new LinkedHashSet<EstadoFinal>();
-		interseccao.addAll(finais);
+	private static Estados getFinalStates(Estados estados) {
+		Set<Estado> interseccao = new LinkedHashSet<Estado>();
+		interseccao.addAll(AFND.getEstadosAceitacao());
 		interseccao.retainAll(getEpsilonFecho(estados).get());
-		if (!interseccao.isEmpty()) {
-			return true;
-		}
-		return false;
+		return new Estados(interseccao);
 	}
 
 	private static Estados getEpsilonFecho(Estados estados) {
@@ -156,5 +158,15 @@ public class AFND2AFD {
 		Estados epsilonFecho = AFND.epsilonFecho(estados);
 		epsilonFechoMap.put(estados, epsilonFecho);
 		return epsilonFecho;
+	}
+
+	private static void putInFinalStatesMap(Estados estadosFinais, EstadoFinal novoEstadoFinal) {
+		for (Estado estadoFinal : estadosFinais.get()) {
+			old2NewFinalStatesMap.put(estadoFinal, novoEstadoFinal);
+		}
+	}
+	
+	public static Map<Estado, Estado> getOld2NewFinalStatesMap(){
+		return old2NewFinalStatesMap;
 	}
 }
