@@ -252,6 +252,13 @@ public class OperacoesAFND {
         return aFdeSimbolo(Simbolo.EPSILON);
     }
     
+    /**
+     * Concatena dois automatos sem perder os estados finais dos automatos.
+     *
+     * @param af1 Um automato finíto não determinsitico.
+     * @param af2 Um automato finíto não determinsitico.
+     * @return Um automato finíto não determinsitico.
+     */
     public static AutomatoFinitoNaoDeterministico concatenaParaFecho(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2){
          Map<Entrada, Estados> transicoes = new HashMap<>();
 

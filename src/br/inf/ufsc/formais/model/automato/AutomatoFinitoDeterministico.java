@@ -214,11 +214,18 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         return out.toString();
     }
 
+    /**
+     * Remove os estados não alcançaveis.
+     */
     public void removeUnreachableStates() {
         Estados unreachableStates = getUnreachableStates();
         removeUnreachableStates(unreachableStates);
     }
 
+    /**
+     * Remove do automato os estados incalcançaveis.
+     * @param unreachableStates conjunto de estados inalcançaveis.
+     */
     private void removeUnreachableStates(Estados unreachableStates) {
         if (unreachableStates.isEmpty()) {
             return;
@@ -235,6 +242,9 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         }
     }
 
+    /**
+     * Remove do automato os estados mortos.
+     */
     public void removeDeadStates() {
         Estados deadStates = getDeadStates();
 
@@ -254,6 +264,10 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         }
     }
 
+    /**
+     * Retorna os estados inalcançaveis do automato
+     * @return estados inalcançaveis do automato
+     */
     private Estados getUnreachableStates() {
         Estados estadosAlcancaveis = new Estados();
         estadosAlcancaveis.addEstado(this.estadoInicial);
@@ -278,7 +292,11 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         return estadosInalcancaveis;
 
     }
-
+    
+    /**
+     * Retorna os estados mortos do automato
+     * @return os estados mortos do automato
+     */
     private Estados getDeadStates() {
         Estados deadStates = new Estados();
 
@@ -298,21 +316,38 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         deadStates.get().removeAll(this.estadosAceitacao);
         return deadStates;
     }
-
+    /**
+    * Encontra a união entre dois estados
+    * @param one conjunto que será utilizado para obter a união
+    * @param other conjunto que será utilizado para obter a união
+    * @return A união entre os dois conuntos de estados.
+    */
     private Estados uniao(Estados one, Estados other) {
         LinkedHashSet<Estado> uniao = new LinkedHashSet<Estado>();
         uniao.addAll(one.get());
         uniao.addAll(other.get());
         return new Estados(uniao);
     }
-
+    /**
+    * Encontra a diferença entre dois estados
+    * @param one conjunto que será utilizado para obter a diferença
+    * @param other conjunto que será utilizado para obter a diferença
+    * @return A diferença entre os dois conuntos de estados.
+    */
     private Estados diferenca(Estados one, Estados other) {
         LinkedHashSet<Estado> diferenca = new LinkedHashSet<Estado>();
         diferenca.addAll(one.get());
         diferenca.removeAll(other.get());
         return new Estados(diferenca);
     }
-
+    
+     /**
+     * Computa a cadeia recebida por parametro
+     * @param cadeia Cadeia de simbolos a serem computados
+     * @return Estado final em que findou a computação
+     * @throws EstadosInalcancaveisException lança exceção caso a palavra não foi reconhecida
+     * pelo automato ou a computação não findou em um estado final.
+     */
     public Estado computar(CadeiaAutomato cadeia) throws EstadoInalcancavelException {
         Estado estadoAtual = this.estadoInicial;
         Simbolo simboloAtual = new Simbolo("");
@@ -330,6 +365,11 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         return estadoAtual;
     }
 
+    /**
+     * Retorna se o estado é final
+     * @param estado estado que se deseja saber se é final
+     * @return Verdadeiro caso o estado seja final, falso caso não seja.
+     */
     private boolean isFinalState(Estado estado) {
         return this.estadosAceitacao.contains(estado);
     }

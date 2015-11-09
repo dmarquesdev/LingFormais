@@ -247,6 +247,11 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Verifica se existe uma determinada transição no AFD
+     * @param entrada entrada a ser verificada se existe transição
+     * @return Verdadeiro se existe transição, falso caso contrário.
+     */
     public boolean existeTransicao(Entrada entrada) {
         return this.transicoes.get(entrada) != null;
     }
@@ -319,12 +324,24 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
         return new Estados(epsilonFecho);
     }
 
+    /**
+     * Verifica se um conjunto de estados possui um estado final
+     * @param estados Conjunto de estados a ser analisado
+     * @return Verdadeiro se o conjunto possui um estado de aceitação, falso caso contrario.
+     */
     public boolean hasEstadoFinal(Estados estados) {
         Set<Estado> interseccao = new LinkedHashSet<Estado>(this.estadosAceitacao);
         interseccao.retainAll(estados.get());
         return !interseccao.isEmpty();
     }
 
+    /**
+     * Computa a cadeia recebida por parametro
+     * @param cadeia Cadeia de simbolos a serem computados
+     * @return Estado final em que findou a computação
+     * @throws EstadosInalcancaveisException lança exceção caso a palavra não foi reconhecida
+     * pelo automato ou a computação não findou em um estado final.
+     */
     public Estados computar(CadeiaAutomato cadeia) throws EstadosInalcancaveisException {
         Estados estadosAtuais = new Estados();
         estadosAtuais.addEstado(this.estadoInicial);

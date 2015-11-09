@@ -9,3 +9,6 @@ read
 write
 return
 void
+if
+else
+while

@@ -28,6 +28,13 @@ import java.util.logging.Logger;
  */
 public class ER2AFND {
 
+    /**
+     * Analisa se expressao regular passada por parametro é uma ds 
+     * tipos especiais em que os automatos são gerados de forma diferente dos convencionais.
+     * Gera o automato equivalente a expressão regular.
+     * @param er Uma expressão regular.
+     * @return Um automato finito não deterministico.
+     */
     public static AutomatoFinitoNaoDeterministico analisaConverte(ExpressaoRegular er) {
         AutomatoFinitoNaoDeterministico afnd = null;
 
@@ -38,8 +45,9 @@ public class ER2AFND {
             afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0)), OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(1)));
         } else if (er.toString().equals("\".\"")){
             ExpressaoRegularIO erio = new ExpressaoRegularIO();
+            String nomeArquivoCaracteres = "lista_de_caracteres.in";
             try {
-                ArrayList<ExpressaoRegular> alfa = erio.readAll("", "lista_de_caracteres.in");
+                ArrayList<ExpressaoRegular> alfa = erio.readAll("", nomeArquivoCaracteres);
                 for(Simbolo s : alfa.get(0).getSimbolos()){
                     if(afnd == null){
                         afnd = OperacoesAFND.aFdeSimbolo(s);
@@ -51,7 +59,7 @@ public class ER2AFND {
                 afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(new Simbolo("\"")), afnd);
                 afnd = OperacoesAFND.concatenaAFs(afnd, OperacoesAFND.aFdeSimbolo(new Simbolo("\"")));
             } catch (IOException ex) {
-                System.out.println("Ocorreu um erro de leitura no arquivo \"alfabeto.in!\"");
+                System.out.println("Ocorreu um erro de leitura no arquivo "+ nomeArquivoCaracteres + ". Verifique e tente novamente!");
             } catch (FormaisIOException ex) {
                 System.out.println(ex.getMessage());
             }
