@@ -6,24 +6,24 @@
 package br.inf.ufsc.formais.exception;
 
 import br.inf.ufsc.formais.model.Simbolo;
-import br.inf.ufsc.formais.model.automato.Estado;
+import br.inf.ufsc.formais.model.automato.Estados;
 
 /**
  *
  * @author Diego
  */
-public class EstadoInalcancavelException extends AnaliseLexicaException {
+public class EstadosInalcancaveisException extends AnaliseLexicaException {
 
-    private Estado estado;
+    private Estados estados;
     private Simbolo simbolo;
 
-    public EstadoInalcancavelException(Estado estado, Simbolo simbolo) {
-        this.estado = estado;
+    public EstadosInalcancaveisException(Estados estado, Simbolo simbolo) {
+        this.estados = estado;
         this.simbolo = simbolo;
     }
 
-    public Estado getEstado() {
-        return estado;
+    public Estados getEstados() {
+        return estados;
     }
 
     public Simbolo getSimbolo() {

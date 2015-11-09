@@ -5,22 +5,17 @@
  */
 package br.inf.ufsc.formais.operacoes;
 
-import br.inf.ufsc.formais.model.Alfabeto;
+import br.inf.ufsc.formais.exception.FormaisIOException;
+import br.inf.ufsc.formais.io.ExpressaoRegularIO;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
-import br.inf.ufsc.formais.model.automato.Entrada;
-import br.inf.ufsc.formais.model.automato.Estado;
-import br.inf.ufsc.formais.model.automato.EstadoFinal;
-import br.inf.ufsc.formais.model.automato.EstadoInicial;
-import br.inf.ufsc.formais.model.automato.Estados;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
 import br.inf.ufsc.formais.model.er.SimboloOperacional;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,7 +28,40 @@ import java.util.Set;
  */
 public class ER2AFND {
 
-    private static int contadorEstados = 0;
+    public static AutomatoFinitoNaoDeterministico analisaConverte(ExpressaoRegular er) {
+        AutomatoFinitoNaoDeterministico afnd = null;
+
+        if (er.toString().equals("|") || er.toString().equals("*")
+                || er.toString().equals("(") || er.toString().equals(")")) {
+            afnd = OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0));
+        } else if (er.toString().equals("||")) {
+            afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(0)), OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(1)));
+        } else if (er.toString().equals("\".\"")){
+            ExpressaoRegularIO erio = new ExpressaoRegularIO();
+            try {
+                ArrayList<ExpressaoRegular> alfa = erio.readAll("", "lista_de_caracteres.in");
+                for(Simbolo s : alfa.get(0).getSimbolos()){
+                    if(afnd == null){
+                        afnd = OperacoesAFND.aFdeSimbolo(s);
+                    }else{
+                        afnd = OperacoesAFND.ouEntreAFNDs(afnd, OperacoesAFND.aFdeSimbolo(s));
+                    }
+                }
+                afnd = OperacoesAFND.fechoDeAF(afnd);
+                afnd = OperacoesAFND.concatenaAFs(OperacoesAFND.aFdeSimbolo(new Simbolo("\"")), afnd);
+                afnd = OperacoesAFND.concatenaAFs(afnd, OperacoesAFND.aFdeSimbolo(new Simbolo("\"")));
+            } catch (IOException ex) {
+                System.out.println("Ocorreu um erro de leitura no arquivo \"alfabeto.in!\"");
+            } catch (FormaisIOException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+            
+        } else {
+            afnd = ER2AFND.converterParaAutomato(er);
+        }
+        return afnd;
+    }
 
     /**
      * Responsável por reconhecer cada símbolo da expressão regular criar o
@@ -42,7 +70,7 @@ public class ER2AFND {
      * @param er Uma expressão regular.
      * @return Um automato finito não determinsitico.
      */
-    public static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
+    private static AutomatoFinitoNaoDeterministico converterParaAutomato(ExpressaoRegular er) {
 
         AutomatoFinitoNaoDeterministico ultimo = null;
 
@@ -77,7 +105,7 @@ public class ER2AFND {
                 if (ultimo == null) {
                     if (i < er.getSimbolos().size() - 1) {
                         if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
-                            ultimo = fechoDeAF(converterParaAutomato(subEr));
+                            ultimo = OperacoesAFND.fechoDeAF(converterParaAutomato(subEr));
                             ++i;
                         } else {
                             ultimo = converterParaAutomato(subEr);
@@ -88,28 +116,28 @@ public class ER2AFND {
                 } else {
                     if (i < er.getSimbolos().size() - 1) {
                         if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
-                            ultimo = concatenaAFs(ultimo, fechoDeAF(converterParaAutomato(subEr)));
+                            ultimo = OperacoesAFND.concatenaAFs(ultimo, OperacoesAFND.fechoDeAF(converterParaAutomato(subEr)));
                             ++i;
                         } else {
-                            ultimo = concatenaAFs(ultimo, converterParaAutomato(subEr));
+                            ultimo = OperacoesAFND.concatenaAFs(ultimo, converterParaAutomato(subEr));
                         }
                     } else {
-                        ultimo = concatenaAFs(ultimo, converterParaAutomato(subEr));
+                        ultimo = OperacoesAFND.concatenaAFs(ultimo, converterParaAutomato(subEr));
                     }
                 }
             } else if (er.getSimbolos().get(i).getReferencia().equals("*")) {
 //                gera o fecho do ultimo automato
-                ultimo = fechoDeAF(ultimo);
+                ultimo = OperacoesAFND.fechoDeAF(ultimo);
 
             } else if (er.getSimbolos().get(i).getReferencia().equals("|")) {
 //                cria automato depois do | e opera com o automato em espera
                 List<Simbolo> subSimbolos;
                 subSimbolos = er.getSimbolos().subList(i + 1, er.getSimbolos().size());
                 ExpressaoRegular subEr = new ExpressaoRegular(subSimbolos);
-                ultimo = ouEntreAFs(ultimo, converterParaAutomato(subEr));
-                ++i;
+                ultimo = OperacoesAFND.ouEntreAFNDs(ultimo, converterParaAutomato(subEr));
+                i = er.getSimbolos().size();
             } else if (er.getSimbolos().get(i) == SimboloOperacional.CONJUNTO_VAZIO) {
-                ultimo = aFLingVazia();
+                ultimo = OperacoesAFND.aFLingVazia();
 
             } else {
 //                se for um simbolo é gerado um automato que reconheça esse simbolo, gera o seu fecho se o proximo
@@ -117,17 +145,17 @@ public class ER2AFND {
                 if (ultimo == null) {
 
                     if (er.getSimbolos().get(i) == SimboloOperacional.EPSILON) {
-                        ultimo = aFPalavraVazia();
+                        ultimo = OperacoesAFND.aFPalavraVazia();
                     } else {
                         if (i < er.getSimbolos().size() - 1) {
                             if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
-                                ultimo = fechoDeAF(aFdeSimbolo(er.getSimbolos().get(i)));
+                                ultimo = OperacoesAFND.fechoDeAF(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(i)));
                                 i++;
                             } else {
-                                ultimo = aFdeSimbolo(er.getSimbolos().get(i));
+                                ultimo = OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(i));
                             }
                         } else {
-                            ultimo = aFdeSimbolo(er.getSimbolos().get(i));
+                            ultimo = OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(i));
                         }
 
                     }
@@ -135,17 +163,17 @@ public class ER2AFND {
                 } else {
 
                     if (er.getSimbolos().get(i) == SimboloOperacional.EPSILON) {
-                        ultimo = concatenaAFs(ultimo, aFPalavraVazia());
+                        ultimo = OperacoesAFND.concatenaAFs(ultimo, OperacoesAFND.aFPalavraVazia());
                     } else {
                         if (i < er.getSimbolos().size() - 1) {
                             if (er.getSimbolos().get(i + 1).getReferencia().equals("*")) {
-                                ultimo = concatenaAFs(ultimo, fechoDeAF(aFdeSimbolo(er.getSimbolos().get(i))));
+                                ultimo = OperacoesAFND.concatenaAFs(ultimo, OperacoesAFND.fechoDeAF(OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(i))));
                                 ++i;
                             } else {
-                                ultimo = concatenaAFs(ultimo, aFdeSimbolo(er.getSimbolos().get(i)));
+                                ultimo = OperacoesAFND.concatenaAFs(ultimo, OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(i)));
                             }
                         } else {
-                            ultimo = concatenaAFs(ultimo, aFdeSimbolo(er.getSimbolos().get(i)));
+                            ultimo = OperacoesAFND.concatenaAFs(ultimo, OperacoesAFND.aFdeSimbolo(er.getSimbolos().get(i)));
                         }
 
                     }
@@ -157,219 +185,4 @@ public class ER2AFND {
         return ultimo;
     }
 
-    /**
-     * Cria um automato mais simples que reconheça palavras que contenham o
-     * símbolo s.
-     *
-     * @param s Um símbolo do alfabeto do automato.
-     * @return Um automato finito não determinístico.
-     */
-    public static AutomatoFinitoNaoDeterministico aFdeSimbolo(Simbolo s) {
-//        cria estado inicial e final
-        EstadoInicial einicial = new EstadoInicial("q" + contadorEstados);
-        ++contadorEstados;
-        EstadoFinal efinal = new EstadoFinal("q" + contadorEstados);
-        ++contadorEstados;
-
-//        cria um set de estados e adiciona o inicial e o final.
-        Set<Estado> estados = new LinkedHashSet<>();
-        estados.add(einicial);
-        estados.add(efinal);
-
-//        cria set de estados e adicio estado final, será usado para criar a transicao.
-        Set<Estado> prox = new LinkedHashSet<>();
-        prox.add(efinal);
-        Estados proxEstados = new Estados(prox);
-
-//        cria o set de estados aceitacao e adiciona estado final.
-        Set<EstadoFinal> estadosAceitacao = new LinkedHashSet<>();
-        estadosAceitacao.add(efinal);
-
-//        cria um set de simbolos e adiciona au alfabeto
-        Set<Simbolo> simbolos = new LinkedHashSet<>();
-        simbolos.add(s);
-        Alfabeto alfa = new Alfabeto(simbolos);
-
-//        cria uma entrada,composta por estado de saida da transicao e o simbolo pelo qual transita
-        Entrada entrada = new Entrada(einicial, s);
-
-//        cria um map de transicoes, cada transicao é composta por uma entrada e os estados para qual a transicao 
-//        pelo simbolo em questao leva.
-        Map<Entrada, Estados> transicoes = new HashMap<>();
-        transicoes.put(entrada, proxEstados);
-
-//        gera o automato.
-        AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, alfa,
-                einicial, estadosAceitacao, transicoes);
-
-        return afnd;
-    }
-
-    /**
-     * Cria o fecho de um automato. Cria uma transição de cada estado final para
-     * o inicial por epsilon.
-     *
-     * @param af Um automato finito não determinístico.
-     * @return Um automato finito não determinsitico.
-     */
-    public static AutomatoFinitoNaoDeterministico fechoDeAF(AutomatoFinitoNaoDeterministico af) {
-        AutomatoFinitoNaoDeterministico afnd;
-        afnd = af;
-
-        Set<Estado> prox = new LinkedHashSet<>();
-        prox.add(afnd.getEstadoInicial());
-        Estados estados = new Estados(prox);
-
-//        cria uma transição por epsilon de cada estado final para o inicial.
-        for (EstadoFinal efinal : af.getEstadosAceitacao()) {
-            Entrada entrada = new Entrada(efinal, Simbolo.EPSILON);
-
-            afnd.addTransicao(entrada, estados);
-        }
-
-        return afnd;
-    }
-
-    /**
-     * Cria a operação ou entre dois automatos. Cria um estado inicial novo e
-     * transições que saem desse novo estado e vai para os estados iniciais de
-     * cada automato por epsilon.
-     *
-     * @param af1 Um automato finíto não determinsitico.
-     * @param af2 Um automato finíto não determinsitico.
-     * @return Um automato finíto não determinsitico.
-     */
-    public static AutomatoFinitoNaoDeterministico ouEntreAFs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
-//        Cria novo estado inicial.
-        EstadoInicial novoInicial = new EstadoInicial("q" + contadorEstados);
-        ++contadorEstados;
-
-//        Substitui estados iniciais de af1 e af2 por estados normais
-        Estado ei_af1 = af1.removeEstadoInicial();
-        Estado ei_af2 = af2.removeEstadoInicial();
-
-//        criando transicao nao deterministica do inicial para cada um dos iniciais dos afnd's
-        Set<Estado> estadosProx = new LinkedHashSet<>();
-        estadosProx.add(ei_af2);
-        estadosProx.add(ei_af1);
-        Estados proxEstados = new Estados(estadosProx);
-        Entrada entrada = new Entrada(novoInicial, Simbolo.EPSILON);
-
-//        Junção de estados
-        Set<Estado> estados = new LinkedHashSet<>();
-        estados.addAll(af1.getEstados());
-        estados.addAll(af2.getEstados());
-        estados.add(novoInicial);
-
-//        Junção de estados finais
-        Set<EstadoFinal> estadosAceitacao = new LinkedHashSet<>();
-        estadosAceitacao.addAll(af1.getEstadosAceitacao());
-        estadosAceitacao.addAll(af2.getEstadosAceitacao());
-
-//        Junção de Alfabeto
-        Set<Simbolo> simbolos = new LinkedHashSet<>();
-        simbolos.addAll(af1.getAlfabeto().getSimbolos());
-        simbolos.addAll(af2.getAlfabeto().getSimbolos());
-        Alfabeto alfa = new Alfabeto(simbolos);
-
-//        Junção de transições
-        Map<Entrada, Estados> transicoes = new HashMap<>();
-        transicoes.putAll(af1.getTransicoes());
-        transicoes.putAll(af2.getTransicoes());
-        transicoes.put(entrada, proxEstados);
-
-        AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, alfa,
-                novoInicial, estadosAceitacao, transicoes);
-
-        return afnd;
-    }
-
-    /**
-     * Concatena dois automatos. Cria uma transição por epsilon do(s) estado(s)
-     * final(is) de um automato para o inicial do outro automato.
-     *
-     * @param af1 Um automato finíto não determinsitico.
-     * @param af2 Um automato finíto não determinsitico.
-     * @return Um automato finíto não determinsitico.
-     */
-    public static AutomatoFinitoNaoDeterministico concatenaAFs(AutomatoFinitoNaoDeterministico af1, AutomatoFinitoNaoDeterministico af2) {
-        Map<Entrada, Estados> transicoes = new HashMap<>();
-
-//        Cria estado estado para subtiruir estado inicial de af2
-        Estado eaf2 = af2.removeEstadoInicial();
-
-//        Cria uma transição de cada estado final de af1 para o estado inicial de af2
-        Set<Estado> estadosProx = new LinkedHashSet<>();
-        estadosProx.add(eaf2);
-        Estados proxEstados = new Estados(estadosProx);
-
-        Set<EstadoFinal> apoio = new LinkedHashSet<>();
-        apoio.addAll(af1.getEstadosAceitacao());
-
-//        Junção de transições
-        transicoes.putAll(af1.getTransicoes());
-        transicoes.putAll(af2.getTransicoes());
-
-        for (EstadoFinal e : apoio) {
-            Estado eaf1 = af1.removeEstadoFinal(e);
-            Entrada entrada = new Entrada(eaf1, Simbolo.EPSILON);
-
-//            Se a entrada ja existe, adiciona o estado à transiçao.
-            if (transicoes.containsKey(entrada)) {
-                transicoes.get(entrada).addEstado(eaf2);
-            } else {
-                transicoes.put(entrada, proxEstados);
-            }
-        }
-
-//        Junção de estados.
-        Set<Estado> estados = new LinkedHashSet<>();
-        estados.addAll(af1.getEstados());
-        estados.addAll(af2.getEstados());
-
-//        Junção de Alfabeto
-        Set<Simbolo> simbolos = new LinkedHashSet<>();
-        simbolos.addAll(af1.getAlfabeto().getSimbolos());
-        simbolos.addAll(af2.getAlfabeto().getSimbolos());
-        Alfabeto alfa = new Alfabeto(simbolos);
-
-        AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, alfa,
-                af1.getEstadoInicial(), af2.getEstadosAceitacao(),
-                transicoes);
-
-        return afnd;
-    }
-
-    /**
-     * Cria um automato que reconheça a linguagem vazia. Automato que contem
-     * apenas estado inicial, não contem estados finais.
-     *
-     * @return Um automato finíto não determinsitico.
-     */
-    public static AutomatoFinitoNaoDeterministico aFLingVazia() {
-
-//        cria um automato que tem apenas o estado inicial, todo o resto é nulo.
-        EstadoInicial einicial = new EstadoInicial("S");
-        Set<Estado> estados = new LinkedHashSet<>();
-        estados.add(einicial);
-        Set<EstadoFinal> estadosAceitacao = new LinkedHashSet<>();
-        Alfabeto a = new Alfabeto(null);
-        Map<Entrada, Estados> transicoes = new HashMap<>();
-        Set<EstadoFinal> ef = new LinkedHashSet<>();
-
-        AutomatoFinitoNaoDeterministico afnd = new AutomatoFinitoNaoDeterministico(estados, a,
-                einicial, estadosAceitacao, transicoes);
-        return afnd;
-    }
-
-    /**
-     * Cria automato que reconheça a palavra vazia. Contem uma transição por
-     * epsilon de inicial para final.
-     *
-     * @return Um automato finíto não determinsitico.
-     */
-    public static AutomatoFinitoNaoDeterministico aFPalavraVazia() {
-//        cria um automato que transita do estado inical ao final por epsilon.
-        return aFdeSimbolo(Simbolo.EPSILON);
-    }
 }

@@ -1,5 +1,6 @@
 package br.inf.ufsc.formais.model.automato;
 
+import br.inf.ufsc.formais.exception.EstadosInalcancaveisException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -20,38 +21,40 @@ import java.util.HashSet;
 public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
     /**
-    * Conjunto de estados do Automato.
-    */
+     * Conjunto de estados do Automato.
+     */
     protected Set<Estado> estados;
-    
+
     /**
-    * Alfabeto do Automato.
-    */
+     * Alfabeto do Automato.
+     */
     protected Alfabeto alfabeto;
-    
+
     /**
-    * Estado inicial do Automato.
-    */
+     * Estado inicial do Automato.
+     */
     protected EstadoInicial estadoInicial;
-    
+
     /**
-    * Conjunto de estados de aceitação(Finais) do Automato.
-    */
+     * Conjunto de estados de aceitação(Finais) do Automato.
+     */
     protected Set<EstadoFinal> estadosAceitacao;
-    
+
     /**
-    * Mapa de transições do Automato.
-    */
+     * Mapa de transições do Automato.
+     */
     protected Map<Entrada, Estados> transicoes;
 
     /**
-    * Contrutor, inicializa todos os atributos da classe.
-    * @param estados conjunto de estados que será inicializado o Automato.
-    * @param alfabeto  alfabeto que será inicializado o Automato.
-    * @param estadoInicial estado inicial que será inicializado o Automato.
-    * @param estadosAceitacao conjunto de estados de aceitação(Finais) que será inicializado o Automato.
-    * @param transicoes mapa de transições que será inicializado o Automato.
-    */
+     * Contrutor, inicializa todos os atributos da classe.
+     *
+     * @param estados conjunto de estados que será inicializado o Automato.
+     * @param alfabeto alfabeto que será inicializado o Automato.
+     * @param estadoInicial estado inicial que será inicializado o Automato.
+     * @param estadosAceitacao conjunto de estados de aceitação(Finais) que será
+     * inicializado o Automato.
+     * @param transicoes mapa de transições que será inicializado o Automato.
+     */
     public AutomatoFinitoNaoDeterministico(Set<Estado> estados, Alfabeto alfabeto, EstadoInicial estadoInicial, Set<EstadoFinal> estadosAceitacao, Map<Entrada, Estados> transicoes) {
         this.estados = estados;
         this.alfabeto = alfabeto;
@@ -61,8 +64,8 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     }
 
     /**
-    * Contrutor vazio, inicializa os atributos da classe com valores padrão.
-    */
+     * Contrutor vazio, inicializa os atributos da classe com valores padrão.
+     */
     public AutomatoFinitoNaoDeterministico() {
         estados = new LinkedHashSet<>();
         estadosAceitacao = new LinkedHashSet<>();
@@ -113,9 +116,10 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public void setEstadosAceitacao(Set<EstadoFinal> estadosAceitacao) {
         this.estadosAceitacao = estadosAceitacao;
     }
-    
+
     /**
      * Seta o mapa de transições do Automato.
+     *
      * @param transicoes mapa de transições a ser setado.
      */
     public void setTransicoes(Map<Entrada, Estados> transicoes) {
@@ -131,23 +135,24 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public Estado getEstadoTransicao(Entrada entrada) {
         return transicoes.get(entrada);
     }
-    
-    
+
     /**
      * Obtem o conjunto de estados alcançaveis dado uma entrada.
+     *
      * @param entrada chave para o mapa de transições.
      * @return O conjunto de estados alcançaveis a partir da entrada.
      */
     public Estados getEstadosTransicao(Entrada entrada) {
-            if (transicoes.get(entrada) != null) {
-                    return transicoes.get(entrada);
-            } else {
-                    return new Estados(new HashSet<Estado>());
-            }
+        if (transicoes.get(entrada) != null) {
+            return transicoes.get(entrada);
+        } else {
+            return new Estados(new HashSet<Estado>());
+        }
     }
 
     /**
      * Adicionar uma transição no mapa de transições do Automato.
+     *
      * @param entrada chave do mapa de transições.
      * @param destino Conjunto de estados do destino(Alcançavel).
      */
@@ -178,13 +183,13 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
         out.append(alfabeto.toString()).append("\n");
 
-        for (Entrada ent : transicoes.keySet()) { 
-                Estados est = transicoes.get(ent);
-                out.append("T(")
-                        .append(ent.toString())
-                        .append(") -> ").append(est.toString())
-                        .append("\n");
-            
+        for (Entrada ent : transicoes.keySet()) {
+            Estados est = transicoes.get(ent);
+            out.append("T(")
+                    .append(ent.toString())
+                    .append(") -> ").append(est.toString())
+                    .append("\n");
+
         }
 
         out.append("\n");
@@ -209,7 +214,7 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
 
     @Override
     public Estado removeEstadoFinal(EstadoFinal estado) {
-        
+
         Estado novo = new Estado(estado.getId());
         for (Entrada ent : transicoes.keySet()) {
 
@@ -241,99 +246,111 @@ public class AutomatoFinitoNaoDeterministico implements AutomatoFinito {
     public boolean existeTransicao(Estado de, Simbolo entrada, Estado para) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public boolean existeTransicao(Entrada entrada){
-    	return this.transicoes.get(entrada) != null;
+
+    public boolean existeTransicao(Entrada entrada) {
+        return this.transicoes.get(entrada) != null;
     }
 
     /**
      * Remove o estado inicial.
+     *
      * @return o estado inicial.
      */
     public Estado removeEstadoInicial() {
         Estado novo = new Estado(estadoInicial.getId());
         for (Entrada ent : transicoes.keySet()) {
-            
+
             Estados ests = transicoes.get(ent);
-            
-                for(Estado est : ests.get()){
-                    if(est.equals(estadoInicial)){
-                        ests.get().remove(estadoInicial);
-                        ests.get().add(est);
-                    }
+            Estados apoio = new Estados();
+
+            apoio.addEstado(transicoes.get(ent));
+
+            for (Estado est : apoio.get()) {
+                if (est.equals(estadoInicial)) {
+                    ests.get().remove(estadoInicial);
+                    ests.get().add(est);
                 }
+            }
             if (ent.getEstado().equals(estadoInicial)) {
                 ent.setEstado(novo);
             }
-            
+
         }
-        
+
         estados.remove(estadoInicial);
         estados.add(novo);
         return novo;
     }
-    	/**
-	 * Método que retorna o Epsilon-fecho de um conjunto de estados. A partir do conjunto de estados recebido por paramêtro, são encontrados todos os estados alcançaveis por epsilon
-	 * transição, então esse processo é repetido esses novos estados alcançaveis até que todas as transições por epsilon possíveis sejam encontradas. 
-	 * @param estados Conjunto de estados que se deseja obter o Epsilon-fecho.   
-	 * @return Conjunto de estados com o epsilon-fecho do conjunto de estados recebido por paramêtro.
-	 */
-	public Estados epsilonFecho(Estados estado) {
-		Set<Estado> epsilonFecho = new LinkedHashSet<Estado>();
-		Set<Estado> toBeVisited = new LinkedHashSet<Estado>();
-		Set<Estado> alreadyVisited = new LinkedHashSet<Estado>();
 
-		toBeVisited.addAll(estado.get());
+    /**
+     * Método que retorna o Epsilon-fecho de um conjunto de estados. A partir do
+     * conjunto de estados recebido por paramêtro, são encontrados todos os
+     * estados alcançaveis por epsilon transição, então esse processo é repetido
+     * esses novos estados alcançaveis até que todas as transições por epsilon
+     * possíveis sejam encontradas.
+     *
+     * @param estados Conjunto de estados que se deseja obter o Epsilon-fecho.
+     * @return Conjunto de estados com o epsilon-fecho do conjunto de estados
+     * recebido por paramêtro.
+     */
+    public Estados epsilonFecho(Estados estado) {
+        Set<Estado> epsilonFecho = new LinkedHashSet<Estado>();
+        Set<Estado> toBeVisited = new LinkedHashSet<Estado>();
+        Set<Estado> alreadyVisited = new LinkedHashSet<Estado>();
 
-		while (!toBeVisited.isEmpty()) {
+        toBeVisited.addAll(estado.get());
 
-			for (Estado estadoAtual : toBeVisited) {
-				epsilonFecho.add(estadoAtual);
+        while (!toBeVisited.isEmpty()) {
 
-				Entrada entrada = new Entrada(estadoAtual, Simbolo.EPSILON);
-				if (existeTransicao(entrada)) {
-					Estados alcancavelPorEpsilon = this.transicoes.get(entrada);
-					epsilonFecho.addAll(alcancavelPorEpsilon.get());
-				}	
-				alreadyVisited.add(estadoAtual);
-			}
-			toBeVisited.addAll(epsilonFecho);
-			toBeVisited.removeAll(alreadyVisited);
-		}
+            for (Estado estadoAtual : toBeVisited) {
+                epsilonFecho.add(estadoAtual);
 
-		return new Estados(epsilonFecho);
-	}
-	
-	public boolean hasEstadoFinal(Estados estados){
-		Set<Estado> interseccao = new LinkedHashSet<Estado>(this.estadosAceitacao);
-		interseccao.retainAll(estados.get());
-		return !interseccao.isEmpty();
-	}
-	
-	public Estados computar(CadeiaAutomato cadeia){
-		Estados estadosAtuais = new Estados();
-		estadosAtuais.addEstado(this.estadoInicial);
-		
-		for(Simbolo simbolo : cadeia.getSimbolos()){
-			estadosAtuais = epsilonFecho(estadosAtuais);
-			Estados alcancaveis = new Estados();
-			for(Estado estado : estadosAtuais.get()){
-				Entrada entrada = new Entrada(estado, simbolo);
-				if(existeTransicao(entrada)){
-				alcancaveis.addEstados(this.transicoes.get(entrada));
-				}
-			}
-			if(alcancaveis.isEmpty()){
-				//lanca exception
-			}
-			estadosAtuais.get().clear();
-			estadosAtuais.addEstados(alcancaveis);	
-		}
-		
-		if(!hasEstadoFinal(estadosAtuais)){
-			//lança exception
-		}
-		
-		return estadosAtuais;
-	}
+                Entrada entrada = new Entrada(estadoAtual, Simbolo.EPSILON);
+                if (existeTransicao(entrada)) {
+                    Estados alcancavelPorEpsilon = this.transicoes.get(entrada);
+                    epsilonFecho.addAll(alcancavelPorEpsilon.get());
+                }
+                alreadyVisited.add(estadoAtual);
+            }
+            toBeVisited.addAll(epsilonFecho);
+            toBeVisited.removeAll(alreadyVisited);
+        }
+
+        return new Estados(epsilonFecho);
+    }
+
+    public boolean hasEstadoFinal(Estados estados) {
+        Set<Estado> interseccao = new LinkedHashSet<Estado>(this.estadosAceitacao);
+        interseccao.retainAll(estados.get());
+        return !interseccao.isEmpty();
+    }
+
+    public Estados computar(CadeiaAutomato cadeia) throws EstadosInalcancaveisException {
+        Estados estadosAtuais = new Estados();
+        estadosAtuais.addEstado(this.estadoInicial);
+        Simbolo simboloAtual = new Simbolo("");
+
+        for (Simbolo simbolo : cadeia.getSimbolos()) {
+            simboloAtual = simbolo;
+            estadosAtuais = epsilonFecho(estadosAtuais);
+            Estados alcancaveis = new Estados();
+            for (Estado estado : estadosAtuais.get()) {
+                Entrada entrada = new Entrada(estado, simbolo);
+                if (existeTransicao(entrada)) {
+                    alcancaveis.addEstados(this.transicoes.get(entrada));
+                }
+            }
+            if (alcancaveis.isEmpty()) {
+                throw new EstadosInalcancaveisException(estadosAtuais, simboloAtual);
+            }
+            estadosAtuais.get().clear();
+            estadosAtuais.addEstados(alcancaveis);
+        }
+
+        if (!hasEstadoFinal(estadosAtuais)) {
+            throw new EstadosInalcancaveisException(estadosAtuais, simboloAtual);
+        }
+        estadosAtuais.get().retainAll(estadosAceitacao);
+        return estadosAtuais;
+    }
 }

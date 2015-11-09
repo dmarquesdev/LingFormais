@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import br.inf.ufsc.formais.common.IndexGenerator;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -26,6 +27,8 @@ import br.inf.ufsc.formais.model.automato.Estados;
 public class AFND2AFD {
 
 	private static AutomatoFinitoNaoDeterministico AFND;
+	private static Map<Estados, Estados> epsilonFechoMap = new LinkedHashMap<Estados, Estados>();
+	private static Map<Estado, Estados> old2NewFinalStatesMap = new LinkedHashMap<Estado, Estados>();
 
 	/**
 	 * Retorna um Automato Finito Deterministico. A partir do AFND, o algortimo encontra todos os estados alcançaveis, podendo ser mais que um, por um simbolo inclusive Epsilon. Então todos os
@@ -41,43 +44,38 @@ public class AFND2AFD {
 		 * Atributo responsável por armazenar o Automato finito não deterministico.
 		 */
 		AFND2AFD.AFND = AFND;
-
 		Set<Estados> estadosAgrupados = new LinkedHashSet<Estados>();
 		Set<Estados> estadosToBeGrouped = new LinkedHashSet<Estados>();
 		Set<Estados> estadosAlcancaveis = new LinkedHashSet<Estados>();
 
 		Estados estadoInicial = new Estados(new HashSet<Estado>());
 		estadoInicial.addEstado(AFND.getEstadoInicial());
-		estadosToBeGrouped.add(AFND.epsilonFecho(estadoInicial));
-
-		Set<Simbolo> simbolos = AFND.getAlfabeto().getSimbolos();
-
-		simbolos.remove(Simbolo.EPSILON);
+		estadosToBeGrouped.add(estadoInicial);
+		AFND.getAlfabeto().getSimbolos().remove(Simbolo.EPSILON);
 
 		// agrupar estados para formar novos deterministicos
 		while (!estadosToBeGrouped.isEmpty()) {
 
-			Estados estadoAtual = (Estados) estadosToBeGrouped.toArray()[0];
+			Estados estadoAtual = ((Estados) estadosToBeGrouped.toArray()[0]);
 
 			for (Simbolo simbolo : AFND.getAlfabeto().getSimbolos()) {
 
-				HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
+				Estados novosEstados = new Estados();
+				Estados epsilonFecho = getEpsilonFecho(estadoAtual);
 
-				for (Estado estado : estadoAtual.get()) {
-
+				for (Estado estado : epsilonFecho.get()) {
 					Entrada entrada = new Entrada(estado, simbolo);
-					Estados alcancaveis = AFND.getEstadosTransicao(entrada);
-
-					Estados epsilonFecho = AFND.epsilonFecho(alcancaveis);
-					novoEstado.addAll(epsilonFecho.get());
-
+					if (AFND.existeTransicao(entrada)) {
+						Estados alcancaveis = AFND.getEstadosTransicao(entrada);
+						novosEstados.addEstados(alcancaveis);
+					}
 				}
-				Estados novoEstados = new Estados(novoEstado);
 				// trata o caso de transição para o vazio
-				if (!novoEstados.get().isEmpty()) {
-					estadosAlcancaveis.add(novoEstados);
+				if (!novosEstados.isEmpty()) {
+					estadosAlcancaveis.add(novosEstados);
 				}
 			}
+
 			estadosAgrupados.add(estadoAtual);
 			estadosToBeGrouped.addAll(estadosAlcancaveis);
 			estadosToBeGrouped.removeAll(estadosAgrupados);
@@ -86,25 +84,20 @@ public class AFND2AFD {
 		// criar novos estados deterministicos
 		HashMap<Estados, Estado> estadosDeterministicos = new LinkedHashMap<Estados, Estado>();
 		Set<EstadoFinal> estadosAceitacaoDeterministico = new HashSet<EstadoFinal>();
-		Estado estadoInicialDeterministico = new EstadoInicial("Q0");
-		estadosDeterministicos.put(AFND.epsilonFecho(estadoInicial), estadoInicialDeterministico);
+		Estado estadoInicialDeterministico = new EstadoInicial("Q" + IndexGenerator.newIndex());
+		estadosDeterministicos.put(estadoInicial, estadoInicialDeterministico);
 
 		estadosAgrupados.remove(estadoInicial);
-
-		int indexEstados = 1;
+		old2NewFinalStatesMap = new LinkedHashMap<Estado, Estados>();
 
 		for (Estados estadosAgrupado : estadosAgrupados) {
-
-			if (isFinalState(estadosAgrupado, AFND.getEstadosAceitacao())) {
-				Estado novoEstadoFinal = new EstadoFinal("Q" + indexEstados);
-				estadosDeterministicos.put(estadosAgrupado, novoEstadoFinal);
-				estadosAceitacaoDeterministico.add((EstadoFinal) novoEstadoFinal);
-			} else {
-
-				estadosDeterministicos.put(estadosAgrupado, new Estado("Q" + indexEstados));
+			Estado novoEstado = new Estado("Q" + IndexGenerator.newIndex());
+			estadosDeterministicos.put(estadosAgrupado, novoEstado);
+			if (!getFinalStates(estadosAgrupado).isEmpty()) {
+				EstadoFinal novoEstadoFinal = new EstadoFinal(novoEstado.getId());
+				estadosAceitacaoDeterministico.add(novoEstadoFinal);
+				putInFinalStatesMap(novoEstadoFinal, getFinalStates(estadosAgrupado));
 			}
-
-			indexEstados++;
 		}
 
 		// criar novas transições deterministicas
@@ -115,25 +108,19 @@ public class AFND2AFD {
 		for (Estados estadosEntrada : estadosAgrupados) {
 
 			for (Simbolo simboloAtual : AFND.getAlfabeto().getSimbolos()) {
-				HashSet<Estado> novoEstado = new LinkedHashSet<Estado>();
+				Estados alcancaveis = new Estados();
+				Estados epsilonFecho = getEpsilonFecho(estadosEntrada);
 
-				for (Estado estadoAtual : estadosEntrada.get()) {
+				for (Estado estadoAtual : epsilonFecho.get()) {
 					Entrada entrada = new Entrada(estadoAtual, simboloAtual);
-					Estados alcancaveis = AFND.getEstadosTransicao(entrada);
-					Estados epsilonFecho = AFND.epsilonFecho(alcancaveis);
-
-					// trata o caso de transição para o vazio
-					if (!epsilonFecho.isEmpty()) {
-						novoEstado.addAll(epsilonFecho.get());
+					if (AFND.existeTransicao(entrada)) {
+						alcancaveis.addEstados(AFND.getEstadosTransicao(entrada));
 					}
 				}
-
-				Estados alcancaveis = new Estados(novoEstado);
 				// só cria transicao deterministica se o conjunto dos alcançaveis não for nulo
-				if (!alcancaveis.get().isEmpty()) {
+				if (!alcancaveis.isEmpty()) {
 					Entrada entradaDeterministica = new Entrada(estadosDeterministicos.get(estadosEntrada), simboloAtual);
 					Estado estadoAlcancavelDeterministico = estadosDeterministicos.get(alcancaveis);
-
 					transicoesDeterministicas.put(entradaDeterministica, estadoAlcancavelDeterministico);
 				}
 			}
@@ -142,27 +129,42 @@ public class AFND2AFD {
 
 		Set<Estado> estadosAFD = new LinkedHashSet<Estado>();
 		estadosAFD.addAll(estadosDeterministicos.values());
-
+		epsilonFechoMap.clear();
 		return new AutomatoFinitoDeterministico(estadosAFD, AFND.getAlfabeto(), (EstadoInicial) estadoInicialDeterministico, estadosAceitacaoDeterministico, transicoesDeterministicas);
 	}
 
 	/**
-	 * Método auxiliar que retorna se dado um conjunto de estados algum deles é final(Estado de aceitação). O metodo faz a intersecção do conjunto de estados finais com o conjunto de estados passado
-	 * por parâmetro, se a intersecção não for vazia temos que o conjunto passado por paramêtro contem pelo menos um estado final.
+	 * Método auxiliar que retorna os estados finais contidos no conjunto de estados recebido por parametro.
+	 * O metodo retorna a intersecção do conjunto de estados finais com o conjunto de estados passado
+	 * por parâmetro.
 	 * 
 	 * @param estados
-	 *            Conjunto de estados que se deseja saber se contem ao menos um estado que é final.
+	 *            Conjunto de estados que se deseja obter os estados finais.
 	 * @param finais
 	 *            Conjunto de estados finais do Automato finito não deterministico.
-	 * @return Verdadeiro se estados contem um estado que é final, falso caso contrário.
+	 * @return Conjunto que contem os estados finais encontrados.
 	 */
-	private static boolean isFinalState(Estados estados, Set<EstadoFinal> finais) {
-		Set<EstadoFinal> interseccao = new LinkedHashSet<EstadoFinal>();
-		interseccao.addAll(finais);
-		interseccao.retainAll(estados.get());
-		if (!interseccao.isEmpty()) {
-			return true;
+	private static Estados getFinalStates(Estados estados) {
+		Set<Estado> interseccao = new LinkedHashSet<Estado>();
+		interseccao.addAll(AFND.getEstadosAceitacao());
+		interseccao.retainAll(getEpsilonFecho(estados).get());
+		return new Estados(interseccao);
+	}
+
+	private static Estados getEpsilonFecho(Estados estados) {
+		if (epsilonFechoMap.containsKey(estados)) {
+			return epsilonFechoMap.get(estados);
 		}
-		return false;
+		Estados epsilonFecho = AFND.epsilonFecho(estados);
+		epsilonFechoMap.put(estados, epsilonFecho);
+		return epsilonFecho;
+	}
+
+	private static void putInFinalStatesMap(EstadoFinal novoEstadoFinal, Estados antigosEstadosFinais) {
+		old2NewFinalStatesMap.put(novoEstadoFinal, antigosEstadosFinais);
+	}
+	
+	public static Map<Estado, Estados> getOld2NewFinalStatesMap(){
+		return old2NewFinalStatesMap;
 	}
 }

@@ -50,6 +50,15 @@ public class ExpressaoRegular {
     public ExpressaoRegular() {
         this.simbolos = new ArrayList<>();
     }
+    
+    public ExpressaoRegular(String er) {
+        this.simbolos = new ArrayList<>();
+        for(int i = 0; i < er.length(); i++) {
+            String ch = "" + er.charAt(i);
+            Simbolo simb = new Simbolo(ch);
+            this.simbolos.add(simb);
+        }
+    }
 
     /**
      * get da expressão regular.

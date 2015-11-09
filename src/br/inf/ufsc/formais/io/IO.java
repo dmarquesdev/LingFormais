@@ -2,6 +2,7 @@ package br.inf.ufsc.formais.io;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Interface que contém os métodos necessários para entrada/saída.
@@ -31,6 +32,15 @@ public interface IO<T> {
      */
     public T read(String path, String file) throws IOException, FormaisIOException;
     
+    /**
+     * Lê um arquivo.
+     * @param path Caminho onde se encontra o arquivo.
+     * @param file Arquivo para ser lido.
+     * @return Um arrayList de objetos da classe T.
+     * @throws IOException Quando não é possível ler o arquivo.
+     * @throws FormaisIOException Quando a estrutura do arquivo está incorreta.
+     */
+    public ArrayList<T> readAll(String path, String file) throws IOException, FormaisIOException;
     
     /**
      * Escreve em um arquivo.

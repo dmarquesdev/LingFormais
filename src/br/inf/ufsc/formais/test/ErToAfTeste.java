@@ -27,7 +27,7 @@ public class ErToAfTeste {
         try {
             ExpressaoRegularIO ioer = new ExpressaoRegularIO();
             ExpressaoRegular er = ioer.read("", "teste1ErAfnd.in");
-            AutomatoFinitoNaoDeterministico afnd = ER2AFND.converterParaAutomato(er);
+            AutomatoFinitoNaoDeterministico afnd = ER2AFND.analisaConverte(er);
             AutomatoFinitoNaoDeterministicoIO ioafnd = new AutomatoFinitoNaoDeterministicoIO();
             ioafnd.write("", "teste2ErAfnd.out", afnd);
             //System.out.println("Determinização sem epsilon transição.");

@@ -20,10 +20,8 @@ public class MinimizacaoAfdTeste {
 		try {
 			AutomatoFinitoIO ioafd = new AutomatoFinitoIO();
 			AutomatoFinitoDeterministico afd = (AutomatoFinitoDeterministico) ioafd.read("/home/nathan/Eclipse/eclipse/workspace/formais/arquivos/", "toMinimize.in");
-
-			AFDMinimizer afdminimizer = new AFDMinimizer(afd);
 			
-			System.out.println(afdminimizer.minimizar());
+			System.out.println(AFDMinimizer.minimizar(afd));
 			
 
 //			AutomatoFinitoIO afdio = new AutomatoFinitoIO();

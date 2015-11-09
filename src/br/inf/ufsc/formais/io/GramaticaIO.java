@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -148,6 +149,11 @@ public class GramaticaIO implements IO<Gramatica> {
         BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
         bw.write(obj.toString());
         bw.close();
+    }
+
+    @Override
+    public ArrayList<Gramatica> readAll(String path, String file) throws IOException, FormaisIOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

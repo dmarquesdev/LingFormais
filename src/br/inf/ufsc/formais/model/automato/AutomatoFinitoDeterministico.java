@@ -1,5 +1,6 @@
 package br.inf.ufsc.formais.model.automato;
 
+import br.inf.ufsc.formais.exception.EstadoInalcancavelException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -181,6 +182,7 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         return novo;
     }
 
+    
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder("M = (E,A,T,I,F)\n");
@@ -311,19 +313,19 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
         return new Estados(diferenca);
     }
 
-    public Estado computar(CadeiaAutomato cadeia) {
+    public Estado computar(CadeiaAutomato cadeia) throws EstadoInalcancavelException {
         Estado estadoAtual = this.estadoInicial;
-        Estado proximoEstado = new Estado("");
-
+        Simbolo simboloAtual = new Simbolo("");
         for (Simbolo simbolo : cadeia.getSimbolos()) {
+            simboloAtual = simbolo;
             Entrada entrada = new Entrada(estadoAtual, simbolo);
             if (!existeTransicao(entrada)) {
-                //	lança exception
+                throw new EstadoInalcancavelException(estadoAtual, simbolo);
             }
             estadoAtual = transicoes.get(entrada);
         }
         if (!isFinalState(estadoAtual)) {
-            //lança exception
+            throw new EstadoInalcancavelException(estadoAtual, simboloAtual);
         }
         return estadoAtual;
     }
@@ -331,4 +333,5 @@ public class AutomatoFinitoDeterministico implements AutomatoFinito {
     private boolean isFinalState(Estado estado) {
         return this.estadosAceitacao.contains(estado);
     }
+
 }

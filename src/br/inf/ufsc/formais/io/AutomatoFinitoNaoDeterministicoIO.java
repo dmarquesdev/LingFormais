@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -179,5 +180,10 @@ public class AutomatoFinitoNaoDeterministicoIO implements IO<AutomatoFinitoNaoDe
 		bw.write(obj.toString());
 		bw.close();
 	}
+
+    @Override
+    public ArrayList<AutomatoFinitoNaoDeterministico> readAll(String path, String file) throws IOException, FormaisIOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
