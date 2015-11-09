@@ -3,14 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/lexicalanalyzer/Linguagem.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/lexicalanalyzer/TipoToken.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/gui/MainView.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/exception/EstadoInalcancavelException.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoDeterministico.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/gramatica/Cadeia.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinito.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/operacoes/ER2AFND.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/Grupo.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/analisador/lexico/AnalisadorLexico.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/operacoes/AFLexico.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/test/AnalisadorLexicoTeste2.java</file>
         </group>
     </open-files>
 </project-private>

@@ -17,7 +17,10 @@ public enum Grupo {
 	SEPARADORES("Separadores"),
 	OPERADORES("Operadores"),
 	CONDICIONAL("Condicional"),
-        CONSTANTES("Constantes");
+        CONSTANTES("Constantes"), 
+        TIPO("Tipo"), 
+        LITERAL("Literal"), 
+        ATRIBUICAO("Atribuição");
         
 	private final String descricao;
 	

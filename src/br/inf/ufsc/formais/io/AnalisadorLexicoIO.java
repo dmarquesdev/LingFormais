@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  */
 public class AnalisadorLexicoIO implements IO<AnalisadorLexico> {
 
-    Pattern tokenPatt = Pattern.compile("<(.+?), ([A-Z_])+?>");
+    Pattern tokenPatt = Pattern.compile("<(.+?), ([A-Z_]+?)>");
 
     @Override
     public AnalisadorLexico read(String file) throws IOException, FormaisIOException {
