@@ -24,6 +24,8 @@ import java.util.Map;
  * @author Diego Marques
  * @author Matheus Demetrio
  * @author Nathan Molinari
+ * 
+ * Classe de testes do Analisador Lexico.
  */
 public class AnalisadorLexicoTeste {
 
@@ -33,12 +35,11 @@ Map<Grupo, ArrayList<ExpressaoRegular>> grupos = new LinkedHashMap<Grupo, ArrayL
         try {
 
                 grupos.put(Grupo.PALAVRASRESERVADAS, ioer.readAll("", "er_palavras_reservadas.in"));
-                grupos.put(Grupo.CONDICIONAL, ioer.readAll("", "er_condicional.in"));
-                grupos.put(Grupo.LOOP, ioer.readAll("", "er_loop.in"));
                 grupos.put(Grupo.OPERADORESLOGICOS, ioer.readAll("", "er_operadores_logicos.in"));
-                grupos.put(Grupo.OPERADORES, ioer.readAll("", "er_operadores.in"));
+                grupos.put(Grupo.OPERADORES, ioer.readAll("", "er_operadores_algebricos.in"));
+                grupos.put(Grupo.OPERADORES, ioer.readAll("", "er_operadore_atribuicao.in"));
                 grupos.put(Grupo.SEPARADORES, ioer.readAll("", "er_separadores.in"));
-                grupos.put(Grupo.CONSTANTES, ioer.readAll("", "er_constante.in"));
+                grupos.put(Grupo.CONSTANTES, ioer.readAll("", "er_literal.in"));
                 grupos.put(Grupo.IDENTIFICADORES, ioer.readAll("", "er_identificadores.in"));
 
         } catch (IOException ex) {

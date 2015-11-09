@@ -28,6 +28,13 @@ import java.util.logging.Logger;
  */
 public class ER2AFND {
 
+    /**
+     * Analisa se expressao regular passada por parametro é uma ds 
+     * tipos especiais em que os automatos são gerados de forma diferente dos convencionais.
+     * Gera o automato equivalente a expressão regular.
+     * @param er Uma expressão regular.
+     * @return Um automato finito não deterministico.
+     */
     public static AutomatoFinitoNaoDeterministico analisaConverte(ExpressaoRegular er) {
         AutomatoFinitoNaoDeterministico afnd = null;
 
