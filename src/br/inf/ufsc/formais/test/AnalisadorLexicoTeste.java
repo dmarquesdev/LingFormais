@@ -49,7 +49,7 @@ Map<Grupo, ArrayList<ExpressaoRegular>> grupos = new LinkedHashMap<Grupo, ArrayL
         }
 
         AutomatoFinitoDeterministico afd = AFLexico.geraAutomatoFinal(grupos);
-            System.out.println(afd.toString());
+             System.out.println(afd.toString());
 
         try {
 

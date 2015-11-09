@@ -5,8 +5,6 @@
  */
 package br.inf.ufsc.formais.operacoes;
 
-import br.inf.ufsc.formais.exception.EstadoInalcancavelException;
-import br.inf.ufsc.formais.model.CadeiaAutomato;
 import br.inf.ufsc.formais.model.Grupo;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
@@ -19,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,17 +30,30 @@ import java.util.Set;
 public class AFLexico {
 
     private static Map<Grupo, Set<EstadoFinal>> finalStatesOfEachGroup = new LinkedHashMap<Grupo, Set<EstadoFinal>>();
+    private static List<Grupo> groupPriority = new ArrayList<Grupo>();
+
+    static {
+        groupPriority.add(Grupo.PALAVRASRESERVADAS);
+        groupPriority.add(Grupo.CONDICIONAL);
+        groupPriority.add(Grupo.LOOP);
+        groupPriority.add(Grupo.OPERADORES);
+        groupPriority.add(Grupo.OPERADORESLOGICOS);
+        groupPriority.add(Grupo.SEPARADORES);
+        groupPriority.add(Grupo.CONSTANTES);
+        groupPriority.add(Grupo.IDENTIFICADORES);
+    }
 
     /**
      * Retorna o grupo a qual o estado passado como parametro pertence.
+     *
      * @param estadoAceitacao Um estado de aceitação.
      * @return Um grupo.
      */
     public static Grupo findGroup(Estado estadoAceitacao) {
         //obtem os antigos estados finais
-        Estados antigosFinais = AFND2AFD.getOld2NewFinalStatesMap().get(estadoAceitacao);
+        Estados antigosFinais = AFND2AFD.getNew2OldFinalStatesMap().get(estadoAceitacao);
         //itera sobre todos os grupos
-        for (Grupo grupo : finalStatesOfEachGroup.keySet()) {
+        for (Grupo grupo : groupPriority) {
             //faz a interseccao dos antigos estados finais com os finais do grupo
             Set<Estado> interseccao = new LinkedHashSet<Estado>(antigosFinais.get());
             interseccao.retainAll(finalStatesOfEachGroup.get(grupo));
@@ -55,7 +67,9 @@ public class AFLexico {
     }
 
     /**
-     * Responsável por criar o automato reconhecedor de um grupo de expressões regulares.
+     * Responsável por criar o automato reconhecedor de um grupo de expressões
+     * regulares.
+     *
      * @param ers Lista de expressões regulares.
      * @return Um automato finito deterministico.
      */
