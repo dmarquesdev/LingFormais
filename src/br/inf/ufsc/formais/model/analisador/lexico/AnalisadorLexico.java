@@ -24,7 +24,7 @@ public class AnalisadorLexico {
     
     public String analisar(String entrada) throws AnaliseLexicaException {
         StringBuilder out = new StringBuilder();
-        String[] lexemas = entrada.split(" ");
+        String[] lexemas = entrada.split("[ \n\t]");
         
         for (String lexema : lexemas) {
             Grupo grupo = linguagem.computar(new ExpressaoRegular(lexema));

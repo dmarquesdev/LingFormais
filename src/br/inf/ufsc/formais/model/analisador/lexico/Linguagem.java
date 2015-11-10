@@ -32,7 +32,7 @@ public class Linguagem {
     }
     
     public Grupo computar(ExpressaoRegular er) throws EstadoInalcancavelException {
-       Estado ef = automato.computar(new CadeiaAutomato(er.getSimbolos()));
+       Estado ef = automato.computar(new CadeiaAutomato(er.toString()));
        return AFLexico.findGroup(ef);
     }
 
