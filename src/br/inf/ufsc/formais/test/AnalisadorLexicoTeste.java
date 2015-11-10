@@ -39,7 +39,7 @@ Map<Grupo, ArrayList<ExpressaoRegular>> grupos = new LinkedHashMap<Grupo, ArrayL
                 grupos.put(Grupo.OPERADORES, ioer.readAll("", "er_operadores_algebricos.in"));
                 grupos.put(Grupo.OPERADORES, ioer.readAll("", "er_operadore_atribuicao.in"));
                 grupos.put(Grupo.SEPARADORES, ioer.readAll("", "er_separadores.in"));
-                grupos.put(Grupo.CONSTANTES, ioer.readAll("", "er_literal.in"));
+                //grupos.put(Grupo.CONSTANTES, ioer.readAll("", "er_literal.in"));
                 grupos.put(Grupo.IDENTIFICADORES, ioer.readAll("", "er_identificadores.in"));
 
         } catch (IOException ex) {
