@@ -78,7 +78,6 @@ public class AFLexico {
     private static AutomatoFinitoDeterministico geraAutomatoDoGrupo(ArrayList<ExpressaoRegular> ers) {
         AutomatoFinitoNaoDeterministico afnd = null;
         for (ExpressaoRegular er : ers) {
-            System.out.println(er.toString());
             if (afnd == null) {
                 afnd = ER2AFND.analisaConverte(er);
             } else {
@@ -88,7 +87,6 @@ public class AFLexico {
         afnd = OperacoesAFND.concatenaAFs(afnd, OperacoesAFND.aFPalavraVazia());
         AutomatoFinitoDeterministico afd = AFND2AFD.determinizar(afnd);
         afd = AFDMinimizer.minimizar(afd);
-        System.out.println(afd.toString());
         return afd;
     }
 
@@ -113,7 +111,6 @@ public class AFLexico {
             }
 
         }
-        System.out.println(afnd.toString());
         AutomatoFinitoDeterministico bigAutomato = AFND2AFD.determinizar(afnd);
         return bigAutomato;
     }

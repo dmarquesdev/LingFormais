@@ -30,6 +30,10 @@ public class AnalisadorLexicoTeste2 {
             String program = ProgramaIO.read("teste.prg");
             String tokens = lex.analisar(program);
             lexIO.writeTokens("teste.lexOut", tokens);
+            System.out.println("========= E N T R A D A =========");
+            System.out.println(program);
+            System.out.println("=========== S A I D A ===========");
+            System.out.println(tokens);
         } catch (IOException ex) {
             System.out.println("Impossível encontrar arquivo de código!");
         } catch (AnaliseLexicaException ex) {
