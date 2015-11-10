@@ -1,0 +1,51 @@
+<(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)(_|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|1|2|3|4|5|6|7|8|9|0)*, IDENTIFICADORES>
+
+<<, OPERADORESLOGICOS>
+<>, OPERADORESLOGICOS>
+<==, OPERADORESLOGICOS>
+<!, OPERADORESLOGICOS>
+<!=, OPERADORESLOGICOS>
+<<=, OPERADORESLOGICOS>
+<>=, OPERADORESLOGICOS>
+<&&, OPERADORESLOGICOS>
+<||, OPERADORESLOGICOS>
+
+<while, LOOP>
+
+<program, PALAVRASRESERVAD
+<const, PALAVRASRESERVADAS>
+<return, PALAVRASRESERVADAS>
+<read, PALAVRASRESERVADAS>
+<write, PALAVRASRESERVADAS>
+
+<int, TIPO>
+<string, TIPO>
+<float, TIPO>
+<boolean, TIPO>
+<void, TIPO>
+
+<=, ATRIBUICAO>
+
+<if, CONDICIONAL>
+<else, CONDICIONAL>
+
+<+, OPERADORES>
+<-, OPERADORES>
+<*, OPERADORES>
+</, OPERADORES>
+
+<;, SEPARADORES>
+<,, SEPARADORES>
+<[, SEPARADORES>
+<], SEPARADORES>
+<{, SEPARADORES>
+<}, SEPARADORES>
+<(, SEPARADORES>
+<), SEPARADORES>
+<., SEPARADORES>
+
+<".", LITERAL>
+<(0|1|2|3|4|5|6|7|8|9|0|-)(0|1|2|3|4|5|6|7|8|9|0)*, LITERAL>
+<(0|1|2|3|4|5|6|7|8|9|0|-)(0|1|2|3|4|5|6|7|8|9|0)*.(0|1|2|3|4|5|6|7|8|9|0)*, LITERAL>
+<true, LITERAL>
+<false, LITERAL>

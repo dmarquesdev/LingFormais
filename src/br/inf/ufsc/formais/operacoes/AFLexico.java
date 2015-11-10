@@ -39,7 +39,9 @@ public class AFLexico {
         groupPriority.add(Grupo.OPERADORES);
         groupPriority.add(Grupo.OPERADORESLOGICOS);
         groupPriority.add(Grupo.SEPARADORES);
-        groupPriority.add(Grupo.CONSTANTES);
+        groupPriority.add(Grupo.LITERAL);
+        groupPriority.add(Grupo.ATRIBUICAO);
+        groupPriority.add(Grupo.TIPO);
         groupPriority.add(Grupo.IDENTIFICADORES);
     }
 
