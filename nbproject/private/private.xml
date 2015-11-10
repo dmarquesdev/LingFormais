@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/Grupo.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/analisador/lexico/AnalisadorLexico.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/operacoes/AFLexico.java</file>
-            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/test/AnalisadorLexicoTeste2.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/io/AnalisadorLexicoIO.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/AnalisadorLexicoTeste2.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/Simbolo.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/lexico/Linguagem.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/TestRunner.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/lexico/AnalisadorLexico.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/io/ProgramaIO.java</file>
         </group>
     </open-files>
 </project-private>
