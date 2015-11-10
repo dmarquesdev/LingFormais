@@ -5,7 +5,11 @@
         <group>
             <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/Grupo.java</file>
             <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/operacoes/AFLexico.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/analisador/lexico/AnalisadorLexico.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/analisador/lexico/Linguagem.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/automato/AutomatoFinitoDeterministico.java</file>
             <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/test/AnalisadorLexicoTeste2.java</file>
+            <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/model/CadeiaAutomato.java</file>
             <file>file:/C:/Users/Diego.Diego-PC/Documents/NetBeansProjects/LinguagensFormais/src/br/inf/ufsc/formais/io/AnalisadorLexicoIO.java</file>
         </group>
     </open-files>
