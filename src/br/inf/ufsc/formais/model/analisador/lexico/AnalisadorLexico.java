@@ -22,8 +22,8 @@ import java.util.Map;
 public class AnalisadorLexico {
 
     private Linguagem linguagem;
-
-    Map<Grupo, List<String>> tokensOfEachGroupMap;
+    private Map<Grupo, List<String>> tokensOfEachGroupMap;
+    private List<String> invalidTokens;
 
     public AnalisadorLexico(Linguagem linguagem) {
         this.linguagem = linguagem;
@@ -32,7 +32,7 @@ public class AnalisadorLexico {
     }
 
     public String analisar(String entrada) throws AnaliseLexicaException {
-        this.buildtokensOfEachGroupMap();
+        this.buildTokensStructures();
 
         String[] separacao = entrada.split("[ \n\t]");
 
@@ -50,7 +50,6 @@ public class AnalisadorLexico {
         }
 
         lexemas = aux;
-        List<String> invalidTokens = new LinkedList<>();
         for (String lexema : lexemas) {
             try {
                 Grupo grupo = linguagem.computar(new ExpressaoRegular(lexema));
@@ -59,10 +58,10 @@ public class AnalisadorLexico {
                 invalidTokens.add(lexema);
             }
         }
-        return buildTokensOutput(invalidTokens);
+        return buildTokensOutput();
     }
 
-    private String buildTokensOutput(List<String> invalidTokens) {
+    private String buildTokensOutput() {
         StringBuilder out = new StringBuilder();
 
         for (Grupo grupo : tokensOfEachGroupMap.keySet()) {
@@ -86,7 +85,7 @@ public class AnalisadorLexico {
         return out.toString();
     }
 
-    private void buildtokensOfEachGroupMap() {
+    private void buildTokensStructures() {
         tokensOfEachGroupMap.put(Grupo.PALAVRASRESERVADAS, new LinkedList<String>());
         tokensOfEachGroupMap.put(Grupo.CONDICIONAL, new LinkedList<String>());
         tokensOfEachGroupMap.put(Grupo.LOOP, new LinkedList<String>());
@@ -97,6 +96,7 @@ public class AnalisadorLexico {
         tokensOfEachGroupMap.put(Grupo.ATRIBUICAO, new LinkedList<String>());
         tokensOfEachGroupMap.put(Grupo.TIPO, new LinkedList<String>());
         tokensOfEachGroupMap.put(Grupo.IDENTIFICADORES, new LinkedList<String>());
+        invalidTokens = new LinkedList<>();
     }
 
     @Override
