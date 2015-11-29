@@ -14,24 +14,24 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Matheus
+ * @author Matheus Demetrio
  */
 public class AnalisadorSintatico {
 
     TabelaAnalise tabela = GeradorTabelaAnalise.gerarTabela(null, null, null);
     GramaticaLivreContexto gramatica = new GramaticaLivreContexto(null, null, null, null);
-
+    
     public AnalisadorSintatico(){
         
     }
     
-    public boolean analisar(ArrayList<SimboloTerminal> lexemas) {
-        lexemas.add(new SimboloTerminal("$"));
+    public boolean analisar(ArrayList<SimboloTerminal> sentenca) {
+        sentenca.add(new SimboloTerminal("$"));
         ArrayList<Simbolo> pilha = new ArrayList<>();
         pilha.add(new Simbolo("$"));
         pilha.add(gramatica.getSimboloInicial());
 
-        for (SimboloTerminal t : lexemas) {
+        for (SimboloTerminal t : sentenca) {
 
             while (!t.equals(pilha.get(pilha.size() - 1))) {
                 CadeiaGLC producao;
