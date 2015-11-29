@@ -4,12 +4,17 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/io/AnalisadorLexicoIO.java</file>
-            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/AnalisadorLexicoTeste2.java</file>
-            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/Simbolo.java</file>
-            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/lexico/Linguagem.java</file>
-            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/test/TestRunner.java</file>
-            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/lexico/AnalisadorLexico.java</file>
-            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/io/ProgramaIO.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/io/AnalisadorSintaticoIO.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/gramatica/SimboloTerminal.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/sintatico/AnalisadorSintatico.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/io/AutomatoFinitoIO.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/sintatico/GeradorTabelaAnalise.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/gramatica/glc/CadeiaGLC.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/sintatico/EntradaTabelaAnalise.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/gramatica/SimboloNaoTerminal.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/analisador/sintatico/TabelaAnalise.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/gramatica/glc/GramaticaLivreContexto.java</file>
+            <file>file:/C:/Users/Matheus/git/LingFormais/src/br/inf/ufsc/formais/model/gramatica/glc/RegraProducaoGLC.java</file>
         </group>
     </open-files>
 </project-private>
