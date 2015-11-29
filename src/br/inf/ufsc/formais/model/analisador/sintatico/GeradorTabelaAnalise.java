@@ -15,9 +15,9 @@ public class GeradorTabelaAnalise {
 	public static TabelaAnalise gerarTabela(GramaticaLivreContexto glc, Map<Simbolo, Set<Simbolo>> first, Map<Simbolo, Set<Simbolo>> follow) {
 		// pegar o first do nao terminal e
 		TabelaAnalise tabelaAnalise = new TabelaAnalise();
-
+		Set<RegraProducaoGLC> producoesUteis = removeProducoesEpsilon(glc.getRegrasDeProducao());
 		// para cada regra
-		for (RegraProducaoGLC regra : glc.getRegrasDeProducao()) {
+		for (RegraProducaoGLC regra : producoesUteis) {
 			Simbolo primeiroSimbolo = regra.getCadeiaProduzida().getPrimeiroSimbolo();
 
 			Set<Simbolo> firstSet = getFirst(first, primeiroSimbolo);
@@ -28,9 +28,9 @@ public class GeradorTabelaAnalise {
 				tabelaAnalise.add(entrada, regra.getCadeiaProduzida());
 			}
 
-			if (firstSet.contains(Simbolo.EPSILON)) {
+			if (first.get(regra.getSimboloProducao()).contains(Simbolo.EPSILON)) {
 
-				Set<Simbolo> followSet = follow.get(regra.getCadeiaProduzida().getPrimeiroSimbolo());
+				Set<Simbolo> followSet = follow.get(regra.getSimboloProducao());
 				for (SimboloTerminal terminalFollow : getTerminais(followSet)) {
 					EntradaTabelaAnalise entrada = new EntradaTabelaAnalise(regra.getSimboloProducao(), terminalFollow);
 					tabelaAnalise.add(entrada, new CadeiaGLC("EPSILON"));
@@ -62,6 +62,16 @@ public class GeradorTabelaAnalise {
 			return first.get(simbolo);
 		}
 
+	}
+
+	private static Set<RegraProducaoGLC> removeProducoesEpsilon(Set<RegraProducaoGLC> producoes) {
+		Set<RegraProducaoGLC> producoesSemEpsilon = new LinkedHashSet<>();
+		for (RegraProducaoGLC regra : producoes) {
+			if (!regra.getCadeiaProduzida().getSimbolosCadeia().contains(Simbolo.EPSILON)) {
+				producoesSemEpsilon.add(regra);
+			}
+		}
+		return producoesSemEpsilon;
 	}
 
 }
