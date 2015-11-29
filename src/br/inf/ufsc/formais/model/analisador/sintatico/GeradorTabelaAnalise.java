@@ -19,7 +19,7 @@ public class GeradorTabelaAnalise {
 		// para cada regra
 		for (RegraProducaoGLC regra : glc.getRegrasDeProducao()) {
 			Simbolo primeiroSimbolo = regra.getCadeiaProduzida().getPrimeiroSimbolo();
-			Set<Simbolo> firstSet = first.get(regra.getCadeiaProduzida().getPrimeiroSimbolo());
+			Set<Simbolo> firstSet = first.get(primeiroSimbolo);
 
 			// para cada simbolo terminal em first da producao
 			for (SimboloTerminal terminalFirst : getTerminais(firstSet)) {
@@ -28,10 +28,10 @@ public class GeradorTabelaAnalise {
 			}
 
 			if (firstSet.contains(Simbolo.EPSILON)) {
-				Set<Simbolo> followSet = follow.get(regra.getCadeiaProduzida().getPrimeiroSimbolo());
+				Set<Simbolo> followSet = follow.get(primeiroSimbolo);
 				for (SimboloTerminal terminalFollow : getTerminais(followSet)) {
 					EntradaTabelaAnalise entrada = new EntradaTabelaAnalise(regra.getSimboloProducao(), terminalFollow);
-					tabelaAnalise.add(entrada, new CadeiaGLC("EPSILON"));
+					tabelaAnalise.add(entrada, new CadeiaGLC(Simbolo.EPSILON.getReferencia()));
 				}
 			}
 		}
