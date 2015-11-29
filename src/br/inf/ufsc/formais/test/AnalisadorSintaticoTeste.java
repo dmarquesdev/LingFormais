@@ -21,7 +21,7 @@ public class AnalisadorSintaticoTeste {
 
     public void runTest() {
 
-        String path = "./arquivos2/AnalisadorSintatico/";
+        String path = "./arquivos/AnalisadorSintatico/";
         FirstAndFollowIO firstAndFollowIO = new FirstAndFollowIO();
         GramaticaLivreContextoIO glcIO = new GramaticaLivreContextoIO();
         TokensIO tokenIO = new TokensIO();
@@ -36,7 +36,7 @@ public class AnalisadorSintaticoTeste {
             AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(tabelaAnalise, glc);
 
             ArrayList<SimboloTerminal> lexemas = tokenIO.readLexemas(path, "tokens.lexOut");
-
+            
             analisadorSintatico.analisar(lexemas);
             System.out.println("Programa sem erros sintáticos");
 
