@@ -19,8 +19,8 @@ import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.automato.EstadoInicial;
 import br.inf.ufsc.formais.model.automato.Estados;
-import br.inf.ufsc.formais.model.gramatica.Gramatica;
-import br.inf.ufsc.formais.model.gramatica.RegraProducao;
+import br.inf.ufsc.formais.model.gramatica.regular.GramaticaRegular;
+import br.inf.ufsc.formais.model.gramatica.regular.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 
 /**
@@ -32,7 +32,7 @@ import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
  */
 public class Gramatica2AFND {
 
-    public static AutomatoFinitoNaoDeterministico converterParaAFND(Gramatica g) {
+    public static AutomatoFinitoNaoDeterministico converterParaAFND(GramaticaRegular g) {
         Set<Simbolo> simbAlfa = new LinkedHashSet<>();
         simbAlfa.addAll(g.getSimbolosTerminais());
         Alfabeto alfa = new Alfabeto(simbAlfa);

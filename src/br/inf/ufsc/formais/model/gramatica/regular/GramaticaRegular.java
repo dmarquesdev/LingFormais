@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.inf.ufsc.formais.model.gramatica;
+package br.inf.ufsc.formais.model.gramatica.regular;
 
+import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
+import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import java.util.Set;
 
 /**
@@ -13,14 +15,14 @@ import java.util.Set;
  * @author Matheus Demetrio
  * @author Nathan Molinari
  */
-public class Gramatica {
+public class GramaticaRegular {
 
     private Set<SimboloNaoTerminal> simbolosNaoTerminais;
     private Set<SimboloTerminal> simbolosTerminais;
     private Set<RegraProducao> regrasDeProducao;
     private SimboloNaoTerminal simboloInicial;
 
-    public Gramatica(Set<SimboloNaoTerminal> simbolosNaoTerminais, Set<SimboloTerminal> simbolosTerminais, Set<RegraProducao> regrasDeProducao, SimboloNaoTerminal simboloInicial) {
+    public GramaticaRegular(Set<SimboloNaoTerminal> simbolosNaoTerminais, Set<SimboloTerminal> simbolosTerminais, Set<RegraProducao> regrasDeProducao, SimboloNaoTerminal simboloInicial) {
         this.simbolosNaoTerminais = simbolosNaoTerminais;
         this.simbolosTerminais = simbolosTerminais;
         this.regrasDeProducao = regrasDeProducao;

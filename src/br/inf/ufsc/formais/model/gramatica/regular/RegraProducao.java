@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.inf.ufsc.formais.model.gramatica;
+package br.inf.ufsc.formais.model.gramatica.regular;
+
+import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 
 /**
  * Regras de produção de uma gramatica.
