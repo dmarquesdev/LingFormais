@@ -10,7 +10,7 @@ import br.inf.ufsc.formais.io.AutomatoFinitoIO;
 import br.inf.ufsc.formais.io.GramaticaIO;
 
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
-import br.inf.ufsc.formais.model.gramatica.Gramatica;
+import br.inf.ufsc.formais.model.gramatica.regular.GramaticaRegular;
 import br.inf.ufsc.formais.operacoes.Gramatica2AFD;
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class GramaticaAfdTeste {
 
     public void runTest() {
-        Gramatica gr = null;
+        GramaticaRegular gr = null;
         try {
             gr = new GramaticaIO().read("", "teste9gramaticaAfd.in");
             System.out.println(gr.toString());

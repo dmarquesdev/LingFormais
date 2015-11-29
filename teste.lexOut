@@ -1,12 +1,26 @@
+Classe de palavras: PALAVRASRESERVADAS
 <program, PALAVRASRESERVADAS>
-<teste, IDENTIFICADORES>
-<{, SEPARADORES>
-<int, TIPO>
-<a, IDENTIFICADORES>
-<=, ATRIBUICAO>
-<0, LITERAL>
-<;, SEPARADORES>
 <return, PALAVRASRESERVADAS>
-<a, IDENTIFICADORES>
+
+Classe de palavras: SEPARADORES
+<{, SEPARADORES>
+<;, SEPARADORES>
 <;, SEPARADORES>
 <}, SEPARADORES>
+
+Classe de palavras: LITERAL
+<0, LITERAL>
+
+Classe de palavras: ATRIBUICAO
+<=, ATRIBUICAO>
+
+Classe de palavras: TIPO
+<int, TIPO>
+
+Classe de palavras: IDENTIFICADORES
+<teste, IDENTIFICADORES>
+<a, IDENTIFICADORES>
+<a, IDENTIFICADORES>
+
+Tokens inválidos: 
+<çç, INVALIDTOKEN>

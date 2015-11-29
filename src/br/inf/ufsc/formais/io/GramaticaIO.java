@@ -1,9 +1,9 @@
 package br.inf.ufsc.formais.io;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
-import br.inf.ufsc.formais.model.gramatica.Cadeia;
-import br.inf.ufsc.formais.model.gramatica.Gramatica;
-import br.inf.ufsc.formais.model.gramatica.RegraProducao;
+import br.inf.ufsc.formais.model.gramatica.regular.Cadeia;
+import br.inf.ufsc.formais.model.gramatica.regular.GramaticaRegular;
+import br.inf.ufsc.formais.model.gramatica.regular.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * @author Matheus Demetrio
  * @author Nathan Molinari
  */
-public class GramaticaIO implements IO<Gramatica> {
+public class GramaticaIO implements IO<GramaticaRegular> {
 
     /**
      * Expressões Regulares responsáveis por reconhecer a estrutura de uma
@@ -41,7 +41,7 @@ public class GramaticaIO implements IO<Gramatica> {
      * @throws FormaisIOException Quando ocorre algum erro na leitura da estrutura do arquivo.
      */
     @Override
-    public Gramatica read(String file) throws IOException, FormaisIOException {
+    public GramaticaRegular read(String file) throws IOException, FormaisIOException {
         return read(null, file);
     }
 
@@ -54,7 +54,7 @@ public class GramaticaIO implements IO<Gramatica> {
      * @throws FormaisIOException Quando ocorre algum erro na leitura da estrutura do arquivo.
      */
     @Override
-    public Gramatica read(String path, String file) throws IOException, FormaisIOException {
+    public GramaticaRegular read(String path, String file) throws IOException, FormaisIOException {
         String completePath = "";
         if (path != null) {
             completePath += path;
@@ -112,7 +112,7 @@ public class GramaticaIO implements IO<Gramatica> {
 
         br.close();
 
-        return new Gramatica(naoTerminais, terminais, regras, inicial);
+        return new GramaticaRegular(naoTerminais, terminais, regras, inicial);
     }
 
     /**
@@ -122,7 +122,7 @@ public class GramaticaIO implements IO<Gramatica> {
      * @throws IOException Quando não for possível escrever o arquivo em disco.
      */
     @Override
-    public void write(String fileName, Gramatica obj) throws IOException {
+    public void write(String fileName, GramaticaRegular obj) throws IOException {
         write(null, fileName, obj);
     }
 
@@ -134,7 +134,7 @@ public class GramaticaIO implements IO<Gramatica> {
      * @throws IOException Quando não for possível escrever o arquivo em disco.
      */
     @Override
-    public void write(String path, String fileName, Gramatica obj) throws IOException {
+    public void write(String path, String fileName, GramaticaRegular obj) throws IOException {
         String completePath = "";
         if (path != null) {
             completePath += path;
@@ -152,7 +152,7 @@ public class GramaticaIO implements IO<Gramatica> {
     }
 
     @Override
-    public ArrayList<Gramatica> readAll(String path, String file) throws IOException, FormaisIOException {
+    public ArrayList<GramaticaRegular> readAll(String path, String file) throws IOException, FormaisIOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

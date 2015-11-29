@@ -9,7 +9,7 @@ import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministico;
 import br.inf.ufsc.formais.model.automato.AutomatoFinitoNaoDeterministicoGeneralizado;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
-import br.inf.ufsc.formais.model.gramatica.Gramatica;
+import br.inf.ufsc.formais.model.gramatica.regular.GramaticaRegular;
 import br.inf.ufsc.formais.operacoes.AFD2AFNDG;
 import br.inf.ufsc.formais.operacoes.AFD2Gramatica;
 import br.inf.ufsc.formais.operacoes.AFND2AFD;
@@ -34,7 +34,7 @@ public class MainView {
     static ExpressaoRegular er;
     static AutomatoFinitoDeterministico afd;
     static AutomatoFinitoNaoDeterministico afnd;
-    static Gramatica gramatica;
+    static GramaticaRegular gramatica;
     static AutomatoFinitoNaoDeterministicoGeneralizado afndg;
 
     public static void main(String[] args) {

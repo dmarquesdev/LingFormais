@@ -12,7 +12,7 @@ import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
 import br.inf.ufsc.formais.model.er.ExpressaoRegular;
-import br.inf.ufsc.formais.model.gramatica.Cadeia;
+import br.inf.ufsc.formais.model.gramatica.regular.Cadeia;
 import br.inf.ufsc.formais.operacoes.AFLexico;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

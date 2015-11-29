@@ -64,6 +64,9 @@ public class Simbolo {
         if (obj == null) {
             return false;
         }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final Simbolo other = (Simbolo) obj;
         if (!Objects.equals(this.referencia, other.referencia)) {
             return false;

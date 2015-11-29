@@ -35,11 +35,14 @@ public class TestRunner {
 //        //Minimizacao
 //        MinimizacaoAfdTeste afdMinTeste = new MinimizacaoAfdTeste();
 //        afdMinTeste.runTeste();
-        
-        //Analisador Lexico
-        AnalisadorLexicoTeste lexico = new AnalisadorLexicoTeste();
-        lexico.runTest();
-        
+//        
+//        //Analisador Lexico
+//        AnalisadorLexicoTeste lexico = new AnalisadorLexicoTeste();
+//        lexico.runTest();
+       
+        IOtest iot = new IOtest();
+        iot.runTest();
+                
         
     }
 }

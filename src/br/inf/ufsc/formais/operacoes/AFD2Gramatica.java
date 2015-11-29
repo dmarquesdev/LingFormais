@@ -12,8 +12,8 @@ import br.inf.ufsc.formais.model.automato.AutomatoFinitoDeterministico;
 import br.inf.ufsc.formais.model.automato.Entrada;
 import br.inf.ufsc.formais.model.automato.Estado;
 import br.inf.ufsc.formais.model.automato.EstadoFinal;
-import br.inf.ufsc.formais.model.gramatica.Gramatica;
-import br.inf.ufsc.formais.model.gramatica.RegraProducao;
+import br.inf.ufsc.formais.model.gramatica.regular.GramaticaRegular;
+import br.inf.ufsc.formais.model.gramatica.regular.RegraProducao;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 
@@ -25,7 +25,7 @@ import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
  */
 public class AFD2Gramatica {
 
-    public static Gramatica converterParaGramatica(AutomatoFinitoDeterministico afd) {
+    public static GramaticaRegular converterParaGramatica(AutomatoFinitoDeterministico afd) {
         SimboloNaoTerminal simboloInicial = new SimboloNaoTerminal(afd.getEstadoInicial().getId());
         Set<SimboloNaoTerminal> naoTerminais = new LinkedHashSet<>();
         Set<SimboloTerminal> terminais = new LinkedHashSet<>();
@@ -76,6 +76,6 @@ public class AFD2Gramatica {
             regras.add(regra);
         }
 
-        return new Gramatica(naoTerminais, terminais, regras, simboloInicial);
+        return new GramaticaRegular(naoTerminais, terminais, regras, simboloInicial);
     }
 }
