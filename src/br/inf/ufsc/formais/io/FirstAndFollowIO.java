@@ -23,12 +23,11 @@ import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 
 public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 
-	// Pattern pattern = Pattern.compile("[A-Z]+[a-z]*[0-9]* = \\{[[\\p{Alnum}|\\p{Punct}]+( ,)?]+\\}");
-
+	Map<Simbolo, Set<Simbolo>> firstAndFollowMap;
 	/**
 	 * Expressões Regulares responsáveis por reconhecer a estrutura de um Autômato Finito.
 	 */
-	Pattern firstAndFollowPattern = Pattern.compile("[A-Z]+[a-z]*[0-9]* = \\{[[[a-z]|\\p{Punct}|ε|EPSILON]+( )?]+\\}");
+	Pattern firstAndFollowPattern = Pattern.compile("[A-Z]+[a-z]*[0-9]* = \\{( )?[[[a-z]|[0-9]|\\p{Punct}|ε|EPSILON]+( )?]+\\}");
 
 	/**
 	 * Lê um arquivo que contenha um Automato Finito.
@@ -70,7 +69,7 @@ public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 		BufferedReader br = new BufferedReader(new FileReader(completePath));
 		String line = br.readLine();
 
-		Map<Simbolo, Set<Simbolo>> firstAndFollowMap = new LinkedHashMap<>();
+		this.firstAndFollowMap = new LinkedHashMap<>();
 
 		Matcher firstAndFollowMatcher;
 
@@ -82,7 +81,7 @@ public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 			firstAndFollowMatcher = this.firstAndFollowPattern.matcher(line);
 
 			if (firstAndFollowMatcher.matches()) {
-				LinkedList<String> splitedLine = new LinkedList<>(Arrays.asList(line.split(" = \\{")));
+				LinkedList<String> splitedLine = new LinkedList<>(Arrays.asList(line.split(" = \\{( )?")));
 				SimboloNaoTerminal snt = new SimboloNaoTerminal(splitedLine.get(0));
 				String inputSet = splitedLine.get(1);
 				inputSet = inputSet.substring(0, inputSet.length() - 1);
@@ -95,8 +94,7 @@ public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 						firstAndFollowSet.add(new SimboloTerminal(simbolo));
 					}
 				}
-				System.out.println(snt + "= {" + firstAndFollowSet + "}");
-				firstAndFollowMap.put(snt, firstAndFollowSet);
+				this.firstAndFollowMap.put(snt, firstAndFollowSet);
 
 			} else {
 				throw new FormaisIOException("Entrada de First e follow inválida: " + line);
@@ -106,8 +104,7 @@ public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 		}
 
 		br.close();
-
-		return firstAndFollowMap;
+		return this.firstAndFollowMap;
 	}
 
 	/**
@@ -151,8 +148,24 @@ public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 		}
 
 		BufferedWriter bw = new BufferedWriter(new FileWriter(arq));
-		bw.write(obj.toString());
+		bw.write(this.outputString());
 		bw.close();
+	}
+
+	public String outputString() {
+		if (this.firstAndFollowMap.isEmpty()) {
+			return "";
+		}
+		StringBuilder out = new StringBuilder();
+		for (Simbolo nt : this.firstAndFollowMap.keySet()) {
+			out.append(nt.getReferencia() + " = { ");
+			for (Simbolo firstandfollow : this.firstAndFollowMap.get(nt)) {
+				out.append(firstandfollow.getReferencia() + ", ");
+			}
+			out.delete(out.length() - 2, out.length());
+			out.append(" }" + "\n");
+		}
+		return out.toString();
 	}
 
 	@Override

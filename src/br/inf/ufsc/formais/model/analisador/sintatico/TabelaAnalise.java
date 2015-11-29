@@ -3,6 +3,7 @@ package br.inf.ufsc.formais.model.analisador.sintatico;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import br.inf.ufsc.formais.exception.AnaliseSintaticaException;
 import br.inf.ufsc.formais.model.gramatica.glc.CadeiaGLC;
 
 public class TabelaAnalise {
@@ -21,11 +22,21 @@ public class TabelaAnalise {
 		this.mapaSintatico.put(entrada, cadeia);
 	}
 
-	public CadeiaGLC getCadeia(EntradaTabelaAnalise entrada) {
+	public CadeiaGLC getCadeia(EntradaTabelaAnalise entrada) throws AnaliseSintaticaException {
 		if (this.mapaSintatico.containsKey(entrada)) {
 			return this.mapaSintatico.get(entrada);
 		}
-		// lançar exception de erro
-		return null;
+		throw new AnaliseSintaticaException();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder out = new StringBuilder();
+
+		for (EntradaTabelaAnalise entrada : this.mapaSintatico.keySet()) {
+			out.append(entrada.toString()).append(" = ").append(this.mapaSintatico.get(entrada).toString()).append("\n");
+		}
+
+		return out.toString();
 	}
 }

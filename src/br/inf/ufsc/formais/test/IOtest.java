@@ -6,7 +6,8 @@
 package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
-import br.inf.ufsc.formais.io.AnalisadorSintaticoIO;
+import br.inf.ufsc.formais.io.TokensIO;
+import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,11 +20,11 @@ import java.util.logging.Logger;
 public class IOtest {
 
     public void runTest() {
-        AnalisadorSintaticoIO asio = new AnalisadorSintaticoIO();
-        ArrayList<String> entradas;
+        TokensIO asio = new TokensIO();
+        ArrayList<SimboloTerminal> entradas;
         try {
             entradas = asio.readLexemas("", "lexemas.LEXOUT");
-            for (String s : entradas) {
+            for (SimboloTerminal s : entradas) {
                 System.out.println(s + "\n");
             }
         } catch (IOException ex) {

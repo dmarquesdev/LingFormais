@@ -16,7 +16,7 @@ public class EntradaTabelaAnalise {
 	}
 
 	public SimboloNaoTerminal getNaoTerminal() {
-		return naoTerminal;
+		return this.naoTerminal;
 	}
 
 	public void setNaoTerminal(SimboloNaoTerminal naoTerminal) {
@@ -24,7 +24,7 @@ public class EntradaTabelaAnalise {
 	}
 
 	public SimboloTerminal getTerminal() {
-		return terminal;
+		return this.terminal;
 	}
 
 	public void setTerminal(SimboloTerminal terminal) {
@@ -54,7 +54,7 @@ public class EntradaTabelaAnalise {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final EntradaTabelaAnalise other = (EntradaTabelaAnalise) obj;
@@ -65,6 +65,13 @@ public class EntradaTabelaAnalise {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder out = new StringBuilder();
+		out.append("[ ").append(this.naoTerminal).append(", ").append(this.terminal).append(" ]");
+		return out.toString();
 	}
 
 }

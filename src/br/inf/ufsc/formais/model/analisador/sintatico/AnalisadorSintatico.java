@@ -5,12 +5,14 @@
  */
 package br.inf.ufsc.formais.model.analisador.sintatico;
 
+import java.util.ArrayList;
+
+import br.inf.ufsc.formais.exception.AnaliseSintaticaException;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.gramatica.SimboloNaoTerminal;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import br.inf.ufsc.formais.model.gramatica.glc.CadeiaGLC;
 import br.inf.ufsc.formais.model.gramatica.glc.GramaticaLivreContexto;
-import java.util.ArrayList;
 
 /**
  *
@@ -18,24 +20,26 @@ import java.util.ArrayList;
  */
 public class AnalisadorSintatico {
 
-    TabelaAnalise tabela = GeradorTabelaAnalise.gerarTabela(null, null, null);
-    GramaticaLivreContexto gramatica = new GramaticaLivreContexto(null, null, null, null);
+    TabelaAnalise tabela;
+    GramaticaLivreContexto gramatica;
 
-    public AnalisadorSintatico(){
-        
+    public AnalisadorSintatico(TabelaAnalise tabela, GramaticaLivreContexto gramatica) {
+        this.tabela = tabela;
+        this.gramatica = gramatica;
     }
-    
-    public boolean analisar(ArrayList<SimboloTerminal> lexemas) {
+
+    public boolean analisar(ArrayList<SimboloTerminal> lexemas) throws AnaliseSintaticaException {
         lexemas.add(new SimboloTerminal("$"));
         ArrayList<Simbolo> pilha = new ArrayList<>();
         pilha.add(new Simbolo("$"));
-        pilha.add(gramatica.getSimboloInicial());
+        pilha.add(this.gramatica.getSimboloInicial());
 
         for (SimboloTerminal t : lexemas) {
 
             while (!t.equals(pilha.get(pilha.size() - 1))) {
                 CadeiaGLC producao;
-                producao = tabela.getCadeia(new EntradaTabelaAnalise((SimboloNaoTerminal) pilha.get(pilha.size() - 1), t));
+                producao = this.tabela.getCadeia(new EntradaTabelaAnalise((SimboloNaoTerminal) pilha.get(pilha.size() - 1), t));
+
                 if (producao.getPrimeiroSimbolo().equals(Simbolo.EPSILON)) {
                     pilha.remove(pilha.size() - 1);
                 } else {

@@ -6,15 +6,12 @@
 package br.inf.ufsc.formais.io;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
-import br.inf.ufsc.formais.model.Grupo;
 import br.inf.ufsc.formais.model.analisador.sintatico.AnalisadorSintatico;
-import br.inf.ufsc.formais.model.er.ExpressaoRegular;
+import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author Matheus
  */
-public class AnalisadorSintaticoIO implements IO<AnalisadorSintatico> {
+public class TokensIO implements IO<AnalisadorSintatico> {
 
     Pattern tokenPatt = Pattern.compile("<(.+?), ([A-Z_]+?)>");
 
@@ -51,8 +48,8 @@ public class AnalisadorSintaticoIO implements IO<AnalisadorSintatico> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public ArrayList<String> readLexemas(String path, String file) throws IOException, FormaisIOException {
-        ArrayList<String> entradas = new ArrayList<>();
+    public ArrayList<SimboloTerminal> readLexemas(String path, String file) throws IOException, FormaisIOException {
+        ArrayList<SimboloTerminal> entradas = new ArrayList<>();
 
         String completePath = "";
         if (path != null) {
@@ -77,7 +74,7 @@ public class AnalisadorSintaticoIO implements IO<AnalisadorSintatico> {
                 String grp = tokenMatcher.group(2);
                 String entrada = tokenMatcher.group(1);
 
-                entradas.add(entrada);
+                entradas.add(new SimboloTerminal(entrada));
 
             }
 
