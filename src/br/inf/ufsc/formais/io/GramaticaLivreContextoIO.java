@@ -33,7 +33,9 @@ public class GramaticaLivreContextoIO implements IO<GramaticaLivreContexto> {
 	/**
 	 * Expressões Regulares responsáveis por reconhecer a estrutura de uma Gramática.
 	 */
+
 	Pattern glcLineValidation = Pattern.compile("[A-Z]+[0-9]* -> [[\\p{Alnum}]*[\\p{Punct}]*( )?]+");
+
 
 	/**
 	 * Lê um arquivo que contenha uma Gramática.
@@ -92,11 +94,13 @@ public class GramaticaLivreContextoIO implements IO<GramaticaLivreContexto> {
 				}
 
 				String producao = splitedLine.get(1);
+
 				LinkedList<String> simbolosProducao = new LinkedList<>(Arrays.asList(producao.split(" ")));
 				LinkedList<Simbolo> cadeiaProduzida = new LinkedList<>();
 
 				for (String simbolo : simbolosProducao) {
 					if (simbolo.equals("EPSILON")) {
+
 						cadeiaProduzida.add(Simbolo.EPSILON);
 					} else {
 						if (Character.isUpperCase(simbolo.codePointAt(0))) {

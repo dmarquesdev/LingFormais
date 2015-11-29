@@ -30,7 +30,9 @@ public class CadeiaGLC {
 	public CadeiaGLC(String cadeia) {
 		LinkedList<String> simbolos = new LinkedList<>(Arrays.asList(cadeia.split(" ")));
 		for (String simbolo : simbolos) {
+
 			if (simbolo.equals(Simbolo.EPSILON) || simbolo.equals("EPSILON")) {
+
 				this.simbolosCadeia.add(Simbolo.EPSILON);
 			} else {
 				if (Character.isUpperCase(simbolo.codePointAt(0))) {
@@ -53,5 +55,6 @@ public class CadeiaGLC {
 	public Simbolo getPrimeiroSimbolo() {
 		return this.simbolosCadeia.get(0);
 	}
+
 
 }
