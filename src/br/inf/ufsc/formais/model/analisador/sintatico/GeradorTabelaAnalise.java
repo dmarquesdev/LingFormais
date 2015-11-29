@@ -20,9 +20,7 @@ public class GeradorTabelaAnalise {
 		for (RegraProducaoGLC regra : glc.getRegrasDeProducao()) {
 			Simbolo primeiroSimbolo = regra.getCadeiaProduzida().getPrimeiroSimbolo();
 
-			Set<Simbolo> firstSet = first.get(regra.getCadeiaProduzida().getPrimeiroSimbolo());
-
-                        
+			Set<Simbolo> firstSet = getFirst(first, primeiroSimbolo);
 
 			// para cada simbolo terminal em first da producao
 			for (SimboloTerminal terminalFirst : getTerminais(firstSet)) {
@@ -53,6 +51,17 @@ public class GeradorTabelaAnalise {
 			}
 		}
 		return terminais;
+	}
+
+	private static Set<Simbolo> getFirst(Map<Simbolo, Set<Simbolo>> first, Simbolo simbolo) {
+		if (simbolo instanceof SimboloTerminal) {
+			LinkedHashSet<Simbolo> terminalSet = new LinkedHashSet<>();
+			terminalSet.add(simbolo);
+			return terminalSet;
+		} else {
+			return first.get(simbolo);
+		}
+
 	}
 
 }

@@ -7,8 +7,9 @@ package br.inf.ufsc.formais.test;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.TokensIO;
+
 import br.inf.ufsc.formais.model.Lexema_Token;
-import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -22,10 +23,13 @@ public class IOtest {
 
     public void runTest() {
         TokensIO asio = new TokensIO();
+
         ArrayList<Lexema_Token> entradas;
         try {
             entradas = asio.readLexemas("", "lexemas.LEXOUT");
             for (Lexema_Token s : entradas) {
+
+
                 System.out.println(s + "\n");
             }
         } catch (IOException ex) {

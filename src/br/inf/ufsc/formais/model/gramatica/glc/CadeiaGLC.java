@@ -28,6 +28,7 @@ public class CadeiaGLC {
 	}
 
 	public CadeiaGLC(String cadeia) {
+		this.simbolosCadeia = new LinkedList<>();
 		LinkedList<String> simbolos = new LinkedList<>(Arrays.asList(cadeia.split(" ")));
 		for (String simbolo : simbolos) {
 
@@ -56,5 +57,12 @@ public class CadeiaGLC {
 		return this.simbolosCadeia.get(0);
 	}
 
-
+	@Override
+	public String toString() {
+		StringBuilder out = new StringBuilder();
+		for (Simbolo simbolo : this.simbolosCadeia) {
+			out.append(simbolo.getReferencia()).append(" ");
+		}
+		return out.toString();
+	}
 }

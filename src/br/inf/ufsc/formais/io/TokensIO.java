@@ -7,6 +7,7 @@ package br.inf.ufsc.formais.io;
 
 import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.model.Lexema_Token;
+
 import br.inf.ufsc.formais.model.analisador.sintatico.AnalisadorSintatico;
 import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import java.io.BufferedReader;
@@ -74,7 +75,6 @@ public class TokensIO implements IO<AnalisadorSintatico> {
 
                 String lexema = tokenMatcher.group(1);
                 String token = tokenMatcher.group(2);
-                
 
                 entradas.add(new Lexema_Token(lexema, token));
 

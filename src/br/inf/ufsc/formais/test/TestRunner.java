@@ -39,9 +39,10 @@ public class TestRunner {
 //        //Analisador Lexico
 //        AnalisadorLexicoTeste lexico = new AnalisadorLexicoTeste();
 //        lexico.runTest();
-       
-        IOtest iot = new IOtest();
-        iot.runTest();
+
+        //Analisador Sintático
+        AnalisadorSintaticoTeste sintatico = new AnalisadorSintaticoTeste();
+        sintatico.runTest();
                 
         
     }

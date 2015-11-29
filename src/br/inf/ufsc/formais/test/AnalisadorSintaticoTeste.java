@@ -1,5 +1,8 @@
 package br.inf.ufsc.formais.test;
 
+
+import br.inf.ufsc.formais.exception.AnaliseSintaticaException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,43 +12,44 @@ import br.inf.ufsc.formais.exception.FormaisIOException;
 import br.inf.ufsc.formais.io.FirstAndFollowIO;
 import br.inf.ufsc.formais.io.GramaticaLivreContextoIO;
 import br.inf.ufsc.formais.io.TokensIO;
+import br.inf.ufsc.formais.model.Lexema_Token;
 import br.inf.ufsc.formais.model.Simbolo;
 import br.inf.ufsc.formais.model.analisador.sintatico.AnalisadorSintatico;
 import br.inf.ufsc.formais.model.analisador.sintatico.GeradorTabelaAnalise;
 import br.inf.ufsc.formais.model.analisador.sintatico.TabelaAnalise;
-import br.inf.ufsc.formais.model.gramatica.SimboloTerminal;
 import br.inf.ufsc.formais.model.gramatica.glc.GramaticaLivreContexto;
 
 public class AnalisadorSintaticoTeste {
 
-	public static void main(String[] args) {
 
-		FirstAndFollowIO firstAndFollowIO = new FirstAndFollowIO();
-		GramaticaLivreContextoIO glcIO = new GramaticaLivreContextoIO();
-		TokensIO tokensIO = new TokensIO();
+    public void runTest() {
 
-		try {
-			Map<Simbolo, Set<Simbolo>> first = firstAndFollowIO.read("first.in");
-			Map<Simbolo, Set<Simbolo>> follow = firstAndFollowIO.read("follow.in");
-			GramaticaLivreContexto glc = glcIO.read("gramatica.in");
+        String path = "./arquivos/AnalisadorSintatico/";
+        FirstAndFollowIO firstAndFollowIO = new FirstAndFollowIO();
+        GramaticaLivreContextoIO glcIO = new GramaticaLivreContextoIO();
+        TokensIO tokenIO = new TokensIO();
 
-			TabelaAnalise tabelaAnalise = GeradorTabelaAnalise.gerarTabela(glc, first, follow);
+        try {
+            Map<Simbolo, Set<Simbolo>> first = firstAndFollowIO.read(path, "first.in");
+            Map<Simbolo, Set<Simbolo>> follow = firstAndFollowIO.read(path, "follow.in");
+            GramaticaLivreContexto glc = glcIO.read(path, "gramatica.in");
 
-			AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(tabelaAnalise, glc);
+            TabelaAnalise tabelaAnalise = GeradorTabelaAnalise.gerarTabela(glc, first, follow);
 
-			ArrayList<SimboloTerminal> lexemas = tokensIO.readLexemas("tokens.in");
+            AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico(tabelaAnalise, glc);
 
-			if (!analisadorSintatico.analisar(lexemas)) {
-				System.out.println("Programa sem erros sintáticos");
-			} else {
-				System.out.println("Erro sintático, verifique seu programa.");
-			}
+            ArrayList<Lexema_Token> lexemas = tokenIO.readLexemas(path, "tokens.lexOut");
 
-		} catch (IOException | FormaisIOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            analisadorSintatico.analisar(lexemas);
+            System.out.println("Programa sem erros sintáticos");
 
-	}
+        } catch (IOException | FormaisIOException ex) {
+            System.out.println("Impossível encontrar arquivo de código!");
+        } catch (AnaliseSintaticaException ex) {
+            System.out.println("Ocorreu um erro sintatico!");
+        }
+
+    }
+
 
 }

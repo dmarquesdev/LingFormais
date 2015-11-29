@@ -1,0 +1,37 @@
+S = { program }
+B2 = { , ε }
+C = { ε int float string boolean [ }
+C2 = { , ; = }
+D = { return b while if read write }
+F2 = { new ( b 0 " }
+K = { ( b 0 " }
+H = { if }
+H2 = { else ε }
+I = { while }
+M = { ( b true false 0 " }
+M2 = { ε < > ! && 11 == }
+M3 = { ε < > ! && 11 == }
+J = { read write b }
+O = { ε b }
+O2 = { , ε }
+E = { int float string boolean [ ε }
+E2 = { [ ε }
+L = { + - * / }
+N = { < > ! && 11 == }
+N2 = { = ε }
+P = { true false }
+G2 = { ε 0 }
+Q = { 0 }
+Q2 = { ε 0 }
+R = { " }
+T = { a }
+T2 = { ε a }
+A = { b }
+A2 = { ε b }
+F = { b }
+K2 = { b 0 " ( }
+M4 = { b ( true false 0 " }
+M5 = { b true false 0 " ( }
+J2 = { b 0 " }
+G = { 0 " }
+B = { int float string boolean [ ε }
