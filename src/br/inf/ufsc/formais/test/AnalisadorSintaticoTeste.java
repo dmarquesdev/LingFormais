@@ -24,7 +24,7 @@ public class AnalisadorSintaticoTeste {
 
     public void runTest() {
 
-        String path = "./arquivos/AnalisadorSintatico/";
+        String path = "./teste/";
         FirstAndFollowIO firstAndFollowIO = new FirstAndFollowIO();
         GramaticaLivreContextoIO glcIO = new GramaticaLivreContextoIO();
         TokensIO tokenIO = new TokensIO();
@@ -47,6 +47,7 @@ public class AnalisadorSintaticoTeste {
             System.out.println("Impossível encontrar arquivo de código!");
         } catch (AnaliseSintaticaException ex) {
             System.out.println("Ocorreu um erro sintatico!");
+            ex.printStackTrace();
         }
 
     }

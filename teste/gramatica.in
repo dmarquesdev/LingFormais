@@ -1,0 +1,86 @@
+S -> program A ( B ) { C D }
+B -> E A B2
+B2 -> , B
+B2 -> ε
+C -> E A C2
+C -> ε
+C2 -> , C
+C2 -> ; C
+C2 -> = G ; C
+D -> F D
+D -> H D
+D -> I D
+D -> J D
+D -> return A ;
+F -> A = F2
+F2 -> K ;
+F2 -> G ;
+F2 -> new [ Q ] ;
+K -> A L K2
+K -> G L K2
+K -> ( K )
+K2 -> A
+K2 -> G
+K2 -> K
+H -> if ( M ) { D } H2
+H2 -> else { D }
+H2 -> ε
+I -> while ( M ) { D }
+M -> A M2
+M -> P M3
+M -> G N M4
+M -> ( M )
+M2 -> N M5
+M2 -> ε
+M3 -> N A
+M3 -> ε
+M4 -> A
+M4 -> M
+M5 -> A
+M5 -> P
+M5 -> G
+M5 -> M
+J -> A ( O ) ;
+J -> read ( J2
+J -> write ( J2
+J2 -> A ) ;
+J2 -> G ) ;
+O -> A O2
+O -> ε
+O2 -> , O
+O2 -> ε
+E -> int E2
+E -> float E2
+E -> string E2
+E -> boolean E2
+E -> E2
+E2 -> [ ] E2
+E2 -> ε
+L -> +
+L -> -
+L -> *
+L -> /
+N -> < N2
+N -> > N2
+N -> ! N2
+N -> &&
+N -> 11
+N -> ==
+N2 -> =
+N2 -> ε
+P -> true
+P -> false
+G -> Q G2
+G -> R
+G2 -> Q
+G2 -> ε
+Q -> LITERAIS Q2
+Q2 -> Q
+Q2 -> ε
+R -> " T "
+T -> IDENTIFICADORES T2
+T2 -> T
+T2 -> ε
+A -> IDENTIFICADORES A2
+A2 -> A
+A2 -> ε

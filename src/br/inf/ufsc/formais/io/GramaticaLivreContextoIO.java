@@ -34,8 +34,8 @@ public class GramaticaLivreContextoIO implements IO<GramaticaLivreContexto> {
 	 * Expressões Regulares responsáveis por reconhecer a estrutura de uma Gramática.
 	 */
 
-	Pattern glcLineValidation = Pattern.compile("[A-Z]+[0-9]* -> [[\\p{Alnum}]*[\\p{Punct}]*( )?]+");
-
+	// Pattern glcLineValidation = Pattern.compile("[A-Z]+[0-9]* -> [[\\p{Alnum}]*[\\p{Punct}]*ε*( )?]+");
+	Pattern glcLineValidation = Pattern.compile("[A-Z]+[0-9]* -> [[[a-z]|[A-Z]|[0-9]|\\p{Punct}|ε|EPSILON]+( )?]+");
 
 	/**
 	 * Lê um arquivo que contenha uma Gramática.
@@ -95,13 +95,16 @@ public class GramaticaLivreContextoIO implements IO<GramaticaLivreContexto> {
 
 				String producao = splitedLine.get(1);
 
-				LinkedList<String> simbolosProducao = new LinkedList<>(Arrays.asList(producao.split(" ")));
+				LinkedList<String> simbolosProducao = new LinkedList<>(Arrays.asList(producao.split("\\s+")));
 				LinkedList<Simbolo> cadeiaProduzida = new LinkedList<>();
 
 				for (String simbolo : simbolosProducao) {
-					if (simbolo.equals("EPSILON")) {
-
+					if (simbolo.equals("EPSILON") || simbolo.equals(Simbolo.EPSILON.getReferencia())) {
 						cadeiaProduzida.add(Simbolo.EPSILON);
+					} else if (simbolo.equals("LITERAIS") || simbolo.equals("IDENTIFICADORES")) {
+						SimboloTerminal terminal = new SimboloTerminal(simbolo);
+						cadeiaProduzida.add(terminal);
+						terminais.add(terminal);
 					} else {
 						if (Character.isUpperCase(simbolo.codePointAt(0))) {
 							SimboloNaoTerminal naoTerminal = new SimboloNaoTerminal(simbolo);
@@ -117,6 +120,8 @@ public class GramaticaLivreContextoIO implements IO<GramaticaLivreContexto> {
 
 				RegraProducaoGLC regraGLC = new RegraProducaoGLC(snt, new CadeiaGLC(cadeiaProduzida));
 				regras.add(regraGLC);
+			} else {
+				throw new FormaisIOException("Entrada da gramatica inválida: " + line);
 			}
 
 			line = br.readLine();

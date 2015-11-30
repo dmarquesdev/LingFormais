@@ -27,7 +27,7 @@ public class FirstAndFollowIO implements IO<Map<Simbolo, Set<Simbolo>>> {
 	/**
 	 * Expressões Regulares responsáveis por reconhecer a estrutura de um Autômato Finito.
 	 */
-	Pattern firstAndFollowPattern = Pattern.compile("[A-Z]+[a-z]*[0-9]* = \\{( )?[[[a-z]|[0-9]|\\p{Punct}|ε|EPSILON]+( )?]+\\}");
+	Pattern firstAndFollowPattern = Pattern.compile("[A-Z]+[a-z]*[0-9]* = \\{( )?[[[a-z]|[A-Z]|[0-9]|\\p{Punct}|ε|EPSILON]+( )?]+\\}");
 
 	/**
 	 * Lê um arquivo que contenha um Automato Finito.

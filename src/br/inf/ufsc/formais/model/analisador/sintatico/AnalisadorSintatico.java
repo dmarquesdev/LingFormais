@@ -21,7 +21,6 @@ import br.inf.ufsc.formais.model.gramatica.glc.GramaticaLivreContexto;
  */
 public class AnalisadorSintatico {
 
-
     TabelaAnalise tabela;
     GramaticaLivreContexto gramatica;
 
@@ -32,19 +31,25 @@ public class AnalisadorSintatico {
 
     public boolean analisar(ArrayList<Lexema_Token> lex_tok) throws AnaliseSintaticaException {
         ArrayList<SimboloTerminal> sentenca = new ArrayList<>();
-        for(Lexema_Token lt : lex_tok){
-            sentenca.add(new SimboloTerminal(lt.getLexema()));
+
+        for (Lexema_Token lt : lex_tok) {
+            if ("IDENTIFICADORES".equals(lt.getToken()) || "LITERAIS".equals(lt.getToken())) {
+                sentenca.add(new SimboloTerminal(lt.getToken()));
+            } else {
+                sentenca.add(new SimboloTerminal(lt.getLexema()));
+            }
         }
         sentenca.add(new SimboloTerminal("$"));
         ArrayList<Simbolo> pilha = new ArrayList<>();
-        pilha.add(new Simbolo("$"));
+        pilha.add(new SimboloTerminal("$"));
         pilha.add(this.gramatica.getSimboloInicial());
 
         for (SimboloTerminal t : sentenca) {
 
             while (!t.equals(pilha.get(pilha.size() - 1))) {
                 CadeiaGLC producao;
-                producao = this.tabela.getCadeia(new EntradaTabelaAnalise((SimboloNaoTerminal) pilha.get(pilha.size() - 1), t));
+                String referencia = pilha.get(pilha.size() - 1).getReferencia();
+                producao = this.tabela.getCadeia(new EntradaTabelaAnalise(new SimboloNaoTerminal(pilha.get(pilha.size() - 1).getReferencia()), t));
 
                 if (producao.getPrimeiroSimbolo().equals(Simbolo.EPSILON)) {
                     pilha.remove(pilha.size() - 1);

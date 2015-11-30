@@ -23,9 +23,11 @@ public class TabelaAnalise {
 	}
 
 	public CadeiaGLC getCadeia(EntradaTabelaAnalise entrada) throws AnaliseSintaticaException {
+            
 		if (this.mapaSintatico.containsKey(entrada)) {
 			return this.mapaSintatico.get(entrada);
 		}
+		System.out.println(entrada);
 		throw new AnaliseSintaticaException();
 	}
 

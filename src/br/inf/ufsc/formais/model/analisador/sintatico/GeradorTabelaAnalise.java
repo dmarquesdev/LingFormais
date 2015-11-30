@@ -19,8 +19,8 @@ public class GeradorTabelaAnalise {
 		// para cada regra
 		for (RegraProducaoGLC regra : producoesUteis) {
 			Simbolo primeiroSimbolo = regra.getCadeiaProduzida().getPrimeiroSimbolo();
-
-			Set<Simbolo> firstSet = getFirst(first, primeiroSimbolo);
+			Set<Simbolo> firstSet = new LinkedHashSet<>(getFirst(first, primeiroSimbolo));
+			firstSet.remove(Simbolo.EPSILON);
 
 			// para cada simbolo terminal em first da producao
 			for (SimboloTerminal terminalFirst : getTerminais(firstSet)) {

@@ -1,0 +1,37 @@
+S = { program }
+B2 = { , ε }
+C = { ε int float string boolean [ }
+C2 = { , ; = }
+D = { return IDENTIFICADORES while if read write }
+F2 = { new ( IDENTIFICADORES LITERAIS " }
+K = { ( IDENTIFICADORES LITERAIS " }
+H = { if }
+H2 = { else ε }
+I = { while }
+M = { ( IDENTIFICADORES true false LITERAIS " }
+M2 = { ε < > ! && 11 == }
+M3 = { ε < > ! && 11 == }
+J = { read write IDENTIFICADORES }
+O = { ε IDENTIFICADORES }
+O2 = { , ε }
+E = { int float string boolean [ ε }
+E2 = { [ ε }
+L = { + - * / }
+N = { < > ! && 11 == }
+N2 = { = ε }
+P = { true false }
+G2 = { ε LITERAIS }
+Q = { LITERAIS }
+Q2 = { ε LITERAIS }
+R = { " }
+T = { IDENTIFICADORES }
+T2 = { ε IDENTIFICADORES }
+A = { IDENTIFICADORES }
+A2 = { ε IDENTIFICADORES }
+F = { IDENTIFICADORES }
+K2 = { IDENTIFICADORES LITERAIS " ( }
+M4 = { IDENTIFICADORES ( true false LITERAIS " }
+M5 = { IDENTIFICADORES true false LITERAIS " ( }
+J2 = { IDENTIFICADORES LITERAIS " }
+G = { LITERAIS " }
+B = { int float string boolean [ ε }
