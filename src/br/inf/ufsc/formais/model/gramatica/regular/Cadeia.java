@@ -19,6 +19,11 @@ public class Cadeia {
     private SimboloTerminal simboloTerminal;
     private SimboloNaoTerminal simboloNaoTerminal;
 
+    /**
+     * Construtor da classe.
+     * @param simboloTerminal
+     * @param simboloNaoTerminal 
+     */
     public Cadeia(SimboloTerminal simboloTerminal, SimboloNaoTerminal simboloNaoTerminal) {
         this.simboloTerminal = simboloTerminal;
         this.simboloNaoTerminal = simboloNaoTerminal;

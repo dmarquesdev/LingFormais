@@ -19,20 +19,31 @@ import br.inf.ufsc.formais.model.gramatica.glc.CadeiaGLC;
 import br.inf.ufsc.formais.model.gramatica.glc.GramaticaLivreContexto;
 
 /**
- *
+ * @author Diego Marques
  * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class AnalisadorSintatico {
 
 
     TabelaAnalise tabela;
     GramaticaLivreContexto gramatica;
-
+    /**
+     * Construtor da classe AnalisadorSintatico
+     * @param tabela a tabela parse
+     * @param gramatica a gramatica da linguagem
+     */
     public AnalisadorSintatico(TabelaAnalise tabela, GramaticaLivreContexto gramatica) {
         this.tabela = tabela;
         this.gramatica = gramatica;
     }
 
+    /**
+     * A pilha que anasila da sentença de entrada e retorna um boolean se a sentença é aceita pela linguagem ou nõa.
+     * @param lex_tok uma lista de lexemas e tokens
+     * @return true se a sentença é aceita e false se não.
+     * @throws AnaliseSintaticaException dispara uma exceção se ocorrer um erro sintatico.
+     */
     public boolean analisar(ArrayList<Lexema_Token> lex_tok) throws AnaliseSintaticaException {
         ArrayList<SimboloTerminal> sentenca = new ArrayList<>();
 

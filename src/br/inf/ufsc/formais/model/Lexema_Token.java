@@ -6,8 +6,9 @@
 package br.inf.ufsc.formais.model;
 
 /**
- *
- * @author Matheus
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
  */
 public class Lexema_Token {
     private String lexema, token;

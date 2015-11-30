@@ -25,7 +25,7 @@ public class AnalisadorSintaticoTeste {
     public void runTest() {
 
 
-        String path = "./teste/";
+        String path = "./arquivos/AnalisadorSintatico/";
 
         FirstAndFollowIO firstAndFollowIO = new FirstAndFollowIO();
         GramaticaLivreContextoIO glcIO = new GramaticaLivreContextoIO();

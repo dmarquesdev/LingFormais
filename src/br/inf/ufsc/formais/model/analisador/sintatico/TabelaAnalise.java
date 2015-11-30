@@ -5,7 +5,12 @@ import java.util.Map;
 
 import br.inf.ufsc.formais.exception.AnaliseSintaticaException;
 import br.inf.ufsc.formais.model.gramatica.glc.CadeiaGLC;
-
+/**
+ * Classe que define uma tabela de parsing.
+ * @author Diego Marques
+ * @author Matheus Demetrio
+ * @author Nathan Molinari
+ */
 public class TabelaAnalise {
 
 	private Map<EntradaTabelaAnalise, CadeiaGLC> mapaSintatico;

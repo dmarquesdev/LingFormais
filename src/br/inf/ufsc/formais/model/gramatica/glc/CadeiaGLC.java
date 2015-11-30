@@ -23,10 +23,18 @@ public class CadeiaGLC {
 
 	private LinkedList<Simbolo> simbolosCadeia;
 
+        /**
+         * Construtor da classe.
+         * @param simbolosCadeia 
+         */
 	public CadeiaGLC(LinkedList<Simbolo> simbolosCadeia) {
 		this.simbolosCadeia = simbolosCadeia;
 	}
-
+        
+        /**
+         * Gera a cadeia da produção.
+         * @param cadeia 
+         */
 	public CadeiaGLC(String cadeia) {
 		this.simbolosCadeia = new LinkedList<>();
 		LinkedList<String> simbolos = new LinkedList<>(Arrays.asList(cadeia.split(" ")));

@@ -1,37 +1,5 @@
-S = { $ }
-B = { ) }
-B2 = { ) }
-C = { return IDENTIFICADORES while if read write }
-C2 = { return IDENTIFICADORES while if read write }
-D = { } }
-F = { return IDENTIFICADORES while if read write }
-F2 = { return IDENTIFICADORES while if read write }
-K = { ) ; }
-K2 = { ) ; }
-H = { return IDENTIFICADORES while if read write }
-H2 = { return IDENTIFICADORES while if read write }
-I = { return IDENTIFICADORES while if read write }
-M = { ) }
-M2 = { ) }
-M3 = { ) }
-M4 = { ) }
-M5 = { ) }
-J = { return IDENTIFICADORES while if read write }
-J2 = { return IDENTIFICADORES while if read write }
-O = { ) }
-O2 = { ) }
-E = { IDENTIFICADORES }
-E2 = { IDENTIFICADORES }
-L = { IDENTIFICADORES LITERAIS " ( }
-N = { IDENTIFICADORES true false LITERAIS " ( }
-N2 = { IDENTIFICADORES true false LITERAIS " ( }
-P = { ε < > ! && 11 == ) }
-G = { ) < > ! && 11 == + - * / ; }
-G2 = { ) < > ! && 11 == + - * / ; }
-Q = { ε LITERAIS ] ) < > ! && 11 == + - * / ; }
-Q2 = { ε LITERAIS ] ) < > ! && 11 == + - * / ; }
-R = { ) < > ! && 11 == + - * / ; }
-T = { " }
-T2 = { " }
-A = { , ε ) ( < > ! && 11 == + - * / = ; }
-A2 = { , ε ) ( < > ! && 11 == + - * / = ; }
+E = { $ }
+E1 = { $ }
+T = { || $ }
+T1 = { || $}
+F = { && || $ }
